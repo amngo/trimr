@@ -1,10 +1,20 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/lib/db';
 import { createLink } from '@/app/actions';
+import { getCurrentUser } from '@/lib/auth-utils';
 
 export async function GET() {
     try {
+        const user = await getCurrentUser();
+        if (!user) {
+            return NextResponse.json(
+                { error: 'Authentication required' },
+                { status: 401 }
+            );
+        }
+
         const links = await db.link.findMany({
+            where: { userId: user.id },
             orderBy: { createdAt: 'desc' },
             take: 50,
         });

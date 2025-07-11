@@ -3,6 +3,7 @@ import { z } from 'zod';
 import { db } from '@/lib/db';
 import { generateSlug, isValidUrl, formatUrl } from '@/lib/utils';
 import { revalidatePath } from 'next/cache';
+import { getCurrentUser } from '@/lib/auth-utils';
 
 const createLinkSchema = z.object({
     url: z
@@ -15,6 +16,31 @@ const createLinkSchema = z.object({
 
 export async function deleteLink(linkId: string) {
     try {
+        // Get current user
+        const user = await getCurrentUser();
+        if (!user) {
+            return {
+                error: 'You must be logged in to delete links.',
+            };
+        }
+
+        // Check if link belongs to user
+        const link = await db.link.findUnique({
+            where: { id: linkId },
+        });
+
+        if (!link) {
+            return {
+                error: 'Link not found.',
+            };
+        }
+
+        if (link.userId !== user.id) {
+            return {
+                error: 'You can only delete your own links.',
+            };
+        }
+
         await db.link.delete({
             where: { id: linkId },
         });
@@ -35,6 +61,14 @@ export async function deleteLink(linkId: string) {
 
 export async function createLink(formData: FormData) {
     try {
+        // Get current user
+        const user = await getCurrentUser();
+        if (!user) {
+            return {
+                error: 'You must be logged in to create links.',
+            };
+        }
+
         const rawUrl = formData.get('url') as string;
         const rawCustomSlug = formData.get('customSlug') as string;
         const rawExpiration = formData.get('expiration') as string;
@@ -54,10 +88,13 @@ export async function createLink(formData: FormData) {
         const formattedUrl = formatUrl(result.data.url);
         const { customSlug, expiration } = result.data;
 
-        // Check if URL already exists (only if no custom slug provided)
+        // Check if URL already exists for this user (only if no custom slug provided)
         if (!customSlug) {
             const existingLink = await db.link.findFirst({
-                where: { url: formattedUrl },
+                where: { 
+                    url: formattedUrl,
+                    userId: user.id,
+                },
             });
 
             if (existingLink) {
@@ -146,6 +183,7 @@ export async function createLink(formData: FormData) {
             data: {
                 slug,
                 url: formattedUrl,
+                userId: user.id,
                 expiresAt,
             },
         });

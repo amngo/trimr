@@ -11,6 +11,7 @@ model Link {
   id         String    @id @default(cuid())
   slug       String    @unique
   url        String
+  userId     String?
   createdAt  DateTime  @default(now())
   updatedAt  DateTime  @updatedAt
   clickCount Int       @default(0)
@@ -18,6 +19,7 @@ model Link {
   expiresAt  DateTime?
   startsAt   DateTime?
   clicks     Click[]
+  user       user?     @relation(fields: [userId], references: [id], onDelete: SetNull)
 
   @@map("links")
 }
@@ -32,4 +34,60 @@ model Click {
   link      Link     @relation(fields: [linkId], references: [id], onDelete: Cascade)
 
   @@map("clicks")
+}
+
+// Better Auth tables
+model user {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  emailVerified Boolean   @default(false)
+  name          String?
+  image         String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  sessions      session[]
+  accounts      account[]
+  links         Link[]
+}
+
+model session {
+  id           String   @id @default(cuid())
+  token        String   @unique
+  userId       String
+  expiresAt    DateTime
+  ipAddress    String?
+  userAgent    String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  user         user     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model account {
+  id                     String    @id @default(cuid())
+  userId                 String
+  accountId              String
+  providerId             String
+  accessToken            String?
+  refreshToken           String?
+  idToken                String?
+  accessTokenExpiresAt   DateTime?
+  refreshTokenExpiresAt  DateTime?
+  scope                  String?
+  password               String?
+  createdAt              DateTime  @default(now())
+  updatedAt              DateTime  @updatedAt
+  user                   user      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([providerId, accountId])
+}
+
+model verification {
+  id         String   @id @default(cuid())
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@unique([identifier, value])
 }

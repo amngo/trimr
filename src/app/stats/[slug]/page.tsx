@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { db } from '@/lib/db';
+import { getCurrentUser } from '@/lib/auth-utils';
 import { Eye, Globe, Calendar, TrendingUp, Users, Clock } from 'lucide-react';
 
 interface PageProps {
@@ -11,6 +12,12 @@ interface PageProps {
 
 export default async function StatsPage({ params }: PageProps) {
     const { slug } = await params;
+    
+    // Check if user is authenticated
+    const user = await getCurrentUser();
+    if (!user) {
+        notFound();
+    }
 
     const link = await db.link.findUnique({
         where: { slug },
@@ -23,6 +30,11 @@ export default async function StatsPage({ params }: PageProps) {
     });
 
     if (!link) {
+        notFound();
+    }
+
+    // Check if user owns this link
+    if (link.userId !== user.id) {
         notFound();
     }
 

@@ -3,6 +3,7 @@ import { Inter } from 'next/font/google';
 import './globals.css';
 import QueryProvider from '@/providers/QueryProvider';
 import FadeTransition from '@/components/FadeTransition';
+import AuthButton from '@/components/AuthButton';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -21,6 +22,14 @@ export default function RootLayout({
             <body className={inter.className}>
                 <QueryProvider>
                     <div className="min-h-screen bg-base-200">
+                        <header className="bg-base-100 shadow-sm">
+                            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                                <div className="flex justify-between items-center py-4">
+                                    <h1 className="text-xl font-semibold">Link Shortener</h1>
+                                    <AuthButton />
+                                </div>
+                            </div>
+                        </header>
                         <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
                             <FadeTransition>
                                 {children}
