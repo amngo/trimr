@@ -8,24 +8,18 @@ interface URLInputProps {
 
 export default function URLInput({ value, onChange, disabled }: URLInputProps) {
     return (
-        <div>
-            <label
-                htmlFor="url"
-                className="block text-sm font-medium text-gray-900 mb-2"
-            >
-                Destination URL
-            </label>
+        <fieldset className="fieldset">
+            <legend className="fieldset-legend">Destination URL</legend>
             <input
-                type="url"
                 id="url"
                 name="url"
                 value={value}
                 onChange={(e) => onChange(e.target.value)}
                 placeholder="Add link"
-                className="w-full px-3 py-3 border border-gray-300 rounded-md text-gray-500 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                className="input w-full"
                 required
                 disabled={disabled}
             />
-        </div>
+        </fieldset>
     );
 }

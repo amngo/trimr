@@ -24,7 +24,7 @@ export default function LinkIcon({
     }
 
     return (
-        <div className="border border-gray-200 rounded p-2 bg-white">
+        <div className="rounded p-2 bg-white">
             <img
                 src={getFaviconUrl(url)}
                 alt="Site icon"

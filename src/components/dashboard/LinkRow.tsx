@@ -32,14 +32,14 @@ export default function LinkRow({ link, onDelete }: LinkRowProps) {
         setShowDeleteConfirm(false);
     };
     return (
-        <li className="flex items-center px-6 py-4 hover:bg-gray-100 bg-white border border-gray-200 rounded relative">
+        <li className="flex items-center px-6 py-4 rounded relative border border-base-300 bg-base-100">
             <LinkIndicator enabled={link.enabled} />
 
             <div className="flex items-center space-x-3 flex-1 min-w-0">
                 <LinkIcon url={link.url} />
                 <div className="flex-1 min-w-0">
                     <div className="flex items-center space-x-2">
-                        <p className="text-sm font-medium text-gray-900 truncate">
+                        <p className="text-sm font-medium truncate">
                             {formatSlug(link.slug)}
                         </p>
                         <button
@@ -61,7 +61,7 @@ export default function LinkRow({ link, onDelete }: LinkRowProps) {
                             <ExternalLinkIcon size={16} />
                         </a>
                     </div>
-                    <p className="text-xs text-gray-500 truncate font-light">
+                    <p className="text-xs truncate font-light">
                         {formatUrl(link.url)}
                     </p>
                 </div>
@@ -82,21 +82,21 @@ export default function LinkRow({ link, onDelete }: LinkRowProps) {
                 <div className="relative">
                     <button
                         onClick={() => setShowDeleteConfirm(!showDeleteConfirm)}
-                        className="size-8 border border-gray-200 rounded bg-white flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="btn btn-square btn-soft btn-sm"
                     >
                         <EllipsisVerticalIcon size={16} />
                     </button>
 
                     {showDeleteConfirm && (
-                        <div className="absolute right-0 top-8 bg-white border border-gray-200 rounded-lg shadow-lg z-10 min-w-[150px]">
+                        <div className="absolute right-0 top-8 bg-card border rounded z-10 min-w-[150px] bg-base-200 border-base-300">
                             <div className="p-2">
-                                <p className="text-sm text-gray-600 mb-2">
+                                <p className="text-sm mb-2">
                                     Delete this link?
                                 </p>
                                 <div className="flex space-x-2">
                                     <button
                                         onClick={handleDelete}
-                                        className="flex items-center space-x-1 px-2 py-1 text-xs text-red-600 hover:bg-red-50 rounded"
+                                        className="flex items-center space-x-1 px-2 py-1 text-xs text-error hover:bg-base-100 rounded"
                                     >
                                         <TrashIcon size={12} />
                                         <span>Delete</span>
@@ -105,7 +105,7 @@ export default function LinkRow({ link, onDelete }: LinkRowProps) {
                                         onClick={() =>
                                             setShowDeleteConfirm(false)
                                         }
-                                        className="px-2 py-1 text-xs text-gray-600 hover:bg-gray-50 rounded"
+                                        className="px-2 py-1 text-xs hover:bg-base-100 rounded"
                                     >
                                         Cancel
                                     </button>

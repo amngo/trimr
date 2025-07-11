@@ -1,9 +1,10 @@
 @import 'tailwindcss';
+@plugin "daisyui" {
+    themes: light --default;
+    root: ':root';
+    logs: true;
+}
 
 body {
     font-family: Inter;
-}
-
-button {
-    @apply cursor-pointer rounded;
 }

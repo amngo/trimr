@@ -1,5 +1,4 @@
 'use client';
-
 import { useState, useRef, useEffect } from 'react';
 import { createLink } from '@/app/actions';
 import QRCode from 'qrcode';
@@ -8,9 +7,9 @@ import { AnimatePresence, motion } from 'motion/react';
 import URLInput from './URLInput';
 import SlugInput from './SlugInput';
 import ExpirationSelect from './ExpirationSelect';
-import QRCodeDisplay from './QRCodeDisplay';
 import FormMessages from './FormMessages';
 import FormActions from './FormActions';
+import StartingDateInput from './StartingDateInput';
 
 interface CreateLinkModalProps {
     isOpen: boolean;
@@ -31,6 +30,7 @@ export default function CreateLinkModal({
     const [url, setUrl] = useState('');
     const [customSlug, setCustomSlug] = useState('');
     const [expiration, setExpiration] = useState('never');
+    const [startingDate, setStartingDate] = useState('');
     const formRef = useRef<HTMLFormElement>(null);
 
     const shortUrl = result?.slug
@@ -71,14 +71,7 @@ export default function CreateLinkModal({
             setResult({ error: 'An unexpected error occurred' });
         } finally {
             setIsLoading(false);
-        }
-    };
-
-    const copyToClipboard = async (text: string) => {
-        try {
-            await navigator.clipboard.writeText(text);
-        } catch (error) {
-            console.error('Failed to copy:', error);
+            handleClose();
         }
     };
 
@@ -113,15 +106,16 @@ export default function CreateLinkModal({
                             initial={{ opacity: 0, scale: 0.95 }}
                             animate={{ opacity: 1, scale: 1 }}
                             exit={{ opacity: 0, scale: 0.95 }}
-                            className="w-xl space-y-4 bg-white p-12 rounded shadow"
+                            className="space-y-4 bg-base-100 border border-base-300 p-8 rounded shadow"
                         >
                             <DialogTitle className="font-bold">
                                 Create New Link
                             </DialogTitle>
+                            <FormMessages result={result} />
                             <form
                                 ref={formRef}
                                 action={handleSubmit}
-                                className="space-y-6"
+                                className="space-y-2"
                             >
                                 <URLInput
                                     value={url}
@@ -135,19 +129,16 @@ export default function CreateLinkModal({
                                     disabled={isLoading}
                                 />
 
+                                <StartingDateInput
+                                    value={startingDate}
+                                    onChange={setStartingDate}
+                                    disabled={isLoading}
+                                />
+
                                 <ExpirationSelect
                                     value={expiration}
                                     onChange={setExpiration}
                                     disabled={isLoading}
-                                />
-
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                    <QRCodeDisplay qrCodeUrl={qrCodeUrl} />
-                                </div>
-
-                                <FormMessages
-                                    result={result}
-                                    copyToClipboard={copyToClipboard}
                                 />
 
                                 <FormActions

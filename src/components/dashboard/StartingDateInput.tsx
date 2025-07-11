@@ -2,42 +2,37 @@
 
 import { InfoIcon } from 'lucide-react';
 
-interface ExpirationSelectProps {
+interface StartingDateInputProps {
     value: string;
     onChange: (value: string) => void;
     disabled?: boolean;
 }
 
-export default function ExpirationSelect({
+export default function StartingDateInput({
     value,
     onChange,
     disabled,
-}: ExpirationSelectProps) {
+}: StartingDateInputProps) {
     return (
         <fieldset className="fieldset">
             <legend className="fieldset-legend">
-                Expiration
+                Starting Date
                 <div
                     className="tooltip tooltip-right"
-                    data-tip="Select how long the link should be valid."
+                    data-tip="Select the starting date for the link."
                 >
                     <InfoIcon size={16} />
                 </div>
             </legend>
-            <select
-                id="expiration"
-                name="expiration"
+            <input
+                type="datetime-local"
+                id="starting-date"
+                name="starting-date"
                 value={value}
                 onChange={(e) => onChange(e.target.value)}
-                className="select w-full"
                 disabled={disabled}
-            >
-                <option value="never">Never</option>
-                <option value="1h">1 Hour</option>
-                <option value="24h">24 Hours</option>
-                <option value="7d">7 Days</option>
-                <option value="30d">30 Days</option>
-            </select>
+                className="input w-full"
+            />
             <p className="label">Optional</p>
         </fieldset>
     );
