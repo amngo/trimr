@@ -5,9 +5,14 @@ import CreateLinkModal from '@/components/dashboard/CreateLinkModal';
 import DashboardHeader from '@/components/dashboard/DashboardHeader';
 import SearchAndFilters from '@/components/dashboard/SearchAndFilters';
 import LinksTable from '@/components/dashboard/LinksTable';
+import LinksSummary from '@/components/dashboard/LinksSummary';
 import { Link } from '@/types';
 import { useLinks, useDeleteLink } from '@/hooks/useLinks';
 import { useModalStore, useSearchStore } from '@/stores';
+import {
+    filterAndSortLinks,
+    getFilteredLinksCount,
+} from '@/utils/filterAndSort';
 
 interface DashboardClientProps {
     initialLinks: Link[];
@@ -16,18 +21,32 @@ interface DashboardClientProps {
 export default function DashboardClient({
     initialLinks,
 }: DashboardClientProps) {
-    const { isCreateLinkModalOpen, openCreateLinkModal, closeCreateLinkModal } = useModalStore();
-    const { searchTerm } = useSearchStore();
+    const { isCreateLinkModalOpen, openCreateLinkModal, closeCreateLinkModal } =
+        useModalStore();
+    const { searchTerm, sortBy, sortOrder, filterStatus, filterTimeRange } =
+        useSearchStore();
     const { data: links = initialLinks, isLoading, error } = useLinks();
     const deleteLink = useDeleteLink();
 
-    const filteredLinks = useMemo(() => {
-        if (!searchTerm) return links;
-        return links.filter(link => 
-            link.url.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            link.slug.toLowerCase().includes(searchTerm.toLowerCase())
+    const filteredAndSortedLinks = useMemo(() => {
+        return filterAndSortLinks(
+            links,
+            searchTerm,
+            sortBy,
+            sortOrder,
+            filterStatus,
+            filterTimeRange
         );
-    }, [links, searchTerm]);
+    }, [links, searchTerm, sortBy, sortOrder, filterStatus, filterTimeRange]);
+
+    const linkCounts = useMemo(() => {
+        return getFilteredLinksCount(
+            links,
+            searchTerm,
+            filterStatus,
+            filterTimeRange
+        );
+    }, [links, searchTerm, filterStatus, filterTimeRange]);
 
     const handleDeleteLink = async (linkId: string) => {
         try {
@@ -45,7 +64,9 @@ export default function DashboardClient({
                         Error loading links
                     </h2>
                     <p className="text-gray-600">
-                        {error instanceof Error ? error.message : 'An unexpected error occurred'}
+                        {error instanceof Error
+                            ? error.message
+                            : 'An unexpected error occurred'}
                     </p>
                 </div>
             </div>
@@ -56,9 +77,17 @@ export default function DashboardClient({
         <>
             <div className="flex flex-col h-full">
                 <DashboardHeader onCreateLink={openCreateLinkModal} />
+                <LinksSummary
+                    total={linkCounts.total}
+                    active={linkCounts.active}
+                    expired={linkCounts.expired}
+                    disabled={linkCounts.disabled}
+                    isLoading={isLoading}
+                />
                 <SearchAndFilters />
+
                 <LinksTable
-                    links={filteredLinks}
+                    links={filteredAndSortedLinks}
                     onCreateLink={openCreateLinkModal}
                     onDeleteLink={handleDeleteLink}
                     isLoading={isLoading || deleteLink.isPending}
