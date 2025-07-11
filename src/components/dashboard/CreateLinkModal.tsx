@@ -1,7 +1,6 @@
 'use client';
-import { useState, useRef, useEffect } from 'react';
-import { createLink } from '@/app/actions';
-import QRCode from 'qrcode';
+import { useState, useRef } from 'react';
+import { useCreateLink } from '@/hooks/useLinks';
 import { Dialog, DialogPanel, DialogTitle } from '@headlessui/react';
 import { AnimatePresence, motion } from 'motion/react';
 import URLInput from './URLInput';
@@ -20,47 +19,30 @@ export default function CreateLinkModal({
     isOpen,
     onClose,
 }: CreateLinkModalProps) {
-    const [isLoading, setIsLoading] = useState(false);
+    const createLink = useCreateLink();
     const [result, setResult] = useState<{
         slug?: string;
         url?: string;
         error?: string;
     } | null>(null);
-    const [qrCodeUrl, setQrCodeUrl] = useState('');
     const [url, setUrl] = useState('');
     const [customSlug, setCustomSlug] = useState('');
     const [expiration, setExpiration] = useState('never');
     const [startingDate, setStartingDate] = useState('');
     const formRef = useRef<HTMLFormElement>(null);
 
-    const shortUrl = result?.slug
-        ? `trimr.in/${result.slug}`
-        : customSlug
-        ? `trimr.in/${customSlug}`
-        : 'trimr.in/selcan';
-
-    useEffect(() => {
-        if (shortUrl) {
-            QRCode.toDataURL(
-                shortUrl,
-                { width: 120, margin: 1 },
-                (err, url) => {
-                    if (!err) {
-                        setQrCodeUrl(url);
-                    }
-                }
-            );
-        }
-    }, [shortUrl]);
-
     if (!isOpen) return null;
 
     const handleSubmit = async (formData: FormData) => {
-        setIsLoading(true);
         setResult(null);
 
         try {
-            const response = await createLink(formData);
+            const response = await createLink.mutateAsync({
+                url: formData.get('url') as string,
+                customSlug: formData.get('customSlug') as string || undefined,
+                expiration: formData.get('expiration') as string || undefined,
+            });
+            
             if (response?.error) {
                 setResult({ error: response.error });
             } else if (response?.success) {
@@ -70,7 +52,6 @@ export default function CreateLinkModal({
             console.error('Error creating link:', error);
             setResult({ error: 'An unexpected error occurred' });
         } finally {
-            setIsLoading(false);
             handleClose();
         }
     };
@@ -120,29 +101,29 @@ export default function CreateLinkModal({
                                 <URLInput
                                     value={url}
                                     onChange={setUrl}
-                                    disabled={isLoading}
+                                    disabled={createLink.isPending}
                                 />
 
                                 <SlugInput
                                     value={customSlug}
                                     onChange={setCustomSlug}
-                                    disabled={isLoading}
+                                    disabled={createLink.isPending}
                                 />
 
                                 <StartingDateInput
                                     value={startingDate}
                                     onChange={setStartingDate}
-                                    disabled={isLoading}
+                                    disabled={createLink.isPending}
                                 />
 
                                 <ExpirationSelect
                                     value={expiration}
                                     onChange={setExpiration}
-                                    disabled={isLoading}
+                                    disabled={createLink.isPending}
                                 />
 
                                 <FormActions
-                                    isLoading={isLoading}
+                                    isLoading={createLink.isPending}
                                     url={url}
                                     onCancel={handleClose}
                                 />
