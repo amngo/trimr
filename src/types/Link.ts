@@ -4,5 +4,7 @@ export interface Link {
     url: string;
     clickCount: number;
     createdAt: Date;
+    startsAt: Date | null;
+    expiresAt: Date | null;
     enabled: boolean;
 }

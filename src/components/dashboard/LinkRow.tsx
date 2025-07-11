@@ -32,7 +32,7 @@ export default function LinkRow({ link, onDelete }: LinkRowProps) {
         setShowDeleteConfirm(false);
     };
     return (
-        <div className="flex items-center px-6 py-4 hover:bg-gray-100 bg-white border border-gray-200 rounded relative">
+        <li className="flex items-center px-6 py-4 hover:bg-gray-100 bg-white border border-gray-200 rounded relative">
             <LinkIndicator enabled={link.enabled} />
 
             <div className="flex items-center space-x-3 flex-1 min-w-0">
@@ -70,9 +70,7 @@ export default function LinkRow({ link, onDelete }: LinkRowProps) {
             <div className="flex items-center space-x-6 text-sm text-gray-600">
                 <div className="flex items-center space-x-1">
                     <UsersIcon size={16} />
-                    <span>
-                        {Math.floor(Math.random() * 1000) + 100} Visitors
-                    </span>
+                    <span>100 Visitors</span>
                 </div>
                 <div className="flex items-center space-x-1">
                     <MousePointerClickIcon size={16} />
@@ -117,6 +115,6 @@ export default function LinkRow({ link, onDelete }: LinkRowProps) {
                     )}
                 </div>
             </div>
-        </div>
+        </li>
     );
 }

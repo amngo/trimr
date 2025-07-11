@@ -21,7 +21,7 @@ export default function DashboardClient({
     const handleDeleteLink = async (linkId: string) => {
         // Optimistic update
         setLinks(links.filter((link) => link.id !== linkId));
-        
+
         try {
             const result = await deleteLink(linkId);
             if (!result.success) {
