@@ -1,10 +1,10 @@
 import {
     ClipboardIcon,
-    EllipsisVerticalIcon,
     ExternalLinkIcon,
     MousePointerClickIcon,
     UsersIcon,
     TrashIcon,
+    ChartBarIcon,
 } from 'lucide-react';
 import { useState } from 'react';
 import LinkIcon from './LinkIcon';
@@ -15,10 +15,11 @@ import {
     copyToClipboard,
 } from '@/utils/linkUtils';
 import LinkIndicator from './LinkIndicator';
-import { Link } from '@/types';
+import { Link as LinkType } from '@/types';
+import Link from 'next/link';
 
 interface LinkRowProps {
-    link: Link;
+    link: LinkType;
     onDelete?: (linkId: string) => Promise<void>;
 }
 
@@ -84,8 +85,14 @@ export default function LinkRow({ link, onDelete }: LinkRowProps) {
                         onClick={() => setShowDeleteConfirm(!showDeleteConfirm)}
                         className="btn btn-square btn-soft btn-sm"
                     >
-                        <EllipsisVerticalIcon size={16} />
+                        <TrashIcon size={16} />
                     </button>
+                    <Link
+                        href={`/stats/${link.slug}`}
+                        className="btn btn-square btn-soft btn-sm ml-2"
+                    >
+                        <ChartBarIcon size={16} />
+                    </Link>
 
                     {showDeleteConfirm && (
                         <div className="absolute right-0 top-8 bg-card border rounded z-10 min-w-[150px] bg-base-200 border-base-300">
