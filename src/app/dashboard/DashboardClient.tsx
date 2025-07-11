@@ -1,12 +1,13 @@
 'use client';
 
-import { useState } from 'react';
+import { useMemo } from 'react';
 import CreateLinkModal from '@/components/dashboard/CreateLinkModal';
 import DashboardHeader from '@/components/dashboard/DashboardHeader';
 import SearchAndFilters from '@/components/dashboard/SearchAndFilters';
 import LinksTable from '@/components/dashboard/LinksTable';
 import { Link } from '@/types';
 import { useLinks, useDeleteLink } from '@/hooks/useLinks';
+import { useModalStore, useSearchStore } from '@/stores';
 
 interface DashboardClientProps {
     initialLinks: Link[];
@@ -15,9 +16,18 @@ interface DashboardClientProps {
 export default function DashboardClient({
     initialLinks,
 }: DashboardClientProps) {
-    const [isModalOpen, setIsModalOpen] = useState(false);
+    const { isCreateLinkModalOpen, openCreateLinkModal, closeCreateLinkModal } = useModalStore();
+    const { searchTerm } = useSearchStore();
     const { data: links = initialLinks, isLoading, error } = useLinks();
     const deleteLink = useDeleteLink();
+
+    const filteredLinks = useMemo(() => {
+        if (!searchTerm) return links;
+        return links.filter(link => 
+            link.url.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            link.slug.toLowerCase().includes(searchTerm.toLowerCase())
+        );
+    }, [links, searchTerm]);
 
     const handleDeleteLink = async (linkId: string) => {
         try {
@@ -45,19 +55,19 @@ export default function DashboardClient({
     return (
         <>
             <div className="flex flex-col h-full">
-                <DashboardHeader onCreateLink={() => setIsModalOpen(true)} />
+                <DashboardHeader onCreateLink={openCreateLinkModal} />
                 <SearchAndFilters />
                 <LinksTable
-                    links={links}
-                    onCreateLink={() => setIsModalOpen(true)}
+                    links={filteredLinks}
+                    onCreateLink={openCreateLinkModal}
                     onDeleteLink={handleDeleteLink}
                     isLoading={isLoading || deleteLink.isPending}
                 />
             </div>
 
             <CreateLinkModal
-                isOpen={isModalOpen}
-                onClose={() => setIsModalOpen(false)}
+                isOpen={isCreateLinkModalOpen}
+                onClose={closeCreateLinkModal}
             />
         </>
     );

@@ -1,3 +1,5 @@
+import ThemeToggle from './ThemeToggle';
+
 interface DashboardHeaderProps {
     onCreateLink: () => void;
 }
@@ -16,9 +18,12 @@ export default function DashboardHeader({
                         Manage your shortened links and track their performance.
                     </p>
                 </div>
-                <button onClick={onCreateLink} className="btn btn-neutral">
-                    Create New Link
-                </button>
+                <div className="flex items-center gap-2">
+                    <ThemeToggle />
+                    <button onClick={onCreateLink} className="btn btn-neutral">
+                        Create New Link
+                    </button>
+                </div>
             </div>
         </div>
     );

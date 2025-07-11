@@ -1,6 +1,7 @@
 'use client';
-import { useState, useRef } from 'react';
+import { useRef, useEffect } from 'react';
 import { useCreateLink } from '@/hooks/useLinks';
+import { useFormStore } from '@/stores';
 import { Dialog, DialogPanel, DialogTitle } from '@headlessui/react';
 import { AnimatePresence, motion } from 'motion/react';
 import URLInput from './URLInput';
@@ -20,16 +21,26 @@ export default function CreateLinkModal({
     onClose,
 }: CreateLinkModalProps) {
     const createLink = useCreateLink();
-    const [result, setResult] = useState<{
-        slug?: string;
-        url?: string;
-        error?: string;
-    } | null>(null);
-    const [url, setUrl] = useState('');
-    const [customSlug, setCustomSlug] = useState('');
-    const [expiration, setExpiration] = useState('never');
-    const [startingDate, setStartingDate] = useState('');
+    const {
+        url,
+        customSlug,
+        expiration,
+        startingDate,
+        result,
+        setUrl,
+        setCustomSlug,
+        setExpiration,
+        setStartingDate,
+        setResult,
+        resetForm,
+    } = useFormStore();
     const formRef = useRef<HTMLFormElement>(null);
+
+    useEffect(() => {
+        if (!isOpen) {
+            resetForm();
+        }
+    }, [isOpen, resetForm]);
 
     if (!isOpen) return null;
 
@@ -58,10 +69,7 @@ export default function CreateLinkModal({
 
     const handleClose = () => {
         onClose();
-        setUrl('');
-        setCustomSlug('');
-        setExpiration('never');
-        setResult(null);
+        resetForm();
     };
 
     return (
