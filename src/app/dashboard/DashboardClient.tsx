@@ -9,6 +9,7 @@ import LinksSummary from '@/components/dashboard/LinksSummary';
 import { Link } from '@/types';
 import { useLinks, useDeleteLink, useToggleLink } from '@/hooks/useLinks';
 import { useModalStore, useSearchStore } from '@/stores';
+import { logger } from '@/utils';
 import {
     filterAndSortLinks,
     getFilteredLinksCount,
@@ -53,7 +54,7 @@ export default function DashboardClient({
         try {
             await deleteLink.mutateAsync(linkId);
         } catch (error) {
-            console.error('Error deleting link:', error);
+            logger.error('Error deleting link', error);
         }
     };
 
@@ -61,7 +62,7 @@ export default function DashboardClient({
         try {
             await toggleLink.mutateAsync({ linkId, enabled });
         } catch (error) {
-            console.error('Error toggling link:', error);
+            logger.error('Error toggling link', error);
         }
     };
 

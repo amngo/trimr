@@ -1,3 +1,6 @@
+import { logger } from './logger';
+import { FAVICON_SERVICE_URL } from '@/constants';
+
 export function formatUrl(url: string, maxLength: number = 50) {
     if (url.length <= maxLength) return url;
     return url.substring(0, maxLength) + '...';
@@ -20,7 +23,7 @@ export async function copyToClipboard(text: string) {
         await navigator.clipboard.writeText(text);
         return true;
     } catch (error) {
-        console.error('Failed to copy:', error);
+        logger.error('Failed to copy to clipboard', error);
         return false;
     }
 }
@@ -37,5 +40,5 @@ export function getDomain(url: string) {
 // Get favicon URL
 export function getFaviconUrl(url: string) {
     const domain = getDomain(url);
-    return `https://www.google.com/s2/favicons?domain=${domain}&sz=32`;
+    return `${FAVICON_SERVICE_URL}?domain=${domain}&sz=32`;
 }

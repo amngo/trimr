@@ -4,12 +4,12 @@ import { useCreateLink } from '@/hooks/useLinks';
 import { useFormStore } from '@/stores';
 import { Dialog, DialogPanel, DialogTitle } from '@headlessui/react';
 import { AnimatePresence, motion } from 'motion/react';
-import URLInput from './URLInput';
-import SlugInput from './SlugInput';
-import ExpirationSelect from './ExpirationSelect';
+import URLInput from '../forms/URLInput';
+import SlugInput from '../forms/SlugInput';
+import ExpirationSelect from '../forms/ExpirationSelect';
 import FormMessages from './FormMessages';
 import FormActions from './FormActions';
-import StartingDateInput from './StartingDateInput';
+import StartingDateInput from '../forms/StartingDateInput';
 
 interface CreateLinkModalProps {
     isOpen: boolean;

@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { TOAST_DURATION } from '@/constants';
 
 export type ToastType = 'success' | 'error' | 'warning' | 'info';
 
@@ -19,7 +20,7 @@ interface ToastStore {
 export const useToastStore = create<ToastStore>((set, get) => ({
     toasts: [],
     
-    addToast: (message: string, type: ToastType, duration = 4000) => {
+    addToast: (message: string, type: ToastType, duration = TOAST_DURATION) => {
         const id = Math.random().toString(36).substring(2);
         const toast: Toast = { id, message, type, duration };
         

@@ -2,8 +2,8 @@ import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
 import QueryProvider from '@/providers/QueryProvider';
-import FadeTransition from '@/components/FadeTransition';
-import AuthButton from '@/components/AuthButton';
+import FadeTransition from '@/components/transitions/FadeTransition';
+import AuthButton from '@/components/ui/AuthButton';
 import ToastContainer from '@/components/ui/ToastContainer';
 
 const inter = Inter({ subsets: ['latin'] });
