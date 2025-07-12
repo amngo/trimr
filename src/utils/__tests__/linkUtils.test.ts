@@ -35,8 +35,8 @@ describe('linkUtils', () => {
 
     describe('formatSlug', () => {
         it('should format slug with localhost:3000 prefix', () => {
-            expect(formatSlug('my-slug')).toBe('localhost:3000/my-slug');
-            expect(formatSlug('test123')).toBe('localhost:3000/test123');
+            expect(formatSlug('my-slug')).toBe('http://localhost:3000/my-slug');
+            expect(formatSlug('test123')).toBe('http://localhost:3000/test123');
         });
     });
 

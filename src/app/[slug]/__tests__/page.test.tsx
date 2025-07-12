@@ -67,7 +67,7 @@ describe('RedirectPage', () => {
         render(result as React.ReactElement);
 
         expect(screen.getByText('Link Disabled')).toBeInTheDocument();
-        expect(screen.getByText('/test-slug')).toBeInTheDocument();
+        expect(screen.getByText('http://localhost:3000/test-slug')).toBeInTheDocument();
         expect(screen.getByText(/has been disabled/)).toBeInTheDocument();
     });
 
@@ -88,7 +88,7 @@ describe('RedirectPage', () => {
         render(result as React.ReactElement);
 
         expect(screen.getByText('Link Expired')).toBeInTheDocument();
-        expect(screen.getByText('/test-slug')).toBeInTheDocument();
+        expect(screen.getByText('http://localhost:3000/test-slug')).toBeInTheDocument();
         expect(screen.getByText(/has expired/)).toBeInTheDocument();
         expect(screen.getByText(/January 1, 2023/)).toBeInTheDocument();
     });
@@ -110,7 +110,7 @@ describe('RedirectPage', () => {
         render(result as React.ReactElement);
 
         expect(screen.getByText('Link Not Available Yet')).toBeInTheDocument();
-        expect(screen.getByText('/test-slug')).toBeInTheDocument();
+        expect(screen.getByText('http://localhost:3000/test-slug')).toBeInTheDocument();
         expect(screen.getByText(/is not available yet/)).toBeInTheDocument();
         expect(screen.getByText(/December 31, 2025/)).toBeInTheDocument();
     });

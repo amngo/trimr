@@ -19,8 +19,6 @@ export default async function RedirectPage({ params }: PageProps) {
         where: { slug },
     });
 
-    console.log(link);
-
     const now = new Date();
 
     // Check if link exists
