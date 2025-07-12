@@ -19,6 +19,12 @@ interface DeleteLinkResponse {
     error?: string;
 }
 
+interface ToggleLinkResponse {
+    success?: boolean;
+    enabled?: boolean;
+    error?: string;
+}
+
 async function fetchLinks(): Promise<Link[]> {
     const response = await fetch('/api/links');
     if (!response.ok) {
@@ -52,6 +58,22 @@ async function deleteLink(linkId: string): Promise<DeleteLinkResponse> {
 
     if (!response.ok) {
         throw new Error('Failed to delete link');
+    }
+
+    return response.json();
+}
+
+async function toggleLink(linkId: string, enabled: boolean): Promise<ToggleLinkResponse> {
+    const response = await fetch(`/api/links/${linkId}`, {
+        method: 'PATCH',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ enabled }),
+    });
+
+    if (!response.ok) {
+        throw new Error('Failed to toggle link');
     }
 
     return response.json();
@@ -99,6 +121,33 @@ export function useDeleteLink() {
         },
         onSettled: () => {
             queryClient.invalidateQueries({ queryKey: ['links'] });
+        },
+    });
+}
+
+export function useToggleLink() {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: ({ linkId, enabled }: { linkId: string; enabled: boolean }) =>
+            toggleLink(linkId, enabled),
+        onMutate: async ({ linkId, enabled }) => {
+            await queryClient.cancelQueries({ queryKey: ['links'] });
+            
+            const previousLinks = queryClient.getQueryData<Link[]>(['links']);
+            
+            queryClient.setQueryData<Link[]>(['links'], (old) =>
+                old?.map((link) => 
+                    link.id === linkId ? { ...link, enabled } : link
+                ) ?? []
+            );
+            
+            return { previousLinks };
+        },
+        onError: (err, variables, context) => {
+            if (context?.previousLinks) {
+                queryClient.setQueryData(['links'], context.previousLinks);
+            }
         },
     });
 }

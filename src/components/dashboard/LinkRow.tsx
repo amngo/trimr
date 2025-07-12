@@ -5,6 +5,9 @@ import {
     UsersIcon,
     TrashIcon,
     ChartBarIcon,
+    ToggleLeft,
+    ToggleRight,
+    PowerIcon,
 } from 'lucide-react';
 import { useState } from 'react';
 import LinkIcon from './LinkIcon';
@@ -21,16 +24,29 @@ import Link from 'next/link';
 interface LinkRowProps {
     link: LinkType;
     onDelete?: (linkId: string) => Promise<void>;
+    onToggle?: (linkId: string, enabled: boolean) => Promise<void>;
 }
 
-export default function LinkRow({ link, onDelete }: LinkRowProps) {
+export default function LinkRow({ link, onDelete, onToggle }: LinkRowProps) {
     const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+    const [isToggling, setIsToggling] = useState(false);
 
     const handleDelete = async () => {
         if (onDelete) {
             await onDelete(link.id);
         }
         setShowDeleteConfirm(false);
+    };
+
+    const handleToggle = async () => {
+        if (onToggle && !isToggling) {
+            setIsToggling(true);
+            try {
+                await onToggle(link.id, !link.enabled);
+            } finally {
+                setIsToggling(false);
+            }
+        }
     };
     return (
         <li className="flex items-center px-6 py-4 rounded relative border border-base-300 bg-base-100">
@@ -82,18 +98,28 @@ export default function LinkRow({ link, onDelete }: LinkRowProps) {
                 </div>
                 <div className="relative">
                     <button
-                        onClick={() => setShowDeleteConfirm(!showDeleteConfirm)}
-                        className="btn btn-square btn-soft btn-sm"
+                        onClick={handleToggle}
+                        disabled={isToggling}
+                        className={`btn btn-square btn-soft btn-sm ${
+                            isToggling ? 'loading' : ''
+                        }`}
+                        title={link.enabled ? 'Disable link' : 'Enable link'}
                     >
-                        <TrashIcon size={16} />
+                        <PowerIcon size={16} />
                     </button>
+
                     <Link
                         href={`/stats/${link.slug}`}
-                        className="btn btn-square btn-soft btn-sm ml-2"
+                        className="btn btn-square btn-soft btn-sm ml-2 btn-primary"
                     >
                         <ChartBarIcon size={16} />
                     </Link>
-
+                    <button
+                        onClick={() => setShowDeleteConfirm(!showDeleteConfirm)}
+                        className="btn btn-square btn-soft btn-sm ml-2 btn-error"
+                    >
+                        <TrashIcon size={16} />
+                    </button>
                     {showDeleteConfirm && (
                         <div className="absolute right-0 top-8 bg-card border rounded z-10 min-w-[150px] bg-base-200 border-base-300">
                             <div className="p-2">

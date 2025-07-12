@@ -7,7 +7,7 @@ import SearchAndFilters from '@/components/dashboard/SearchAndFilters';
 import LinksTable from '@/components/dashboard/LinksTable';
 import LinksSummary from '@/components/dashboard/LinksSummary';
 import { Link } from '@/types';
-import { useLinks, useDeleteLink } from '@/hooks/useLinks';
+import { useLinks, useDeleteLink, useToggleLink } from '@/hooks/useLinks';
 import { useModalStore, useSearchStore } from '@/stores';
 import {
     filterAndSortLinks,
@@ -27,6 +27,7 @@ export default function DashboardClient({
         useSearchStore();
     const { data: links = initialLinks, isLoading, error } = useLinks();
     const deleteLink = useDeleteLink();
+    const toggleLink = useToggleLink();
 
     const filteredAndSortedLinks = useMemo(() => {
         return filterAndSortLinks(
@@ -53,6 +54,14 @@ export default function DashboardClient({
             await deleteLink.mutateAsync(linkId);
         } catch (error) {
             console.error('Error deleting link:', error);
+        }
+    };
+
+    const handleToggleLink = async (linkId: string, enabled: boolean) => {
+        try {
+            await toggleLink.mutateAsync({ linkId, enabled });
+        } catch (error) {
+            console.error('Error toggling link:', error);
         }
     };
 
@@ -90,6 +99,7 @@ export default function DashboardClient({
                     links={filteredAndSortedLinks}
                     onCreateLink={openCreateLinkModal}
                     onDeleteLink={handleDeleteLink}
+                    onToggleLink={handleToggleLink}
                     isLoading={isLoading || deleteLink.isPending}
                 />
             </div>

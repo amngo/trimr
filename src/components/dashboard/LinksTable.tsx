@@ -6,10 +6,11 @@ interface LinksTableProps {
     links: Link[];
     onCreateLink: () => void;
     onDeleteLink?: (linkId: string) => Promise<void>;
+    onToggleLink?: (linkId: string, enabled: boolean) => Promise<void>;
     isLoading?: boolean;
 }
 
-export default function LinksTable({ links, onCreateLink, onDeleteLink, isLoading }: LinksTableProps) {
+export default function LinksTable({ links, onCreateLink, onDeleteLink, onToggleLink, isLoading }: LinksTableProps) {
     if (isLoading) {
         return (
             <div className="flex-1 mt-4">
@@ -27,7 +28,7 @@ export default function LinksTable({ links, onCreateLink, onDeleteLink, isLoadin
             ) : (
                 <ul className="flex flex-col gap-2">
                     {links.map((link) => (
-                        <LinkRow key={link.id} link={link} onDelete={onDeleteLink} />
+                        <LinkRow key={link.id} link={link} onDelete={onDeleteLink} onToggle={onToggleLink} />
                     ))}
                 </ul>
             )}
