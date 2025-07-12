@@ -15,10 +15,22 @@ export async function middleware(request: NextRequest) {
             return NextResponse.redirect(new URL('/auth', request.url));
         }
     }
+
+    // Handle password verification for links
+    if (pathname.match(/^\/[^\/]+$/) && !pathname.startsWith('/dashboard') && !pathname.startsWith('/auth') && !pathname.startsWith('/api')) {
+        const slug = pathname.slice(1); // Remove leading slash
+        
+        // Check if this is a password verification request
+        if (request.nextUrl.searchParams.has('password_verified')) {
+            const response = NextResponse.next();
+            response.headers.set('x-password-verified', 'true');
+            return response;
+        }
+    }
     
     return NextResponse.next();
 }
 
 export const config = {
-    matcher: ['/dashboard/:path*'],
+    matcher: ['/dashboard/:path*', '/((?!api|_next/static|_next/image|favicon.ico).*)'],
 };

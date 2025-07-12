@@ -2,7 +2,7 @@ import { redirect } from 'next/navigation';
 import { headers } from 'next/headers';
 import { db } from '@/lib/db';
 import { getCountryFromIp } from '@/lib/utils';
-import { AlertTriangle } from 'lucide-react';
+import { AlertTriangle, Lock } from 'lucide-react';
 
 interface PageProps {
     params: Promise<{
@@ -151,6 +151,18 @@ export default async function RedirectPage({ params }: PageProps) {
                 </div>
             </div>
         );
+    }
+
+    // Check if link is password protected
+    if (link.password) {
+        // Check if user has already verified the password
+        const headersList = await headers();
+        const userAgent = headersList.get('user-agent') || '';
+        const isVerified = headersList.get('x-password-verified') === 'true';
+
+        if (!isVerified) {
+            redirect(`/${slug}/password`);
+        }
     }
 
     // Track the click

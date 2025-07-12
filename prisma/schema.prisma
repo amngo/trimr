@@ -19,6 +19,7 @@ model Link {
   enabled      Boolean   @default(true)
   expiresAt    DateTime?
   startsAt     DateTime?
+  password     String?
   clicks       Click[]
   user         user?     @relation(fields: [userId], references: [id], onDelete: SetNull)
 

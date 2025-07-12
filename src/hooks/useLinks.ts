@@ -7,6 +7,7 @@ interface CreateLinkData {
     customSlug?: string;
     expiration?: string; // Optional expiration date for the link
     startingDate?: string; // Optional starting date for when the link will be active
+    password?: string; // Optional password for the link
 }
 
 interface CreateLinkResponse {
@@ -41,6 +42,7 @@ async function createLink(data: CreateLinkData): Promise<CreateLinkResponse> {
     if (data.customSlug) formData.append('customSlug', data.customSlug);
     if (data.expiration) formData.append('expiration', data.expiration);
     if (data.startingDate) formData.append('startingDate', data.startingDate);
+    if (data.password) formData.append('password', data.password);
 
     const response = await fetch('/api/links', {
         method: 'POST',

@@ -200,6 +200,75 @@ describe('RedirectPage', () => {
         expect(redirect).toHaveBeenCalledWith('https://example.com');
     });
 
+    it('should redirect to password page when link is password protected', async () => {
+        const mockLink = {
+            id: '1',
+            slug: 'test-slug',
+            url: 'https://example.com',
+            enabled: true,
+            expiresAt: null,
+            startsAt: null,
+            password: 'secret123',
+        };
+
+        (db.link.findUnique as jest.Mock).mockResolvedValue(mockLink);
+
+        await RedirectPage({ params: mockParams });
+
+        expect(redirect).toHaveBeenCalledWith('/test-slug/password');
+    });
+
+    it('should redirect to URL when password is verified', async () => {
+        const mockLink = {
+            id: '1',
+            slug: 'test-slug',
+            url: 'https://example.com',
+            enabled: true,
+            expiresAt: null,
+            startsAt: null,
+            password: 'secret123',
+        };
+
+        // Mock headers to simulate password verification
+        const mockHeaders = jest.fn(() => Promise.resolve(new Map([
+            ['user-agent', 'Mozilla/5.0 Test Browser'],
+            ['x-forwarded-for', '192.168.1.1'],
+            ['x-password-verified', 'true'],
+        ])));
+
+        jest.doMock('next/headers', () => ({
+            headers: mockHeaders,
+        }));
+
+        (db.link.findUnique as jest.Mock).mockResolvedValue(mockLink);
+        (db.click.findFirst as jest.Mock).mockResolvedValue(null);
+        (db.$transaction as jest.Mock).mockResolvedValue([]);
+
+        await RedirectPage({ params: mockParams });
+
+        expect(redirect).toHaveBeenCalledWith('https://example.com');
+    });
+
+    it('should redirect to URL when link has no password', async () => {
+        const mockLink = {
+            id: '1',
+            slug: 'test-slug',
+            url: 'https://example.com',
+            enabled: true,
+            expiresAt: null,
+            startsAt: null,
+            password: null,
+        };
+
+        (db.link.findUnique as jest.Mock).mockResolvedValue(mockLink);
+        (db.click.findFirst as jest.Mock).mockResolvedValue(null);
+        (db.$transaction as jest.Mock).mockResolvedValue([]);
+
+        await RedirectPage({ params: mockParams });
+
+        expect(redirect).toHaveBeenCalledWith('https://example.com');
+    });
+
     it('should handle analytics errors gracefully', async () => {
         const mockLink = {
             id: '1',
@@ -208,6 +277,7 @@ describe('RedirectPage', () => {
             enabled: true,
             expiresAt: null,
             startsAt: null,
+            password: null,
         };
 
         (db.link.findUnique as jest.Mock).mockResolvedValue(mockLink);

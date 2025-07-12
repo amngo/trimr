@@ -9,4 +9,5 @@ export interface Link {
     expiresAt: Date | null;
     enabled: boolean;
     userId: string | null;
+    password: string | null;
 }

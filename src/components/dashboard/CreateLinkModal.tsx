@@ -10,6 +10,7 @@ import ExpirationSelect from '../forms/ExpirationSelect';
 import FormMessages from './FormMessages';
 import FormActions from './FormActions';
 import StartingDateInput from '../forms/StartingDateInput';
+import PasswordInput from '../forms/PasswordInput';
 import Button from '../ui/Button';
 import { X } from 'lucide-react';
 
@@ -28,11 +29,13 @@ export default function CreateLinkModal({
         customSlug,
         expiration,
         startingDate,
+        password,
         result,
         setUrl,
         setCustomSlug,
         setExpiration,
         setStartingDate,
+        setPassword,
         setResult,
         resetForm,
     } = useFormStore();
@@ -54,6 +57,7 @@ export default function CreateLinkModal({
                 startingDate:
                     (formData.get('startingDate') as string) || undefined,
                 expiration: (formData.get('expiration') as string) || undefined,
+                password: (formData.get('password') as string) || undefined,
             });
 
             if (response?.error) {
@@ -139,6 +143,12 @@ export default function CreateLinkModal({
                                     <ExpirationSelect
                                         value={expiration}
                                         onChange={setExpiration}
+                                        disabled={createLink.isPending}
+                                    />
+
+                                    <PasswordInput
+                                        value={password}
+                                        onChange={setPassword}
                                         disabled={createLink.isPending}
                                     />
 
