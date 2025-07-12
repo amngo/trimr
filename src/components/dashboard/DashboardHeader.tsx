@@ -30,7 +30,7 @@ export default function DashboardHeader({
                     </p>
                 </div>
                 <div className="flex items-center gap-2">
-                    <ThemeToggle />
+                    {/* <ThemeToggle /> */}
                     <button onClick={onCreateLink} className="btn btn-neutral">
                         Create New Link
                     </button>

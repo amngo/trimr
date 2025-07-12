@@ -2,7 +2,15 @@ import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { db } from '@/lib/db';
 import { getCurrentUser } from '@/lib/auth-utils';
-import { Eye, Globe, Calendar, TrendingUp, Users, Clock } from 'lucide-react';
+import {
+    Eye,
+    Globe,
+    Calendar,
+    TrendingUp,
+    Users,
+    Clock,
+    AlertTriangle,
+} from 'lucide-react';
 
 interface PageProps {
     params: Promise<{
@@ -12,7 +20,7 @@ interface PageProps {
 
 export default async function StatsPage({ params }: PageProps) {
     const { slug } = await params;
-    
+
     // Check if user is authenticated
     const user = await getCurrentUser();
     if (!user) {
@@ -30,12 +38,71 @@ export default async function StatsPage({ params }: PageProps) {
     });
 
     if (!link) {
-        notFound();
+        return (
+            <div className="container mx-auto max-w-4xl">
+                <div className="flex flex-col items-center justify-center min-h-[60vh] text-center">
+                    <div className="mb-8">
+                        <AlertTriangle
+                            size={64}
+                            className="text-warning mx-auto mb-4"
+                        />
+                        <h1 className="text-4xl font-bold text-base-content mb-4">
+                            Link Not Found
+                        </h1>
+                        <p className="text-lg text-base-content/70 mb-2">
+                            The link{' '}
+                            <span className="font-mono text-primary">
+                                /{slug}
+                            </span>{' '}
+                            does not exist.
+                        </p>
+                        <p className="text-base-content/60">
+                            It may have been deleted or you may have entered an
+                            incorrect URL.
+                        </p>
+                    </div>
+
+                    <Link href="/dashboard" className="btn btn-primary">
+                        Go to Dashboard
+                    </Link>
+                </div>
+            </div>
+        );
     }
 
     // Check if user owns this link
     if (link.userId !== user.id) {
-        notFound();
+        return (
+            <div className="container mx-auto max-w-4xl">
+                <div className="flex flex-col items-center justify-center min-h-[60vh] text-center">
+                    <div className="mb-8">
+                        <AlertTriangle
+                            size={64}
+                            className="text-error mx-auto mb-4"
+                        />
+                        <h1 className="text-4xl font-bold text-base-content mb-4">
+                            Access Denied
+                        </h1>
+                        <p className="text-lg text-base-content/70 mb-2">
+                            You don't have permission to view stats for this
+                            link.
+                        </p>
+                        <p className="text-base-content/60">
+                            This link belongs to another user.
+                        </p>
+                    </div>
+
+                    <div className="space-y-4">
+                        <Link href="/dashboard" className="btn btn-primary">
+                            Go to Dashboard
+                        </Link>
+                        <Link href="/" className="btn btn-outline">
+                            Back to Home
+                        </Link>
+                    </div>
+                </div>
+            </div>
+        );
     }
 
     // Calculate stats - use clickCount for total (efficient), clicks array for detailed analytics

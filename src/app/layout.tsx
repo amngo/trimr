@@ -8,7 +8,7 @@ import AuthButton from '@/components/AuthButton';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-    title: 'Link Shortener',
+    title: 'trimr',
     description: 'A simple and fast URL shortener',
 };
 
@@ -25,15 +25,15 @@ export default function RootLayout({
                         <header className="bg-base-100 shadow-sm">
                             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                                 <div className="flex justify-between items-center py-4">
-                                    <h1 className="text-xl font-semibold">Link Shortener</h1>
+                                    <h1 className="text-xl font-semibold">
+                                        trimr
+                                    </h1>
                                     <AuthButton />
                                 </div>
                             </div>
                         </header>
                         <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-                            <FadeTransition>
-                                {children}
-                            </FadeTransition>
+                            <FadeTransition>{children}</FadeTransition>
                         </main>
                     </div>
                 </QueryProvider>
