@@ -119,7 +119,7 @@ export default function LinkRow({
                 </div>
             )}
 
-            <LinkIndicator enabled={link.enabled} />
+            <LinkIndicator link={link} />
 
             <div className="flex items-center space-x-3 flex-1 min-w-0">
                 <LinkIcon url={link.url} />
@@ -173,7 +173,9 @@ export default function LinkRow({
                                 </span>
                                 <div className="flex items-center space-x-1">
                                     <span className="text-xs font-mono bg-base-200 px-2 py-1 rounded">
-                                        {showPassword ? link.password : '••••••••'}
+                                        {showPassword
+                                            ? link.password
+                                            : '••••••••'}
                                     </span>
                                     <button
                                         onClick={(e) => {
@@ -182,7 +184,11 @@ export default function LinkRow({
                                         }}
                                         className="text-gray-400 hover:text-gray-600 p-1"
                                         disabled={isSelectionMode}
-                                        title={showPassword ? 'Hide password' : 'Show password'}
+                                        title={
+                                            showPassword
+                                                ? 'Hide password'
+                                                : 'Show password'
+                                        }
                                     >
                                         {showPassword ? (
                                             <EyeOff size={12} />

@@ -23,20 +23,20 @@ export default function LinksSummary({
                     <div className="stat-value">...</div>
                 </div>
                 <div className="stat">
-                    <div className="stat-title text-green-600">Active</div>
-                    <div className="stat-value text-green-600">...</div>
+                    <div className="stat-title text-green-500">Active</div>
+                    <div className="stat-value text-green-500">...</div>
                 </div>
                 <div className="stat">
-                    <div className="stat-title text-blue-600">Inactive</div>
-                    <div className="stat-value text-blue-600">...</div>
+                    <div className="stat-title text-blue-500">Inactive</div>
+                    <div className="stat-value text-blue-500">...</div>
                 </div>
                 <div className="stat">
-                    <div className="stat-title text-orange-600">Expired</div>
-                    <div className="stat-value text-orange-600">...</div>
+                    <div className="stat-title text-gray-500">Expired</div>
+                    <div className="stat-value text-gray-500">...</div>
                 </div>
                 <div className="stat">
-                    <div className="stat-title text-red-600">Disabled</div>
-                    <div className="stat-value text-red-600">...</div>
+                    <div className="stat-title text-red-500">Disabled</div>
+                    <div className="stat-value text-red-500">...</div>
                 </div>
             </div>
         );
@@ -49,20 +49,20 @@ export default function LinksSummary({
                 <div className="stat-value">{total}</div>
             </div>
             <div className="stat">
-                <div className="stat-title text-green-600">Active</div>
-                <div className="stat-value text-green-600">{active}</div>
+                <div className="stat-title text-green-500">Active</div>
+                <div className="stat-value text-green-500">{active}</div>
             </div>
             <div className="stat">
-                <div className="stat-title text-blue-600">Inactive</div>
-                <div className="stat-value text-blue-600">{inactive}</div>
+                <div className="stat-title text-blue-500">Inactive</div>
+                <div className="stat-value text-blue-500">{inactive}</div>
             </div>
             <div className="stat">
-                <div className="stat-title text-orange-600">Expired</div>
-                <div className="stat-value text-orange-600">{expired}</div>
+                <div className="stat-title text-gray-500">Expired</div>
+                <div className="stat-value text-gray-500">{expired}</div>
             </div>
             <div className="stat">
-                <div className="stat-title text-red-600">Disabled</div>
-                <div className="stat-value text-red-600">{disabled}</div>
+                <div className="stat-title text-red-500">Disabled</div>
+                <div className="stat-value text-red-500">{disabled}</div>
             </div>
         </div>
     );

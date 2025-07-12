@@ -128,11 +128,11 @@ export default function CreateLinkModal({
                                         disabled={createLink.isPending}
                                     />
 
-                                    <SlugInput
+                                    {/* <SlugInput
                                         value={customSlug}
                                         onChange={setCustomSlug}
                                         disabled={createLink.isPending}
-                                    />
+                                    /> */}
 
                                     <StartingDateInput
                                         value={startingDate}

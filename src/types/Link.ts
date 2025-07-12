@@ -11,3 +11,5 @@ export interface Link {
     userId: string | null;
     password: string | null;
 }
+
+export type LinkStatus = 'active' | 'inactive' | 'expired' | 'disabled';
