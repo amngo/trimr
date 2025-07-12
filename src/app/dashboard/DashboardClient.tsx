@@ -2,6 +2,7 @@
 
 import { useMemo } from 'react';
 import CreateLinkModal from '@/components/dashboard/CreateLinkModal';
+import BulkUploadModal from '@/components/dashboard/BulkUploadModal';
 import DashboardHeader from '@/components/dashboard/DashboardHeader';
 import SearchAndFilters from '@/components/dashboard/SearchAndFilters';
 import LinksTable from '@/components/dashboard/LinksTable';
@@ -22,8 +23,14 @@ interface DashboardClientProps {
 export default function DashboardClient({
     initialLinks,
 }: DashboardClientProps) {
-    const { isCreateLinkModalOpen, openCreateLinkModal, closeCreateLinkModal } =
-        useModalStore();
+    const { 
+        isCreateLinkModalOpen, 
+        openCreateLinkModal, 
+        closeCreateLinkModal,
+        isBulkUploadModalOpen,
+        openBulkUploadModal,
+        closeBulkUploadModal
+    } = useModalStore();
     const { searchTerm, sortBy, sortOrder, filterStatus, filterTimeRange } =
         useSearchStore();
     const { data: links = initialLinks, isLoading, error } = useLinks();
@@ -86,7 +93,10 @@ export default function DashboardClient({
     return (
         <>
             <div className="flex flex-col h-full">
-                <DashboardHeader onCreateLink={openCreateLinkModal} />
+                <DashboardHeader 
+                    onCreateLink={openCreateLinkModal}
+                    onBulkUpload={openBulkUploadModal}
+                />
                 <LinksSummary
                     total={linkCounts.total}
                     active={linkCounts.active}
@@ -109,6 +119,11 @@ export default function DashboardClient({
             <CreateLinkModal
                 isOpen={isCreateLinkModalOpen}
                 onClose={closeCreateLinkModal}
+            />
+            
+            <BulkUploadModal
+                isOpen={isBulkUploadModalOpen}
+                onClose={closeBulkUploadModal}
             />
         </>
     );

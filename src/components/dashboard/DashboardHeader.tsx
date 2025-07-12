@@ -1,12 +1,15 @@
 import Link from 'next/link';
-import ThemeToggle from './ThemeToggle';
+import { Upload, Plus } from 'lucide-react';
+import { Button } from '@/components/ui';
 
 interface DashboardHeaderProps {
     onCreateLink: () => void;
+    onBulkUpload: () => void;
 }
 
 export default function DashboardHeader({
     onCreateLink,
+    onBulkUpload,
 }: DashboardHeaderProps) {
     return (
         <div className="bg-card border-b border-gray-200 pb-4">
@@ -31,9 +34,22 @@ export default function DashboardHeader({
                 </div>
                 <div className="flex items-center gap-2">
                     {/* <ThemeToggle /> */}
-                    <button onClick={onCreateLink} className="btn btn-neutral">
-                        Create New Link
-                    </button>
+                    <Button
+                        variant="outline"
+                        onClick={onBulkUpload}
+                        className="gap-2"
+                    >
+                        <Upload size={16} />
+                        Bulk Upload
+                    </Button>
+                    <Button
+                        variant="primary"
+                        onClick={onCreateLink}
+                        className="gap-2"
+                    >
+                        <Plus size={16} />
+                        Create Link
+                    </Button>
                 </div>
             </div>
         </div>

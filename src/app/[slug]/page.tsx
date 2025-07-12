@@ -3,7 +3,6 @@ import { headers } from 'next/headers';
 import { db } from '@/lib/db';
 import { getCountryFromIp } from '@/lib/utils';
 import { AlertTriangle } from 'lucide-react';
-import Link from 'next/link';
 
 interface PageProps {
     params: Promise<{

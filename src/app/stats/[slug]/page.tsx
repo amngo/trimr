@@ -85,7 +85,7 @@ export default async function StatsPage({ params }: PageProps) {
                             Access Denied
                         </h1>
                         <p className="text-lg text-base-content/70 mb-2">
-                            You don't have permission to view stats for this
+                            You don&apos;t have permission to view stats for this
                             link.
                         </p>
                         <p className="text-base-content/60">

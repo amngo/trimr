@@ -102,7 +102,7 @@ export function useCreateLink() {
                 toast.success('Link created successfully!');
             }
         },
-        onError: (error) => {
+        onError: () => {
             toast.error('Failed to create link. Please try again.');
         },
     });

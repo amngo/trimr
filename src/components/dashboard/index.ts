@@ -1,3 +1,4 @@
+export { default as BulkUploadModal } from './BulkUploadModal';
 export { default as CreateLinkModal } from './CreateLinkModal';
 export { default as DashboardHeader } from './DashboardHeader';
 export { default as EmptyState } from './EmptyState';
