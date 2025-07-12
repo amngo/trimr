@@ -18,7 +18,12 @@ export default async function RedirectPage({ params }: PageProps) {
         where: { slug },
     });
 
-    if (!link || (link.expiresAt && link.expiresAt < new Date())) {
+    console.log(link);
+
+    const now = new Date();
+
+    // Check if link exists
+    if (!link) {
         return (
             <div className="container mx-auto max-w-4xl">
                 <div className="flex flex-col items-center justify-center min-h-[60vh] text-center">
@@ -40,6 +45,107 @@ export default async function RedirectPage({ params }: PageProps) {
                         <p className="text-base-content/60">
                             It may have been deleted or you may have entered an
                             incorrect URL.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
+    // Check if link is disabled
+    if (!link.enabled) {
+        return (
+            <div className="container mx-auto max-w-4xl">
+                <div className="flex flex-col items-center justify-center min-h-[60vh] text-center">
+                    <div className="mb-8">
+                        <AlertTriangle
+                            size={64}
+                            className="text-warning mx-auto mb-4"
+                        />
+                        <h1 className="text-4xl font-bold text-base-content mb-4">
+                            Link Disabled
+                        </h1>
+                        <p className="text-lg text-base-content/70 mb-2">
+                            The link{' '}
+                            <span className="font-mono text-primary">
+                                /{slug}
+                            </span>{' '}
+                            has been disabled.
+                        </p>
+                        <p className="text-base-content/60">
+                            This link is no longer accessible.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
+    // Check if link has expired
+    if (link.expiresAt && link.expiresAt < now) {
+        return (
+            <div className="container mx-auto max-w-4xl">
+                <div className="flex flex-col items-center justify-center min-h-[60vh] text-center">
+                    <div className="mb-8">
+                        <AlertTriangle
+                            size={64}
+                            className="text-warning mx-auto mb-4"
+                        />
+                        <h1 className="text-4xl font-bold text-base-content mb-4">
+                            Link Expired
+                        </h1>
+                        <p className="text-lg text-base-content/70 mb-2">
+                            The link{' '}
+                            <span className="font-mono text-primary">
+                                /{slug}
+                            </span>{' '}
+                            has expired.
+                        </p>
+                        <p className="text-base-content/60">
+                            This link expired on{' '}
+                            {link.expiresAt.toLocaleDateString('en-US', {
+                                year: 'numeric',
+                                month: 'long',
+                                day: 'numeric',
+                            })}
+                            .
+                        </p>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
+    // Check if link hasn't started yet
+    if (link.startsAt && link.startsAt > now) {
+        return (
+            <div className="container mx-auto max-w-4xl">
+                <div className="flex flex-col items-center justify-center min-h-[60vh] text-center">
+                    <div className="mb-8">
+                        <AlertTriangle
+                            size={64}
+                            className="text-info mx-auto mb-4"
+                        />
+                        <h1 className="text-4xl font-bold text-base-content mb-4">
+                            Link Not Available Yet
+                        </h1>
+                        <p className="text-lg text-base-content/70 mb-2">
+                            The link{' '}
+                            <span className="font-mono text-primary">
+                                /{slug}
+                            </span>{' '}
+                            is not available yet.
+                        </p>
+                        <p className="text-base-content/60">
+                            This link will be available starting{' '}
+                            {link.startsAt.toLocaleDateString('en-US', {
+                                year: 'numeric',
+                                month: 'long',
+                                day: 'numeric',
+                                hour: 'numeric',
+                                minute: '2-digit',
+                            })}
+                            .
                         </p>
                     </div>
                 </div>

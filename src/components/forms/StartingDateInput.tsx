@@ -26,8 +26,8 @@ export default function StartingDateInput({
             </legend>
             <input
                 type="datetime-local"
-                id="starting-date"
-                name="starting-date"
+                id="startingDate"
+                name="startingDate"
                 value={value}
                 onChange={(e) => onChange(e.target.value)}
                 disabled={disabled}

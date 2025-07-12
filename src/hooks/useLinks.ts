@@ -5,7 +5,8 @@ import { toast } from '@/stores';
 interface CreateLinkData {
     url: string;
     customSlug?: string;
-    expiration?: string;
+    expiration?: string; // Optional expiration date for the link
+    startingDate?: string; // Optional starting date for when the link will be active
 }
 
 interface CreateLinkResponse {
@@ -39,6 +40,7 @@ async function createLink(data: CreateLinkData): Promise<CreateLinkResponse> {
     formData.append('url', data.url);
     if (data.customSlug) formData.append('customSlug', data.customSlug);
     if (data.expiration) formData.append('expiration', data.expiration);
+    if (data.startingDate) formData.append('startingDate', data.startingDate);
 
     const response = await fetch('/api/links', {
         method: 'POST',

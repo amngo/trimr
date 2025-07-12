@@ -51,6 +51,8 @@ export default function CreateLinkModal({
             const response = await createLink.mutateAsync({
                 url: formData.get('url') as string,
                 customSlug: (formData.get('customSlug') as string) || undefined,
+                startingDate:
+                    (formData.get('startingDate') as string) || undefined,
                 expiration: (formData.get('expiration') as string) || undefined,
             });
 

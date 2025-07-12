@@ -12,6 +12,7 @@ const createLinkSchema = z.object({
         .refine(isValidUrl, 'Please enter a valid URL'),
     customSlug: z.string().optional(),
     expiration: z.string().optional(),
+    startingDate: z.string().optional(),
 });
 
 export async function deleteLink(linkId: string) {
@@ -72,11 +73,13 @@ export async function createLink(formData: FormData) {
         const rawUrl = formData.get('url') as string;
         const rawCustomSlug = formData.get('customSlug') as string;
         const rawExpiration = formData.get('expiration') as string;
+        const rawStartingDate = formData.get('startingDate') as string;
 
         const result = createLinkSchema.safeParse({
             url: rawUrl,
             customSlug: rawCustomSlug || undefined,
             expiration: rawExpiration || undefined,
+            startingDate: rawStartingDate || undefined,
         });
 
         if (!result.success) {
@@ -86,12 +89,12 @@ export async function createLink(formData: FormData) {
         }
 
         const formattedUrl = formatUrl(result.data.url);
-        const { customSlug, expiration } = result.data;
+        const { customSlug, expiration, startingDate } = result.data;
 
         // Check if URL already exists for this user (only if no custom slug provided)
         if (!customSlug) {
             const existingLink = await db.link.findFirst({
-                where: { 
+                where: {
                     url: formattedUrl,
                     userId: user.id,
                 },
@@ -185,6 +188,7 @@ export async function createLink(formData: FormData) {
                 url: formattedUrl,
                 userId: user.id,
                 expiresAt,
+                startsAt: new Date(startingDate || Date.now()), // Default to now if no starting date provided
             },
         });
 
