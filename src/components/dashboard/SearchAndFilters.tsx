@@ -32,6 +32,7 @@ export default function SearchAndFilters() {
     const statusOptions: { value: FilterStatus; label: string }[] = [
         { value: 'all', label: 'All Links' },
         { value: 'active', label: 'Active' },
+        { value: 'inactive', label: 'Inactive' },
         { value: 'expired', label: 'Expired' },
         { value: 'disabled', label: 'Disabled' },
     ];

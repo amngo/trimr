@@ -1,6 +1,7 @@
 interface LinksSummaryProps {
     total: number;
     active: number;
+    inactive: number;
     expired: number;
     disabled: number;
     isLoading?: boolean;
@@ -9,6 +10,7 @@ interface LinksSummaryProps {
 export default function LinksSummary({
     total,
     active,
+    inactive,
     expired,
     disabled,
     isLoading = false,
@@ -23,6 +25,10 @@ export default function LinksSummary({
                 <div className="stat">
                     <div className="stat-title text-green-600">Active</div>
                     <div className="stat-value text-green-600">...</div>
+                </div>
+                <div className="stat">
+                    <div className="stat-title text-blue-600">Inactive</div>
+                    <div className="stat-value text-blue-600">...</div>
                 </div>
                 <div className="stat">
                     <div className="stat-title text-orange-600">Expired</div>
@@ -45,6 +51,10 @@ export default function LinksSummary({
             <div className="stat">
                 <div className="stat-title text-green-600">Active</div>
                 <div className="stat-value text-green-600">{active}</div>
+            </div>
+            <div className="stat">
+                <div className="stat-title text-blue-600">Inactive</div>
+                <div className="stat-value text-blue-600">{inactive}</div>
             </div>
             <div className="stat">
                 <div className="stat-title text-orange-600">Expired</div>

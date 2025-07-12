@@ -8,6 +8,8 @@ import {
     PowerIcon,
     CheckSquare,
     Square,
+    Eye,
+    EyeOff,
 } from 'lucide-react';
 import { useState } from 'react';
 import LinkIcon from './LinkIcon';
@@ -23,6 +25,7 @@ import Link from 'next/link';
 import { toast, useBulkSelectionStore } from '@/stores';
 import { cn } from '@/utils';
 import { motion } from 'motion/react';
+import { getBadgeClasses, getLinkBadges } from '@/utils/linkBadges';
 
 interface LinkRowProps {
     link: LinkType;
@@ -39,6 +42,7 @@ export default function LinkRow({
 }: LinkRowProps) {
     const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
     const [isToggling, setIsToggling] = useState(false);
+    const [showPassword, setShowPassword] = useState(false);
 
     const { isSelectionMode, isLinkSelected, toggleLink } =
         useBulkSelectionStore();
@@ -142,10 +146,54 @@ export default function LinkRow({
                         >
                             <ExternalLinkIcon size={16} />
                         </a>
+                        {/* Link Status Badges */}
+                        <div className="flex items-center space-x-1">
+                            {getLinkBadges(link).map((badge, index) => (
+                                <span
+                                    key={`${badge.type}-${index}`}
+                                    className={cn(
+                                        'badge badge-xs',
+                                        getBadgeClasses(badge.variant)
+                                    )}
+                                >
+                                    {badge.text}
+                                </span>
+                            ))}
+                        </div>
                     </div>
-                    <p className="text-xs truncate font-light">
-                        {formatUrl(link.url)}
-                    </p>
+                    <div className="flex flex-col space-y-1 mt-1">
+                        <p className="text-xs truncate font-light">
+                            {formatUrl(link.url)}
+                        </p>
+                        {/* Password Display */}
+                        {link.password && (
+                            <div className="flex items-center space-x-2">
+                                <span className="text-xs text-base-content/60">
+                                    Password:
+                                </span>
+                                <div className="flex items-center space-x-1">
+                                    <span className="text-xs font-mono bg-base-200 px-2 py-1 rounded">
+                                        {showPassword ? link.password : '••••••••'}
+                                    </span>
+                                    <button
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            setShowPassword(!showPassword);
+                                        }}
+                                        className="text-gray-400 hover:text-gray-600 p-1"
+                                        disabled={isSelectionMode}
+                                        title={showPassword ? 'Hide password' : 'Show password'}
+                                    >
+                                        {showPassword ? (
+                                            <EyeOff size={12} />
+                                        ) : (
+                                            <Eye size={12} />
+                                        )}
+                                    </button>
+                                </div>
+                            </div>
+                        )}
+                    </div>
                 </div>
             </div>
 

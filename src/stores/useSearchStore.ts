@@ -1,8 +1,18 @@
 import { create } from 'zustand';
 
-export type SortBy = 'createdAt' | 'clickCount' | 'visitorCount' | 'slug' | 'url';
+export type SortBy =
+    | 'createdAt'
+    | 'clickCount'
+    | 'visitorCount'
+    | 'slug'
+    | 'url';
 export type SortOrder = 'asc' | 'desc';
-export type FilterStatus = 'all' | 'active' | 'expired' | 'disabled';
+export type FilterStatus =
+    | 'all'
+    | 'active'
+    | 'inactive'
+    | 'expired'
+    | 'disabled';
 export type FilterTimeRange = 'all' | '7d' | '30d' | '90d';
 
 interface SearchState {
@@ -31,14 +41,17 @@ export const useSearchStore = create<SearchState>((set, get) => ({
     clearSearch: () => set({ searchTerm: '' }),
     setSortBy: (sortBy: SortBy) => set({ sortBy }),
     setSortOrder: (sortOrder: SortOrder) => set({ sortOrder }),
-    toggleSortOrder: () => set({ sortOrder: get().sortOrder === 'asc' ? 'desc' : 'asc' }),
+    toggleSortOrder: () =>
+        set({ sortOrder: get().sortOrder === 'asc' ? 'desc' : 'asc' }),
     setFilterStatus: (status: FilterStatus) => set({ filterStatus: status }),
-    setFilterTimeRange: (range: FilterTimeRange) => set({ filterTimeRange: range }),
-    resetFilters: () => set({
-        searchTerm: '',
-        sortBy: 'createdAt',
-        sortOrder: 'desc',
-        filterStatus: 'all',
-        filterTimeRange: 'all',
-    }),
+    setFilterTimeRange: (range: FilterTimeRange) =>
+        set({ filterTimeRange: range }),
+    resetFilters: () =>
+        set({
+            searchTerm: '',
+            sortBy: 'createdAt',
+            sortOrder: 'desc',
+            filterStatus: 'all',
+            filterTimeRange: 'all',
+        }),
 }));

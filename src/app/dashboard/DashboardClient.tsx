@@ -25,13 +25,13 @@ interface DashboardClientProps {
 export default function DashboardClient({
     initialLinks,
 }: DashboardClientProps) {
-    const { 
-        isCreateLinkModalOpen, 
-        openCreateLinkModal, 
+    const {
+        isCreateLinkModalOpen,
+        openCreateLinkModal,
         closeCreateLinkModal,
         isBulkUploadModalOpen,
         openBulkUploadModal,
-        closeBulkUploadModal
+        closeBulkUploadModal,
     } = useModalStore();
     const { searchTerm, sortBy, sortOrder, filterStatus, filterTimeRange } =
         useSearchStore();
@@ -113,21 +113,22 @@ export default function DashboardClient({
     return (
         <>
             <div className="flex flex-col h-full">
-                <DashboardHeader 
+                <DashboardHeader
                     onCreateLink={openCreateLinkModal}
                     onBulkUpload={openBulkUploadModal}
                 />
                 <LinksSummary
                     total={linkCounts.total}
                     active={linkCounts.active}
+                    inactive={linkCounts.inactive}
                     expired={linkCounts.expired}
                     disabled={linkCounts.disabled}
                     isLoading={isLoading}
                 />
                 <SearchAndFilters />
-                
+
                 <BulkActions
-                    linkIds={filteredAndSortedLinks.map(link => link.id)}
+                    linkIds={filteredAndSortedLinks.map((link) => link.id)}
                     onBulkDelete={handleBulkDelete}
                     onBulkToggle={handleBulkToggle}
                     isLoading={bulkDelete.isPending || bulkToggle.isPending}
@@ -139,7 +140,9 @@ export default function DashboardClient({
                     onDeleteLink={handleDeleteLink}
                     onToggleLink={handleToggleLink}
                     isLoading={isLoading}
-                    deletingLinkId={deleteLink.isPending ? deleteLink.variables : undefined}
+                    deletingLinkId={
+                        deleteLink.isPending ? deleteLink.variables : undefined
+                    }
                 />
             </div>
 
@@ -147,7 +150,7 @@ export default function DashboardClient({
                 isOpen={isCreateLinkModalOpen}
                 onClose={closeCreateLinkModal}
             />
-            
+
             <BulkUploadModal
                 isOpen={isBulkUploadModalOpen}
                 onClose={closeBulkUploadModal}

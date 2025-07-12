@@ -1,5 +1,10 @@
 import { Link } from '@/types';
-import type { SortBy, SortOrder, FilterStatus, FilterTimeRange } from '@/stores/useSearchStore';
+import type {
+    SortBy,
+    SortOrder,
+    FilterStatus,
+    FilterTimeRange,
+} from '@/stores/useSearchStore';
 
 export function filterAndSortLinks(
     links: Link[],
@@ -14,23 +19,31 @@ export function filterAndSortLinks(
     // Apply search filter
     if (searchTerm) {
         const searchLower = searchTerm.toLowerCase();
-        filteredLinks = filteredLinks.filter(link => 
-            link.url.toLowerCase().includes(searchLower) ||
-            link.slug.toLowerCase().includes(searchLower)
+        filteredLinks = filteredLinks.filter(
+            (link) =>
+                link.url.toLowerCase().includes(searchLower) ||
+                link.slug.toLowerCase().includes(searchLower)
         );
     }
 
     // Apply status filter
     if (filterStatus !== 'all') {
         const now = new Date();
-        filteredLinks = filteredLinks.filter(link => {
+        filteredLinks = filteredLinks.filter((link) => {
             switch (filterStatus) {
                 case 'active':
-                    return link.enabled && 
-                           (!link.expiresAt || link.expiresAt > now) &&
-                           (!link.startsAt || link.startsAt <= now);
+                    return (
+                        link.enabled &&
+                        (!link.expiresAt || new Date(link.expiresAt) > now) &&
+                        (!link.startsAt || new Date(link.startsAt) >= now)
+                    );
+                case 'inactive':
+                    return (
+                        link.enabled &&
+                        (!link.startsAt || new Date(link.startsAt) < now)
+                    );
                 case 'expired':
-                    return link.expiresAt && link.expiresAt <= now;
+                    return link.expiresAt && new Date(link.expiresAt) <= now;
                 case 'disabled':
                     return !link.enabled;
                 default:
@@ -43,7 +56,7 @@ export function filterAndSortLinks(
     if (filterTimeRange !== 'all') {
         const now = new Date();
         const cutoffDate = new Date();
-        
+
         switch (filterTimeRange) {
             case '7d':
                 cutoffDate.setDate(now.getDate() - 7);
@@ -55,9 +68,9 @@ export function filterAndSortLinks(
                 cutoffDate.setDate(now.getDate() - 90);
                 break;
         }
-        
-        filteredLinks = filteredLinks.filter(link => 
-            new Date(link.createdAt) >= cutoffDate
+
+        filteredLinks = filteredLinks.filter(
+            (link) => new Date(link.createdAt) >= cutoffDate
         );
     }
 
@@ -113,26 +126,28 @@ export function getFilteredLinksCount(
 ): {
     total: number;
     active: number;
+    inactive: number;
     expired: number;
     disabled: number;
 } {
     const now = new Date();
-    
+
     let filteredLinks = links;
-    
+
     // Apply search filter
     if (searchTerm) {
         const searchLower = searchTerm.toLowerCase();
-        filteredLinks = filteredLinks.filter(link => 
-            link.url.toLowerCase().includes(searchLower) ||
-            link.slug.toLowerCase().includes(searchLower)
+        filteredLinks = filteredLinks.filter(
+            (link) =>
+                link.url.toLowerCase().includes(searchLower) ||
+                link.slug.toLowerCase().includes(searchLower)
         );
     }
 
     // Apply time range filter
     if (filterTimeRange !== 'all') {
         const cutoffDate = new Date();
-        
+
         switch (filterTimeRange) {
             case '7d':
                 cutoffDate.setDate(now.getDate() - 7);
@@ -144,29 +159,34 @@ export function getFilteredLinksCount(
                 cutoffDate.setDate(now.getDate() - 90);
                 break;
         }
-        
-        filteredLinks = filteredLinks.filter(link => 
-            new Date(link.createdAt) >= cutoffDate
+
+        filteredLinks = filteredLinks.filter(
+            (link) => new Date(link.createdAt) >= cutoffDate
         );
     }
 
-    const active = filteredLinks.filter(link => 
-        link.enabled && 
-        (!link.expiresAt || link.expiresAt > now) &&
-        (!link.startsAt || link.startsAt <= now)
+    const active = filteredLinks.filter(
+        (link) =>
+            link.enabled &&
+            (!link.expiresAt || new Date(link.expiresAt) > now) &&
+            (!link.startsAt || new Date(link.startsAt) >= now)
     ).length;
 
-    const expired = filteredLinks.filter(link => 
-        link.expiresAt && link.expiresAt <= now
+    const inactive = filteredLinks.filter(
+        (link) =>
+            link.enabled && (!link.startsAt || new Date(link.startsAt) < now)
     ).length;
 
-    const disabled = filteredLinks.filter(link => 
-        !link.enabled
+    const expired = filteredLinks.filter(
+        (link) => link.expiresAt && new Date(link.expiresAt) < now
     ).length;
+
+    const disabled = filteredLinks.filter((link) => !link.enabled).length;
 
     return {
         total: filteredLinks.length,
         active,
+        inactive,
         expired,
         disabled,
     };
