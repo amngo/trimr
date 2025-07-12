@@ -64,7 +64,10 @@ async function deleteLink(linkId: string): Promise<DeleteLinkResponse> {
     return response.json();
 }
 
-async function toggleLink(linkId: string, enabled: boolean): Promise<ToggleLinkResponse> {
+async function toggleLink(
+    linkId: string,
+    enabled: boolean
+): Promise<ToggleLinkResponse> {
     const response = await fetch(`/api/links/${linkId}`, {
         method: 'PATCH',
         headers: {
@@ -112,13 +115,14 @@ export function useDeleteLink() {
         mutationFn: deleteLink,
         onMutate: async (linkId: string) => {
             await queryClient.cancelQueries({ queryKey: ['links'] });
-            
+
             const previousLinks = queryClient.getQueryData<Link[]>(['links']);
-            
-            queryClient.setQueryData<Link[]>(['links'], (old) =>
-                old?.filter((link) => link.id !== linkId) ?? []
+
+            queryClient.setQueryData<Link[]>(
+                ['links'],
+                (old) => old?.filter((link) => link.id !== linkId) ?? []
             );
-            
+
             return { previousLinks };
         },
         onSuccess: () => {
@@ -130,9 +134,6 @@ export function useDeleteLink() {
             }
             toast.error('Failed to delete link. Please try again.');
         },
-        onSettled: () => {
-            queryClient.invalidateQueries({ queryKey: ['links'] });
-        },
     });
 }
 
@@ -140,19 +141,26 @@ export function useToggleLink() {
     const queryClient = useQueryClient();
 
     return useMutation({
-        mutationFn: ({ linkId, enabled }: { linkId: string; enabled: boolean }) =>
-            toggleLink(linkId, enabled),
+        mutationFn: ({
+            linkId,
+            enabled,
+        }: {
+            linkId: string;
+            enabled: boolean;
+        }) => toggleLink(linkId, enabled),
         onMutate: async ({ linkId, enabled }) => {
             await queryClient.cancelQueries({ queryKey: ['links'] });
-            
+
             const previousLinks = queryClient.getQueryData<Link[]>(['links']);
-            
-            queryClient.setQueryData<Link[]>(['links'], (old) =>
-                old?.map((link) => 
-                    link.id === linkId ? { ...link, enabled } : link
-                ) ?? []
+
+            queryClient.setQueryData<Link[]>(
+                ['links'],
+                (old) =>
+                    old?.map((link) =>
+                        link.id === linkId ? { ...link, enabled } : link
+                    ) ?? []
             );
-            
+
             return { previousLinks };
         },
         onSuccess: (data, variables) => {

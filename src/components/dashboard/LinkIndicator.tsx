@@ -1,6 +1,12 @@
+import { cn } from '@/utils';
+
 export default function LinkIndicator({ enabled }: { enabled: boolean }) {
-    if (enabled) {
-        return <div className="absolute w-2 h-full top-0 left-0 bg-success" />;
-    }
-    return <div className="absolute w-2 h-full top-0 left-0 bg-error" />;
+    return (
+        <div
+            className={cn(
+                'absolute w-2 h-full top-0 left-0 transition-colors duration-300',
+                enabled ? 'bg-success' : 'bg-error'
+            )}
+        />
+    );
 }

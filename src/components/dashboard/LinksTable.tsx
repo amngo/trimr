@@ -1,6 +1,7 @@
 import { Link } from '@/types';
 import EmptyState from './EmptyState';
 import LinkRow from './LinkRow';
+import { AnimatePresence } from 'motion/react';
 
 interface LinksTableProps {
     links: Link[];
@@ -11,7 +12,14 @@ interface LinksTableProps {
     deletingLinkId?: string;
 }
 
-export default function LinksTable({ links, onCreateLink, onDeleteLink, onToggleLink, isLoading, deletingLinkId }: LinksTableProps) {
+export default function LinksTable({
+    links,
+    onCreateLink,
+    onDeleteLink,
+    onToggleLink,
+    isLoading,
+    deletingLinkId,
+}: LinksTableProps) {
     if (isLoading) {
         return (
             <div className="flex-1 mt-4">
@@ -28,15 +36,17 @@ export default function LinksTable({ links, onCreateLink, onDeleteLink, onToggle
                 <EmptyState onCreateLink={onCreateLink} />
             ) : (
                 <ul className="flex flex-col gap-2">
-                    {links.map((link) => (
-                        <LinkRow 
-                            key={link.id} 
-                            link={link} 
-                            onDelete={onDeleteLink} 
-                            onToggle={onToggleLink}
-                            isDeletionPending={deletingLinkId === link.id}
-                        />
-                    ))}
+                    <AnimatePresence initial={false}>
+                        {links.map((link) => (
+                            <LinkRow
+                                key={link.id}
+                                link={link}
+                                onDelete={onDeleteLink}
+                                onToggle={onToggleLink}
+                                isDeletionPending={deletingLinkId === link.id}
+                            />
+                        ))}
+                    </AnimatePresence>
                 </ul>
             )}
         </div>
