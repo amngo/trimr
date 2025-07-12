@@ -35,15 +35,15 @@ export function filterAndSortLinks(
                     return (
                         link.enabled &&
                         (!link.expiresAt || new Date(link.expiresAt) > now) &&
-                        (!link.startsAt || new Date(link.startsAt) >= now)
+                        (!link.startsAt || new Date(link.startsAt) <= now)
                     );
                 case 'inactive':
                     return (
                         link.enabled &&
-                        (!link.startsAt || new Date(link.startsAt) < now)
+                        (!link.startsAt || new Date(link.startsAt) >= now)
                     );
                 case 'expired':
-                    return link.expiresAt && new Date(link.expiresAt) <= now;
+                    return link.expiresAt && new Date(link.expiresAt) < now;
                 case 'disabled':
                     return !link.enabled;
                 default:
@@ -169,12 +169,12 @@ export function getFilteredLinksCount(
         (link) =>
             link.enabled &&
             (!link.expiresAt || new Date(link.expiresAt) > now) &&
-            (!link.startsAt || new Date(link.startsAt) >= now)
+            (!link.startsAt || new Date(link.startsAt) <= now)
     ).length;
 
     const inactive = filteredLinks.filter(
         (link) =>
-            link.enabled && (!link.startsAt || new Date(link.startsAt) < now)
+            link.enabled && (!link.startsAt || new Date(link.startsAt) >= now)
     ).length;
 
     const expired = filteredLinks.filter(
