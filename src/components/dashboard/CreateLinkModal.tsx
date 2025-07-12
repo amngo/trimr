@@ -5,7 +5,6 @@ import { useFormStore } from '@/stores';
 import { Dialog, DialogPanel, DialogTitle } from '@headlessui/react';
 import { AnimatePresence, motion } from 'motion/react';
 import URLInput from '../forms/URLInput';
-import SlugInput from '../forms/SlugInput';
 import ExpirationSelect from '../forms/ExpirationSelect';
 import FormMessages from './FormMessages';
 import FormActions from './FormActions';
@@ -26,13 +25,11 @@ export default function CreateLinkModal({
     const createLink = useCreateLink();
     const {
         url,
-        customSlug,
         expiration,
         startingDate,
         password,
         result,
         setUrl,
-        setCustomSlug,
         setExpiration,
         setStartingDate,
         setPassword,
@@ -53,7 +50,6 @@ export default function CreateLinkModal({
         try {
             const response = await createLink.mutateAsync({
                 url: formData.get('url') as string,
-                customSlug: (formData.get('customSlug') as string) || undefined,
                 startingDate:
                     (formData.get('startingDate') as string) || undefined,
                 expiration: (formData.get('expiration') as string) || undefined,

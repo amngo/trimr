@@ -18,8 +18,6 @@ export async function middleware(request: NextRequest) {
 
     // Handle password verification for links
     if (pathname.match(/^\/[^\/]+$/) && !pathname.startsWith('/dashboard') && !pathname.startsWith('/auth') && !pathname.startsWith('/api')) {
-        const slug = pathname.slice(1); // Remove leading slash
-        
         // Check if this is a password verification request
         if (request.nextUrl.searchParams.has('password_verified')) {
             const response = NextResponse.next();

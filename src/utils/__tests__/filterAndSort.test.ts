@@ -12,7 +12,8 @@ const mockLinks: Link[] = [
         createdAt: new Date('2024-01-01'),
         expiresAt: new Date('2025-12-01'), // future expiry
         startsAt: null,
-        userId: 'user1'
+        userId: 'user1',
+        password: null
     },
     {
         id: '2',
@@ -24,7 +25,8 @@ const mockLinks: Link[] = [
         createdAt: new Date('2024-02-01'),
         expiresAt: null,
         startsAt: null,
-        userId: 'user1'
+        userId: 'user1',
+        password: 'secret123'
     },
     {
         id: '3',
@@ -36,7 +38,8 @@ const mockLinks: Link[] = [
         createdAt: new Date('2024-03-01'),
         expiresAt: new Date('2023-01-01'), // expired
         startsAt: null,
-        userId: 'user1'
+        userId: 'user1',
+        password: null
     },
     {
         id: '4',
@@ -48,7 +51,8 @@ const mockLinks: Link[] = [
         createdAt: new Date('2024-04-01'),
         expiresAt: null,
         startsAt: new Date('2025-12-01'), // future start
-        userId: 'user1'
+        userId: 'user1',
+        password: null
     }
 ];
 

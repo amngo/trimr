@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { useParams, useRouter } from 'next/navigation';
+import { useParams } from 'next/navigation';
 import { Lock, Eye, EyeOff } from 'lucide-react';
 
 export default function PasswordPage() {
@@ -10,7 +10,6 @@ export default function PasswordPage() {
     const [error, setError] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const params = useParams();
-    const router = useRouter();
     const slug = params.slug as string;
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -28,14 +27,13 @@ export default function PasswordPage() {
             });
 
             if (response.ok) {
-                const data = await response.json();
                 // Redirect to the link with password verification flag
                 window.location.href = `/${slug}?password_verified=true`;
             } else {
                 const data = await response.json();
                 setError(data.error || 'Incorrect password');
             }
-        } catch (error) {
+        } catch {
             setError('An error occurred. Please try again.');
         } finally {
             setIsLoading(false);

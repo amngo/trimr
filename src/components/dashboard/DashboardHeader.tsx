@@ -34,14 +34,14 @@ export default function DashboardHeader({
                 </div>
                 <div className="flex items-center gap-2">
                     {/* <ThemeToggle /> */}
-                    <Button
+                    {/* <Button
                         variant="outline"
                         onClick={onBulkUpload}
                         className="gap-2"
                     >
                         <Upload size={16} />
                         Bulk Upload
-                    </Button>
+                    </Button> */}
                     <Button
                         variant="primary"
                         onClick={onCreateLink}
