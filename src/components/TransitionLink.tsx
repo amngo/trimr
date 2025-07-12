@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import { cn } from '@/utils';
 
 interface TransitionLinkProps {
     href: string;
@@ -40,9 +41,11 @@ export default function TransitionLink({
         <Link
             href={href}
             onClick={handleClick}
-            className={`transition-opacity duration-150 ${
-                isTransitioning ? 'opacity-50' : 'opacity-100'
-            } ${className || ''}`}
+            className={cn(
+                'transition-opacity duration-150',
+                isTransitioning ? 'opacity-50' : 'opacity-100',
+                className
+            )}
         >
             {children}
         </Link>

@@ -3,6 +3,7 @@
 import { getFaviconUrl } from '@/utils/linkUtils';
 import { CircleQuestionMarkIcon } from 'lucide-react';
 import { useState } from 'react';
+import { cn } from '@/utils';
 
 interface LinkIconProps {
     url: string;
@@ -18,7 +19,7 @@ export default function LinkIcon({
     if (imageError) {
         return (
             <div className="border border-gray-200 rounded p-2 bg-white">
-                <CircleQuestionMarkIcon className={`${className}`} />
+                <CircleQuestionMarkIcon className={cn(className)} />
             </div>
         );
     }
@@ -28,7 +29,7 @@ export default function LinkIcon({
             <img
                 src={getFaviconUrl(url)}
                 alt="Site icon"
-                className={`${className}`}
+                className={cn(className)}
                 onError={() => setImageError(true)}
             />
         </div>

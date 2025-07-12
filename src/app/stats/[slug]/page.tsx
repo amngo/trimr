@@ -11,6 +11,7 @@ import {
     Clock,
     AlertTriangle,
 } from 'lucide-react';
+import { cn } from '@/utils';
 
 interface PageProps {
     params: Promise<{
@@ -263,7 +264,8 @@ export default async function StatsPage({ params }: PageProps) {
                                     >
                                         <div className="flex items-center space-x-2">
                                             <div
-                                                className={`badge badge-lg ${
+                                                className={cn(
+                                                    'badge badge-lg',
                                                     index === 0
                                                         ? 'badge-primary'
                                                         : index === 1
@@ -271,7 +273,7 @@ export default async function StatsPage({ params }: PageProps) {
                                                         : index === 2
                                                         ? 'badge-accent'
                                                         : 'badge-neutral'
-                                                }`}
+                                                )}
                                             >
                                                 {index + 1}
                                             </div>

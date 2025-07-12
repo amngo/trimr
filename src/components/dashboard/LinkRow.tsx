@@ -21,6 +21,7 @@ import LinkIndicator from './LinkIndicator';
 import { Link as LinkType } from '@/types';
 import Link from 'next/link';
 import { toast } from '@/stores';
+import { cn } from '@/utils';
 
 interface LinkRowProps {
     link: LinkType;
@@ -62,9 +63,10 @@ export default function LinkRow({ link, onDelete, onToggle, isDeletionPending = 
         }
     };
     return (
-        <li className={`flex items-center px-6 py-4 rounded relative border border-base-300 bg-base-100 transition-opacity duration-300 ${
+        <li className={cn(
+            'flex items-center px-6 py-4 rounded relative border border-base-300 bg-base-100 transition-opacity duration-300',
             isDeletionPending ? 'opacity-50 pointer-events-none' : 'opacity-100'
-        }`}>
+        )}>
             <LinkIndicator enabled={link.enabled} />
 
             <div className="flex items-center space-x-3 flex-1 min-w-0">
@@ -111,9 +113,10 @@ export default function LinkRow({ link, onDelete, onToggle, isDeletionPending = 
                     <button
                         onClick={handleToggle}
                         disabled={isToggling}
-                        className={`btn btn-square btn-soft btn-sm ${
-                            isToggling ? 'loading' : ''
-                        }`}
+                        className={cn(
+                            'btn btn-square btn-soft btn-sm',
+                            isToggling && 'loading'
+                        )}
                         title={link.enabled ? 'Disable link' : 'Enable link'}
                     >
                         <PowerIcon size={16} />
