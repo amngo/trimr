@@ -20,7 +20,10 @@ export function parseCSVText(csvText: string): ParsedCSVData {
     const headers = lines[0].split(',').map(h => h.trim().replace(/['"]/g, ''));
     
     // Validate headers
-    const hasUrlHeader = headers.some(h => h.toLowerCase() === 'url');
+    const hasUrlHeader = headers.some(h => {
+        const normalized = h.toLowerCase();
+        return normalized === 'url' || normalized === 'link' || normalized === 'website';
+    });
     if (!hasUrlHeader) {
         return {
             data: [],
