@@ -1,7 +1,9 @@
 'use client';
 
 import { useToastStore, Toast } from '@/stores/useToastStore';
+import { cn } from '@/utils';
 import { CheckCircle, XCircle, AlertTriangle, Info, X } from 'lucide-react';
+import { AnimatePresence, motion } from 'motion/react';
 
 const ToastItem = ({ toast }: { toast: Toast }) => {
     const { removeToast } = useToastStore();
@@ -22,23 +24,30 @@ const ToastItem = ({ toast }: { toast: Toast }) => {
     };
 
     const getToastClasses = () => {
-        const baseClasses = 'alert shadow-lg mb-2 flex items-center justify-between';
+        const baseClasses =
+            'alert shadow-lg mb-2 flex items-center justify-between';
         switch (toast.type) {
             case 'success':
-                return `${baseClasses} alert-success`;
+                return cn(baseClasses, 'alert-success');
             case 'error':
-                return `${baseClasses} alert-error`;
+                return cn(baseClasses, 'alert-error');
             case 'warning':
-                return `${baseClasses} alert-warning`;
+                return cn(baseClasses, 'alert-warning');
             case 'info':
-                return `${baseClasses} alert-info`;
+                return cn(baseClasses, 'alert-info');
             default:
-                return `${baseClasses} alert-info`;
+                return cn(baseClasses, 'alert-info');
         }
     };
 
     return (
-        <div className={getToastClasses()}>
+        <motion.div
+            layout
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.95 }}
+            className={getToastClasses()}
+        >
             <div className="flex items-center space-x-2">
                 {getToastIcon()}
                 <span className="text-sm font-medium">{toast.message}</span>
@@ -50,20 +59,20 @@ const ToastItem = ({ toast }: { toast: Toast }) => {
             >
                 <X size={16} />
             </button>
-        </div>
+        </motion.div>
     );
 };
 
 export default function ToastContainer() {
     const { toasts } = useToastStore();
 
-    if (toasts.length === 0) return null;
-
     return (
-        <div className="toast toast-top toast-center z-50">
-            {toasts.map((toast) => (
-                <ToastItem key={toast.id} toast={toast} />
-            ))}
+        <div className="toast z-50">
+            <AnimatePresence>
+                {toasts.map((toast) => (
+                    <ToastItem key={toast.id} toast={toast} />
+                ))}
+            </AnimatePresence>
         </div>
     );
 }

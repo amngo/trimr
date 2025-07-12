@@ -100,7 +100,8 @@ export default function DashboardClient({
                     onCreateLink={openCreateLinkModal}
                     onDeleteLink={handleDeleteLink}
                     onToggleLink={handleToggleLink}
-                    isLoading={isLoading || deleteLink.isPending}
+                    isLoading={isLoading}
+                    deletingLinkId={deleteLink.isPending ? deleteLink.variables : undefined}
                 />
             </div>
 

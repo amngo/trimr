@@ -26,9 +26,10 @@ interface LinkRowProps {
     link: LinkType;
     onDelete?: (linkId: string) => Promise<void>;
     onToggle?: (linkId: string, enabled: boolean) => Promise<void>;
+    isDeletionPending?: boolean;
 }
 
-export default function LinkRow({ link, onDelete, onToggle }: LinkRowProps) {
+export default function LinkRow({ link, onDelete, onToggle, isDeletionPending = false }: LinkRowProps) {
     const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
     const [isToggling, setIsToggling] = useState(false);
 
@@ -61,7 +62,9 @@ export default function LinkRow({ link, onDelete, onToggle }: LinkRowProps) {
         }
     };
     return (
-        <li className="flex items-center px-6 py-4 rounded relative border border-base-300 bg-base-100">
+        <li className={`flex items-center px-6 py-4 rounded relative border border-base-300 bg-base-100 transition-opacity duration-300 ${
+            isDeletionPending ? 'opacity-50 pointer-events-none' : 'opacity-100'
+        }`}>
             <LinkIndicator enabled={link.enabled} />
 
             <div className="flex items-center space-x-3 flex-1 min-w-0">
