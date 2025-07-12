@@ -115,7 +115,12 @@ export default function AuthPage() {
 
     return (
         <div className="min-h-screen flex items-center justify-center bg-base-200">
-            <div className="card w-96 bg-base-100 border border-base-300">
+            <div
+                className={cn(
+                    'card w-96 bg-base-100 border border-base-300',
+                    isPending && 'opacity-50 pointer-events-none'
+                )}
+            >
                 <div className="card-body">
                     <h2 className="card-title text-center justify-center text-2xl mb-6">
                         {isLogin ? 'Sign In' : 'Sign Up'}

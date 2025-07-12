@@ -5,10 +5,6 @@ import DashboardClient from './DashboardClient';
 export default async function DashboardPage() {
     const user = await getCurrentUser();
 
-    //   if (!user) {
-    //     redirect('/auth')
-    //   }
-
     const links = await db.link.findMany({
         where: { userId: user?.id },
         orderBy: { createdAt: 'desc' },

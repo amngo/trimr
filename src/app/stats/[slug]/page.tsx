@@ -94,14 +94,9 @@ export default async function StatsPage({ params }: PageProps) {
                         </p>
                     </div>
 
-                    <div className="space-y-4">
-                        <Link href="/dashboard" className="btn btn-primary">
-                            Go to Dashboard
-                        </Link>
-                        <Link href="/" className="btn btn-outline">
-                            Back to Home
-                        </Link>
-                    </div>
+                    <Link href="/dashboard" className="btn btn-primary">
+                        Go to Dashboard
+                    </Link>
                 </div>
             </div>
         );
