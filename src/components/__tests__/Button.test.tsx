@@ -7,7 +7,7 @@ describe('Button', () => {
         
         const button = screen.getByRole('button', { name: 'Click me' });
         expect(button).toBeInTheDocument();
-        expect(button).toHaveClass('btn', 'btn-neutral');
+        expect(button).toHaveClass('btn btn-neutral');
     });
 
     it('should apply variant classes correctly', () => {

@@ -4,6 +4,17 @@ import { db } from '@/lib/db';
 import { createLink } from '@/app/actions';
 import { getCurrentUser } from '@/lib/auth-utils';
 
+// Mock NextResponse
+jest.mock('next/server', () => ({
+    ...jest.requireActual('next/server'),
+    NextResponse: {
+        json: (data: unknown, init?: { status?: number }) => ({
+            json: async () => data,
+            status: init?.status || 200,
+        }),
+    },
+}));
+
 // Mock dependencies
 jest.mock('@/lib/db', () => ({
     db: {

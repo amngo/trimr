@@ -7,4 +7,5 @@ export interface Link {
     startsAt: Date | null;
     expiresAt: Date | null;
     enabled: boolean;
+    userId: string | null;
 }

@@ -67,7 +67,7 @@ describe('URLInput', () => {
         const input = screen.getByRole('textbox');
         expect(input).toHaveAttribute('id', 'url');
         expect(input).toHaveAttribute('name', 'url');
-        expect(input).toHaveClass('input', 'w-full');
+        expect(input).toHaveClass('input w-full');
     });
 
     it('should handle multiple onChange calls', () => {
