@@ -8,18 +8,19 @@ datasource db {
 }
 
 model Link {
-  id         String    @id @default(cuid())
-  slug       String    @unique
-  url        String
-  userId     String?
-  createdAt  DateTime  @default(now())
-  updatedAt  DateTime  @updatedAt
-  clickCount Int       @default(0)
-  enabled    Boolean   @default(true)
-  expiresAt  DateTime?
-  startsAt   DateTime?
-  clicks     Click[]
-  user       user?     @relation(fields: [userId], references: [id], onDelete: SetNull)
+  id           String    @id @default(cuid())
+  slug         String    @unique
+  url          String
+  userId       String?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  clickCount   Int       @default(0)
+  visitorCount Int       @default(0)
+  enabled      Boolean   @default(true)
+  expiresAt    DateTime?
+  startsAt     DateTime?
+  clicks       Click[]
+  user         user?     @relation(fields: [userId], references: [id], onDelete: SetNull)
 
   @@map("links")
 }

@@ -24,6 +24,7 @@ export default function SearchAndFilters() {
     const sortOptions: { value: SortBy; label: string }[] = [
         { value: 'createdAt', label: 'Date Created' },
         { value: 'clickCount', label: 'Click Count' },
+        { value: 'visitorCount', label: 'Visitor Count' },
         { value: 'slug', label: 'Slug' },
         { value: 'url', label: 'URL' },
     ];

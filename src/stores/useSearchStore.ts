@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 
-export type SortBy = 'createdAt' | 'clickCount' | 'slug' | 'url';
+export type SortBy = 'createdAt' | 'clickCount' | 'visitorCount' | 'slug' | 'url';
 export type SortOrder = 'asc' | 'desc';
 export type FilterStatus = 'all' | 'active' | 'expired' | 'disabled';
 export type FilterTimeRange = 'all' | '7d' | '30d' | '90d';

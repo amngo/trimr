@@ -75,6 +75,10 @@ export function filterAndSortLinks(
                 aValue = a.clickCount;
                 bValue = b.clickCount;
                 break;
+            case 'visitorCount':
+                aValue = a.visitorCount;
+                bValue = b.visitorCount;
+                break;
             case 'slug':
                 aValue = a.slug.toLowerCase();
                 bValue = b.slug.toLowerCase();

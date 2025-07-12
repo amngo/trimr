@@ -72,7 +72,17 @@ export default async function RedirectPage({ params }: PageProps) {
             country = await getCountryFromIp(ipAddress);
         }
 
-        // Save the click analytics and increment click count
+        // Check if this IP has visited this link before (for visitor count)
+        const existingClick = await db.click.findFirst({
+            where: {
+                linkId: link.id,
+                ipAddress,
+            },
+        });
+
+        const isNewVisitor = !existingClick;
+
+        // Save the click analytics and increment counters
         await db.$transaction([
             db.click.create({
                 data: {
@@ -88,6 +98,11 @@ export default async function RedirectPage({ params }: PageProps) {
                     clickCount: {
                         increment: 1,
                     },
+                    ...(isNewVisitor && {
+                        visitorCount: {
+                            increment: 1,
+                        },
+                    }),
                 },
             }),
         ]);

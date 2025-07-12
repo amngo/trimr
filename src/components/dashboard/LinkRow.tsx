@@ -152,7 +152,7 @@ export default function LinkRow({
             <div className="flex items-center space-x-6 text-sm text-gray-600">
                 <div className="flex items-center space-x-1">
                     <UsersIcon size={16} />
-                    <span>100 Visitors</span>
+                    <span>{link.visitorCount} Visitors</span>
                 </div>
                 <div className="flex items-center space-x-1">
                     <MousePointerClickIcon size={16} />

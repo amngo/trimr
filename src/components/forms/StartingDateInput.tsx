@@ -19,7 +19,7 @@ export default function StartingDateInput({
                 Starting Date
                 <div
                     className="tooltip tooltip-right"
-                    data-tip="Select the starting date for the link."
+                    data-tip="Select the starting date for when the link will be active."
                 >
                     <InfoIcon size={16} />
                 </div>

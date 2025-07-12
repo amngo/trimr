@@ -7,6 +7,7 @@ const mockLinks: Link[] = [
         slug: 'example',
         url: 'https://example.com',
         clickCount: 10,
+        visitorCount: 7,
         enabled: true,
         createdAt: new Date('2024-01-01'),
         expiresAt: new Date('2025-12-01'), // future expiry
@@ -18,6 +19,7 @@ const mockLinks: Link[] = [
         slug: 'google',
         url: 'https://google.com',
         clickCount: 5,
+        visitorCount: 3,
         enabled: false,
         createdAt: new Date('2024-02-01'),
         expiresAt: null,
@@ -29,6 +31,7 @@ const mockLinks: Link[] = [
         slug: 'expired',
         url: 'https://expired.com',
         clickCount: 20,
+        visitorCount: 15,
         enabled: true,
         createdAt: new Date('2024-03-01'),
         expiresAt: new Date('2023-01-01'), // expired
@@ -40,6 +43,7 @@ const mockLinks: Link[] = [
         slug: 'future',
         url: 'https://future.com',
         clickCount: 0,
+        visitorCount: 0,
         enabled: true,
         createdAt: new Date('2024-04-01'),
         expiresAt: null,
@@ -99,6 +103,12 @@ describe('filterAndSort', () => {
             const result = filterAndSortLinks(mockLinks, '', 'clickCount', 'desc', 'all', 'all');
             expect(result[0].clickCount).toBe(20);
             expect(result[1].clickCount).toBe(10);
+        });
+
+        it('should sort by visitor count', () => {
+            const result = filterAndSortLinks(mockLinks, '', 'visitorCount', 'desc', 'all', 'all');
+            expect(result[0].visitorCount).toBe(15);
+            expect(result[1].visitorCount).toBe(7);
         });
 
         it('should sort by slug alphabetically', () => {

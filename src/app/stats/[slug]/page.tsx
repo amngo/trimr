@@ -10,6 +10,7 @@ import {
     Users,
     Clock,
     AlertTriangle,
+    UsersIcon,
 } from 'lucide-react';
 import { cn } from '@/utils';
 
@@ -181,10 +182,21 @@ export default async function StatsPage({ params }: PageProps) {
 
                 <div className="stat">
                     <div className="stat-figure text-secondary">
+                        <UsersIcon size={32} />
+                    </div>
+                    <div className="stat-title">Visitors</div>
+                    <div className="stat-value text-secondary">
+                        {link.visitorCount}
+                    </div>
+                    <div className="stat-desc">Unique Visitors</div>
+                </div>
+
+                <div className="stat">
+                    <div className="stat-figure text-sky-500">
                         <Globe size={32} />
                     </div>
                     <div className="stat-title">Countries</div>
-                    <div className="stat-value text-secondary">
+                    <div className="stat-value text-sky-500">
                         {uniqueCountries}
                     </div>
                     <div className="stat-desc">Unique locations</div>
