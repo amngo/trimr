@@ -1,5 +1,5 @@
 import { logger } from './logger';
-import { FAVICON_SERVICE_URL } from '@/constants';
+import { BASE_URL, FAVICON_SERVICE_URL } from '@/constants';
 
 export function formatUrl(url: string, maxLength: number = 50) {
     if (url.length <= maxLength) return url;
@@ -15,7 +15,7 @@ export function formatDate(date: Date) {
 }
 
 export function formatSlug(slug: string) {
-    return `localhost:3000/${slug}`;
+    return `${BASE_URL}/${slug}`;
 }
 
 export async function copyToClipboard(text: string) {

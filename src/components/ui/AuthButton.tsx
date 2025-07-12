@@ -10,13 +10,13 @@ export default function AuthButton() {
     const router = useRouter();
 
     if (isPending) {
-        return <div className="skeleton h-10 w-20"></div>;
+        return <div className="skeleton size-10 rounded-full"></div>;
     }
 
     if (session) {
         return (
             <div className="dropdown dropdown-end">
-                <button className="btn btn-ghost btn-circle">
+                <button className="btn btn-ghost btn-circle overflow-hidden">
                     <div className="size-10 flex items-center justify-center">
                         {session.user?.image ? (
                             <img src={session.user.image} alt="User avatar" />

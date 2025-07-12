@@ -1,6 +1,10 @@
 // Application Constants
 export const APP_NAME = 'trimr';
 export const APP_DESCRIPTION = 'A simple and fast URL shortener';
+export const BASE_URL =
+    process.env.NODE_ENV === 'production'
+        ? process.env.NEXT_PUBLIC_BASE_URL
+        : 'http://localhost:3000';
 
 // API Constants
 export const API_ROUTES = {
@@ -22,4 +26,9 @@ export const IPAPI_URL = 'https://ipapi.co';
 
 // File Upload Limits
 export const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
-export const ACCEPTED_IMAGE_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'] as const;
+export const ACCEPTED_IMAGE_TYPES = [
+    'image/jpeg',
+    'image/jpg',
+    'image/png',
+    'image/webp',
+] as const;

@@ -26,6 +26,7 @@ import { toast, useBulkSelectionStore } from '@/stores';
 import { cn } from '@/utils';
 import { motion } from 'motion/react';
 import { getBadgeClasses, getLinkBadges } from '@/utils/linkBadges';
+import { BASE_URL } from '@/constants';
 
 interface LinkRowProps {
     link: LinkType;
@@ -68,9 +69,7 @@ export default function LinkRow({
     };
 
     const handleCopyLink = async () => {
-        const success = await copyToClipboard(
-            `${process.env.NEXT_PUBLIC_BASE_URL}/${link.slug}`
-        );
+        const success = await copyToClipboard(`${BASE_URL}/${link.slug}`);
         if (success) {
             toast.success('Link copied to clipboard!');
         } else {

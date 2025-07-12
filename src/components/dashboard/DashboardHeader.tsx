@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { Upload, Plus } from 'lucide-react';
+import { Plus } from 'lucide-react';
 import { Button } from '@/components/ui';
 
 interface DashboardHeaderProps {
@@ -9,8 +9,8 @@ interface DashboardHeaderProps {
 
 export default function DashboardHeader({
     onCreateLink,
-    onBulkUpload,
-}: DashboardHeaderProps) {
+}: // onBulkUpload,
+DashboardHeaderProps) {
     return (
         <div className="bg-card border-gray-200 pb-4">
             <div className="breadcrumbs text-sm mb-4">

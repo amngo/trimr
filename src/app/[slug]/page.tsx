@@ -3,6 +3,7 @@ import { headers } from 'next/headers';
 import { db } from '@/lib/db';
 import { getCountryFromIp } from '@/lib/utils';
 import { AlertTriangle } from 'lucide-react';
+import { BASE_URL } from '@/constants';
 
 interface PageProps {
     params: Promise<{
@@ -68,7 +69,7 @@ export default async function RedirectPage({ params }: PageProps) {
                         <p className="text-lg text-base-content/70 mb-2">
                             The link{' '}
                             <span className="font-mono text-primary">
-                                /{slug}
+                                {`${BASE_URL}/${slug}`}
                             </span>{' '}
                             has been disabled.
                         </p>
@@ -97,7 +98,7 @@ export default async function RedirectPage({ params }: PageProps) {
                         <p className="text-lg text-base-content/70 mb-2">
                             The link{' '}
                             <span className="font-mono text-primary">
-                                /{slug}
+                                {`${BASE_URL}/${slug}`}
                             </span>{' '}
                             has expired.
                         </p>
@@ -107,6 +108,8 @@ export default async function RedirectPage({ params }: PageProps) {
                                 year: 'numeric',
                                 month: 'long',
                                 day: 'numeric',
+                                hour: 'numeric',
+                                minute: '2-digit',
                             })}
                             .
                         </p>
@@ -132,7 +135,7 @@ export default async function RedirectPage({ params }: PageProps) {
                         <p className="text-lg text-base-content/70 mb-2">
                             The link{' '}
                             <span className="font-mono text-primary">
-                                /{slug}
+                                {`${BASE_URL}/${slug}`}
                             </span>{' '}
                             is not available yet.
                         </p>

@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useParams } from 'next/navigation';
 import { Lock, Eye, EyeOff } from 'lucide-react';
+import { BASE_URL } from '@/constants';
 
 export default function PasswordPage() {
     const [password, setPassword] = useState('');
@@ -99,7 +100,8 @@ export default function PasswordPage() {
                     </form>
 
                     <p className="text-sm text-base-content/60 mt-4">
-                        Link: <span className="font-mono">/{slug}</span>
+                        Link:{' '}
+                        <span className="font-mono">{`${BASE_URL}/${slug}`}</span>
                     </p>
                 </div>
             </div>
