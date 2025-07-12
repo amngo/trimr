@@ -12,7 +12,7 @@ export default function DashboardHeader({
     onBulkUpload,
 }: DashboardHeaderProps) {
     return (
-        <div className="bg-card border-b border-gray-200 pb-4">
+        <div className="bg-card border-gray-200 pb-4">
             <div className="breadcrumbs text-sm mb-4">
                 <ul>
                     <li>

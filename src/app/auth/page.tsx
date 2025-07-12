@@ -2,6 +2,13 @@
 import { useState, useEffect } from 'react';
 import { signIn, signUp, useSession } from '@/lib/auth-client';
 import { useRouter } from 'next/navigation';
+import { KeyRoundIcon, MailIcon, UserRoundIcon } from 'lucide-react';
+import { cn } from '@/utils';
+
+function isValidPassword(password: string): boolean {
+    // Basic validation: at least 8 characters
+    return password.length >= 8;
+}
 
 export default function AuthPage() {
     const [isLogin, setIsLogin] = useState(true);
@@ -108,7 +115,7 @@ export default function AuthPage() {
 
     return (
         <div className="min-h-screen flex items-center justify-center bg-base-200">
-            <div className="card w-96 bg-base-100 shadow-xl">
+            <div className="card w-96 bg-base-100 border border-base-300">
                 <div className="card-body">
                     <h2 className="card-title text-center justify-center text-2xl mb-6">
                         {isLogin ? 'Sign In' : 'Sign Up'}
@@ -134,40 +141,70 @@ export default function AuthPage() {
                     )}
 
                     <form onSubmit={handleEmailAuth} className="space-y-4">
-                        <fieldset className="fieldset">
+                        <fieldset className="fieldset space-y-2">
                             {!isLogin && (
                                 <>
-                                    <label className="label">Name</label>
-                                    <input
-                                        type="text"
-                                        placeholder="Enter your name"
-                                        className="input w-full"
-                                        value={name}
-                                        onChange={(e) =>
-                                            setName(e.target.value)
-                                        }
-                                        required={!isLogin}
-                                    />
+                                    <label className="input w-full">
+                                        <UserRoundIcon
+                                            className="opacity-50"
+                                            size={16}
+                                        />
+                                        <input
+                                            type="text"
+                                            placeholder="Name"
+                                            className="grow"
+                                            value={name}
+                                            onChange={(e) =>
+                                                setName(e.target.value)
+                                            }
+                                            required={!isLogin}
+                                        />
+                                    </label>
                                 </>
                             )}
-                            <label className="label">Email</label>
-                            <input
-                                type="email"
-                                placeholder="Enter your email"
-                                className="input w-full"
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
-                                required
-                            />
-                            <label className="label">Password</label>
-                            <input
-                                type="password"
-                                placeholder="Enter your password"
-                                className="input w-full"
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                                required
-                            />
+                            <label className="input w-full">
+                                <MailIcon className="opacity-50" size={16} />
+                                <input
+                                    type="email"
+                                    placeholder="Email"
+                                    className="grow"
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
+                                    required
+                                />
+                            </label>
+
+                            <label className="input w-full">
+                                <KeyRoundIcon
+                                    className="opacity-50"
+                                    size={16}
+                                />
+                                <input
+                                    type="password"
+                                    placeholder="Password"
+                                    className="grow"
+                                    value={password}
+                                    onChange={(e) =>
+                                        setPassword(e.target.value)
+                                    }
+                                    required
+                                />
+                            </label>
+
+                            {!isLogin && (
+                                <span className="text-base-content/60 flex items-center gap-2 px-1 text-[0.6875rem]">
+                                    <span
+                                        className={cn('status inline-block', {
+                                            'status-error':
+                                                password &&
+                                                !isValidPassword(password),
+                                            'status-success':
+                                                isValidPassword(password),
+                                        })}
+                                    ></span>{' '}
+                                    Password must be 8+ characters
+                                </span>
+                            )}
                         </fieldset>
 
                         <div className="form-control mt-6">

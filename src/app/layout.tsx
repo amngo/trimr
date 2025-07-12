@@ -23,9 +23,9 @@ export default function RootLayout({
             <body className={inter.className}>
                 <QueryProvider>
                     <div className="min-h-screen bg-base-200">
-                        <header className="bg-base-100 shadow-sm">
+                        <header className="bg-base-100 border-b border-base-300">
                             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                                <div className="flex justify-between items-center py-4">
+                                <div className="flex justify-between items-center py-2">
                                     <h1 className="text-xl font-semibold">
                                         trimr
                                     </h1>

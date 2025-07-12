@@ -85,8 +85,8 @@ export default async function StatsPage({ params }: PageProps) {
                             Access Denied
                         </h1>
                         <p className="text-lg text-base-content/70 mb-2">
-                            You don&apos;t have permission to view stats for this
-                            link.
+                            You don&apos;t have permission to view stats for
+                            this link.
                         </p>
                         <p className="text-base-content/60">
                             This link belongs to another user.
@@ -169,7 +169,7 @@ export default async function StatsPage({ params }: PageProps) {
             </div>
 
             {/* Overview Stats */}
-            <div className="stats stats-vertical lg:stats-horizontal shadow w-full mb-8 bg-base-100">
+            <div className="stats stats-vertical lg:stats-horizontal w-full mb-8 bg-base-100 border border-base-300">
                 <div className="stat">
                     <div className="stat-figure text-primary">
                         <Eye size={32} />
@@ -210,7 +210,7 @@ export default async function StatsPage({ params }: PageProps) {
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 {/* Daily Activity */}
-                <div className="card bg-base-100 shadow-lg">
+                <div className="card bg-base-100 border border-base-300">
                     <div className="card-body">
                         <h2 className="card-title text-2xl mb-4">
                             <TrendingUp className="w-6 h-6" />
@@ -249,7 +249,7 @@ export default async function StatsPage({ params }: PageProps) {
                 </div>
 
                 {/* Top Countries */}
-                <div className="card bg-base-100 shadow-lg">
+                <div className="card bg-base-100 border border-base-300">
                     <div className="card-body">
                         <h2 className="card-title text-2xl mb-4">
                             <Globe className="w-6 h-6" />
@@ -307,7 +307,7 @@ export default async function StatsPage({ params }: PageProps) {
             </div>
 
             {/* Recent Clicks */}
-            <div className="card bg-base-100 shadow-lg mt-8">
+            <div className="card bg-base-100 border border-base-300 mt-8">
                 <div className="card-body">
                     <h2 className="card-title text-2xl mb-4">
                         <Clock className="w-6 h-6" />
