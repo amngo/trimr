@@ -10,6 +10,8 @@ import ExpirationSelect from '../forms/ExpirationSelect';
 import FormMessages from './FormMessages';
 import FormActions from './FormActions';
 import StartingDateInput from '../forms/StartingDateInput';
+import Button from '../ui/Button';
+import { X } from 'lucide-react';
 
 interface CreateLinkModalProps {
     isOpen: boolean;
@@ -42,18 +44,16 @@ export default function CreateLinkModal({
         }
     }, [isOpen, resetForm]);
 
-    if (!isOpen) return null;
-
     const handleSubmit = async (formData: FormData) => {
         setResult(null);
 
         try {
             const response = await createLink.mutateAsync({
                 url: formData.get('url') as string,
-                customSlug: formData.get('customSlug') as string || undefined,
-                expiration: formData.get('expiration') as string || undefined,
+                customSlug: (formData.get('customSlug') as string) || undefined,
+                expiration: (formData.get('expiration') as string) || undefined,
             });
-            
+
             if (response?.error) {
                 setResult({ error: response.error });
             } else if (response?.success) {
@@ -68,8 +68,8 @@ export default function CreateLinkModal({
     };
 
     const handleClose = () => {
-        onClose();
         resetForm();
+        onClose();
     };
 
     return (
@@ -82,61 +82,72 @@ export default function CreateLinkModal({
                     className="relative z-50"
                 >
                     <motion.div
-                        key="modal-backdrop"
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
-                        className="fixed inset-0 bg-black/30"
+                        className="fixed inset-0 bg-black/25"
                     />
-                    <div className="fixed inset-0 flex w-screen items-center justify-center p-4">
-                        <DialogPanel
-                            key="modal-panel"
-                            as={motion.div}
-                            initial={{ opacity: 0, scale: 0.95 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            exit={{ opacity: 0, scale: 0.95 }}
-                            className="space-y-4 bg-base-100 border border-base-300 p-8 rounded shadow"
-                        >
-                            <DialogTitle className="font-bold">
-                                Create New Link
-                            </DialogTitle>
-                            <FormMessages result={result} />
-                            <form
-                                ref={formRef}
-                                action={handleSubmit}
-                                className="space-y-2"
+                    <div className="fixed inset-0 overflow-y-auto">
+                        <div className="flex min-h-full items-center justify-center p-4 text-center">
+                            <DialogPanel
+                                as={motion.div}
+                                initial={{ opacity: 0, scale: 0.95 }}
+                                animate={{ opacity: 1, scale: 1 }}
+                                exit={{ opacity: 0, scale: 0.95 }}
+                                className="w-full max-w-2xl transform overflow-hidden rounded bg-base-100 p-8 shadow"
                             >
-                                <URLInput
-                                    value={url}
-                                    onChange={setUrl}
-                                    disabled={createLink.isPending}
-                                />
+                                <div className="flex justify-between items-center mb-6">
+                                    <DialogTitle className="text-2xl font-bold leading-6 text-base-content">
+                                        Create New Link
+                                    </DialogTitle>
+                                    <Button
+                                        variant="ghost"
+                                        size="sm"
+                                        shape="square"
+                                        onClick={handleClose}
+                                    >
+                                        <X className="h-4 w-4" />
+                                    </Button>
+                                </div>
 
-                                <SlugInput
-                                    value={customSlug}
-                                    onChange={setCustomSlug}
-                                    disabled={createLink.isPending}
-                                />
+                                <FormMessages result={result} />
+                                <form
+                                    ref={formRef}
+                                    action={handleSubmit}
+                                    className="space-y-2"
+                                >
+                                    <URLInput
+                                        value={url}
+                                        onChange={setUrl}
+                                        disabled={createLink.isPending}
+                                    />
 
-                                <StartingDateInput
-                                    value={startingDate}
-                                    onChange={setStartingDate}
-                                    disabled={createLink.isPending}
-                                />
+                                    <SlugInput
+                                        value={customSlug}
+                                        onChange={setCustomSlug}
+                                        disabled={createLink.isPending}
+                                    />
 
-                                <ExpirationSelect
-                                    value={expiration}
-                                    onChange={setExpiration}
-                                    disabled={createLink.isPending}
-                                />
+                                    <StartingDateInput
+                                        value={startingDate}
+                                        onChange={setStartingDate}
+                                        disabled={createLink.isPending}
+                                    />
 
-                                <FormActions
-                                    isLoading={createLink.isPending}
-                                    url={url}
-                                    onCancel={handleClose}
-                                />
-                            </form>
-                        </DialogPanel>
+                                    <ExpirationSelect
+                                        value={expiration}
+                                        onChange={setExpiration}
+                                        disabled={createLink.isPending}
+                                    />
+
+                                    <FormActions
+                                        isLoading={createLink.isPending}
+                                        url={url}
+                                        onCancel={handleClose}
+                                    />
+                                </form>
+                            </DialogPanel>
+                        </div>
                     </div>
                 </Dialog>
             )}

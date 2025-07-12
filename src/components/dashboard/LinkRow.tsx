@@ -6,6 +6,8 @@ import {
     TrashIcon,
     ChartBarIcon,
     PowerIcon,
+    CheckSquare,
+    Square,
 } from 'lucide-react';
 import { useState } from 'react';
 import LinkIcon from './LinkIcon';
@@ -18,7 +20,7 @@ import {
 import LinkIndicator from './LinkIndicator';
 import { Link as LinkType } from '@/types';
 import Link from 'next/link';
-import { toast } from '@/stores';
+import { toast, useBulkSelectionStore } from '@/stores';
 import { cn } from '@/utils';
 import { motion } from 'motion/react';
 
@@ -37,6 +39,11 @@ export default function LinkRow({
 }: LinkRowProps) {
     const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
     const [isToggling, setIsToggling] = useState(false);
+
+    const { isSelectionMode, isLinkSelected, toggleLink } =
+        useBulkSelectionStore();
+
+    const isSelected = isLinkSelected(link.id);
 
     const handleDelete = async () => {
         if (onDelete) {
@@ -66,17 +73,48 @@ export default function LinkRow({
             toast.error('Failed to copy link to clipboard');
         }
     };
+
+    const handleRowClick = () => {
+        if (isSelectionMode) {
+            toggleLink(link.id);
+        }
+    };
+
+    const handleCheckboxClick = (e: React.MouseEvent) => {
+        e.stopPropagation();
+        toggleLink(link.id);
+    };
+
     return (
         <motion.li
-            layout
             initial={false}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             className={cn(
-                'flex items-center px-6 py-4 rounded relative border border-base-300 bg-base-100 transition-opacity duration-300',
-                isDeletionPending && 'pointer-events-none'
+                'flex items-center px-6 py-4 rounded relative border border-base-300 bg-base-100 transition-all duration-300',
+                isDeletionPending && 'pointer-events-none',
+                isSelectionMode && 'cursor-pointer hover:bg-base-200',
+                isSelected && 'bg-primary/5 border-primary/30'
             )}
+            onClick={handleRowClick}
         >
+            {/* Selection Checkbox */}
+            {isSelectionMode && (
+                <div
+                    className="mr-4 flex-shrink-0"
+                    onClick={handleCheckboxClick}
+                >
+                    {isSelected ? (
+                        <CheckSquare size={20} className="text-primary" />
+                    ) : (
+                        <Square
+                            size={20}
+                            className="text-base-content/40 hover:text-base-content/60"
+                        />
+                    )}
+                </div>
+            )}
+
             <LinkIndicator enabled={link.enabled} />
 
             <div className="flex items-center space-x-3 flex-1 min-w-0">
@@ -87,8 +125,12 @@ export default function LinkRow({
                             {formatSlug(link.slug)}
                         </p>
                         <button
-                            onClick={handleCopyLink}
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                handleCopyLink();
+                            }}
                             className="text-gray-400 hover:text-gray-600"
+                            disabled={isSelectionMode}
                         >
                             <ClipboardIcon size={16} />
                         </button>
@@ -119,58 +161,69 @@ export default function LinkRow({
                 <div className="text-gray-500 min-w-0">
                     {formatDate(link.createdAt)}
                 </div>
-                <div className="relative">
-                    <button
-                        onClick={handleToggle}
-                        disabled={isToggling}
-                        className={cn(
-                            'btn btn-square btn-soft btn-sm',
-                            isToggling && 'loading'
-                        )}
-                        title={link.enabled ? 'Disable link' : 'Enable link'}
-                    >
-                        <PowerIcon size={16} />
-                    </button>
+                {!isSelectionMode && (
+                    <div className="relative">
+                        <button
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                handleToggle();
+                            }}
+                            disabled={isToggling}
+                            className={cn(
+                                'btn btn-square btn-soft btn-sm',
+                                isToggling && 'loading'
+                            )}
+                            title={
+                                link.enabled ? 'Disable link' : 'Enable link'
+                            }
+                        >
+                            <PowerIcon size={16} />
+                        </button>
 
-                    <Link
-                        href={`/stats/${link.slug}`}
-                        className="btn btn-square btn-soft btn-sm ml-2 btn-primary"
-                    >
-                        <ChartBarIcon size={16} />
-                    </Link>
-                    <button
-                        onClick={() => setShowDeleteConfirm(!showDeleteConfirm)}
-                        className="btn btn-square btn-soft btn-sm ml-2 btn-error"
-                    >
-                        <TrashIcon size={16} />
-                    </button>
-                    {showDeleteConfirm && (
-                        <div className="absolute right-0 top-8 bg-card border rounded z-10 min-w-[150px] bg-base-200 border-base-300">
-                            <div className="p-2">
-                                <p className="text-sm mb-2">
-                                    Delete this link?
-                                </p>
-                                <div className="flex space-x-2">
-                                    <button
-                                        onClick={handleDelete}
-                                        className="flex items-center space-x-1 px-2 py-1 text-xs text-error hover:bg-base-100 rounded"
-                                    >
-                                        <TrashIcon size={12} />
-                                        <span>Delete</span>
-                                    </button>
-                                    <button
-                                        onClick={() =>
-                                            setShowDeleteConfirm(false)
-                                        }
-                                        className="px-2 py-1 text-xs hover:bg-base-100 rounded"
-                                    >
-                                        Cancel
-                                    </button>
+                        <Link
+                            href={`/stats/${link.slug}`}
+                            className="btn btn-square btn-soft btn-sm ml-2 btn-primary"
+                            onClick={(e) => e.stopPropagation()}
+                        >
+                            <ChartBarIcon size={16} />
+                        </Link>
+                        <button
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                setShowDeleteConfirm(!showDeleteConfirm);
+                            }}
+                            className="btn btn-square btn-soft btn-sm ml-2 btn-error"
+                        >
+                            <TrashIcon size={16} />
+                        </button>
+                        {showDeleteConfirm && (
+                            <div className="absolute right-0 top-8 bg-card border rounded z-10 min-w-[150px] bg-base-200 border-base-300">
+                                <div className="p-2">
+                                    <p className="text-sm mb-2">
+                                        Delete this link?
+                                    </p>
+                                    <div className="flex space-x-2">
+                                        <button
+                                            onClick={handleDelete}
+                                            className="flex items-center space-x-1 px-2 py-1 text-xs text-error hover:bg-base-100 rounded"
+                                        >
+                                            <TrashIcon size={12} />
+                                            <span>Delete</span>
+                                        </button>
+                                        <button
+                                            onClick={() =>
+                                                setShowDeleteConfirm(false)
+                                            }
+                                            className="px-2 py-1 text-xs hover:bg-base-100 rounded"
+                                        >
+                                            Cancel
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    )}
-                </div>
+                        )}
+                    </div>
+                )}
             </div>
         </motion.li>
     );

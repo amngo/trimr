@@ -6,11 +6,7 @@ import { AnimatePresence, motion } from 'motion/react';
 import { Upload, FileText, X, AlertCircle, CheckCircle } from 'lucide-react';
 import { cn } from '@/utils';
 import { Button } from '@/components/ui';
-import {
-    CSVUploadModalProps,
-    ParsedCSVData,
-    BulkUploadResult,
-} from '@/types';
+import { CSVUploadModalProps, ParsedCSVData, BulkUploadResult } from '@/types';
 import { parseCSVText, downloadSampleCSV } from '@/utils/csvParser';
 import { useBulkUpload } from '@/hooks/useBulkUpload';
 
@@ -332,7 +328,7 @@ export default function BulkUploadModal({
         <AnimatePresence>
             {isOpen && (
                 <Dialog
-                    as="div"
+                    static
                     className="relative z-50"
                     onClose={handleClose}
                     open={isOpen}
@@ -351,7 +347,7 @@ export default function BulkUploadModal({
                                 initial={{ opacity: 0, scale: 0.95 }}
                                 animate={{ opacity: 1, scale: 1 }}
                                 exit={{ opacity: 0, scale: 0.95 }}
-                                className="w-full max-w-2xl transform overflow-hidden rounded-2xl bg-base-100 p-6 text-left align-middle shadow-xl transition-all"
+                                className="w-full max-w-2xl transform overflow-hidden rounded bg-base-100 p-8 shadow"
                             >
                                 <div className="flex justify-between items-center mb-6">
                                     <DialogTitle

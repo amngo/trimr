@@ -14,9 +14,8 @@ export default function FormActions({
     return (
         <div className="flex items-center justify-end space-x-3 pt-4">
             <button
-                type="button"
                 onClick={onCancel}
-                className="btn"
+                className="btn btn-ghost"
                 disabled={isLoading}
             >
                 Cancel

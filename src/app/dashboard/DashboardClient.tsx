@@ -7,8 +7,10 @@ import DashboardHeader from '@/components/dashboard/DashboardHeader';
 import SearchAndFilters from '@/components/dashboard/SearchAndFilters';
 import LinksTable from '@/components/dashboard/LinksTable';
 import LinksSummary from '@/components/dashboard/LinksSummary';
+import BulkActions from '@/components/dashboard/BulkActions';
 import { Link } from '@/types';
 import { useLinks, useDeleteLink, useToggleLink } from '@/hooks/useLinks';
+import { useBulkDelete, useBulkToggle } from '@/hooks/useBulkOperations';
 import { useModalStore, useSearchStore } from '@/stores';
 import { logger } from '@/utils';
 import {
@@ -36,6 +38,8 @@ export default function DashboardClient({
     const { data: links = initialLinks, isLoading, error } = useLinks();
     const deleteLink = useDeleteLink();
     const toggleLink = useToggleLink();
+    const bulkDelete = useBulkDelete();
+    const bulkToggle = useBulkToggle();
 
     const filteredAndSortedLinks = useMemo(() => {
         return filterAndSortLinks(
@@ -73,6 +77,22 @@ export default function DashboardClient({
         }
     };
 
+    const handleBulkDelete = async (linkIds: string[]) => {
+        try {
+            await bulkDelete.mutateAsync(linkIds);
+        } catch (error) {
+            logger.error('Error bulk deleting links', error);
+        }
+    };
+
+    const handleBulkToggle = async (linkIds: string[], enabled: boolean) => {
+        try {
+            await bulkToggle.mutateAsync({ linkIds, enabled });
+        } catch (error) {
+            logger.error('Error bulk toggling links', error);
+        }
+    };
+
     if (error) {
         return (
             <div className="flex items-center justify-center h-64">
@@ -105,6 +125,13 @@ export default function DashboardClient({
                     isLoading={isLoading}
                 />
                 <SearchAndFilters />
+                
+                <BulkActions
+                    linkIds={filteredAndSortedLinks.map(link => link.id)}
+                    onBulkDelete={handleBulkDelete}
+                    onBulkToggle={handleBulkToggle}
+                    isLoading={bulkDelete.isPending || bulkToggle.isPending}
+                />
 
                 <LinksTable
                     links={filteredAndSortedLinks}

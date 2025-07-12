@@ -4,3 +4,4 @@ export { useFormStore } from './useFormStore';
 export { useUIStore } from './useUIStore';
 export { useDashboardStore } from './useDashboardStore';
 export { useToastStore, toast } from './useToastStore';
+export { useBulkSelectionStore } from './useBulkSelectionStore';
