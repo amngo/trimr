@@ -1,5 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Link } from '@/types';
+import { toast } from '@/stores';
 
 interface CreateLinkData {
     url: string;
@@ -92,8 +93,14 @@ export function useCreateLink() {
 
     return useMutation({
         mutationFn: createLink,
-        onSuccess: () => {
+        onSuccess: (data) => {
             queryClient.invalidateQueries({ queryKey: ['links'] });
+            if (data.success) {
+                toast.success('Link created successfully!');
+            }
+        },
+        onError: (error) => {
+            toast.error('Failed to create link. Please try again.');
         },
     });
 }
@@ -114,10 +121,14 @@ export function useDeleteLink() {
             
             return { previousLinks };
         },
+        onSuccess: () => {
+            toast.success('Link deleted successfully!');
+        },
         onError: (err, linkId, context) => {
             if (context?.previousLinks) {
                 queryClient.setQueryData(['links'], context.previousLinks);
             }
+            toast.error('Failed to delete link. Please try again.');
         },
         onSettled: () => {
             queryClient.invalidateQueries({ queryKey: ['links'] });
@@ -144,10 +155,16 @@ export function useToggleLink() {
             
             return { previousLinks };
         },
+        onSuccess: (data, variables) => {
+            const action = variables.enabled ? 'enabled' : 'disabled';
+            toast.success(`Link ${action} successfully!`);
+        },
         onError: (err, variables, context) => {
             if (context?.previousLinks) {
                 queryClient.setQueryData(['links'], context.previousLinks);
             }
+            const action = variables.enabled ? 'enable' : 'disable';
+            toast.error(`Failed to ${action} link. Please try again.`);
         },
     });
 }

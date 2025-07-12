@@ -20,6 +20,7 @@ import {
 import LinkIndicator from './LinkIndicator';
 import { Link as LinkType } from '@/types';
 import Link from 'next/link';
+import { toast } from '@/stores';
 
 interface LinkRowProps {
     link: LinkType;
@@ -48,6 +49,17 @@ export default function LinkRow({ link, onDelete, onToggle }: LinkRowProps) {
             }
         }
     };
+
+    const handleCopyLink = async () => {
+        const success = await copyToClipboard(
+            `${process.env.NEXT_PUBLIC_BASE_URL}/${link.slug}`
+        );
+        if (success) {
+            toast.success('Link copied to clipboard!');
+        } else {
+            toast.error('Failed to copy link to clipboard');
+        }
+    };
     return (
         <li className="flex items-center px-6 py-4 rounded relative border border-base-300 bg-base-100">
             <LinkIndicator enabled={link.enabled} />
@@ -60,11 +72,7 @@ export default function LinkRow({ link, onDelete, onToggle }: LinkRowProps) {
                             {formatSlug(link.slug)}
                         </p>
                         <button
-                            onClick={() =>
-                                copyToClipboard(
-                                    `${process.env.NEXT_PUBLIC_BASE_URL}/${link.slug}`
-                                )
-                            }
+                            onClick={handleCopyLink}
                             className="text-gray-400 hover:text-gray-600"
                         >
                             <ClipboardIcon size={16} />

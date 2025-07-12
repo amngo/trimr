@@ -4,6 +4,7 @@ import './globals.css';
 import QueryProvider from '@/providers/QueryProvider';
 import FadeTransition from '@/components/FadeTransition';
 import AuthButton from '@/components/AuthButton';
+import ToastContainer from '@/components/ui/ToastContainer';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -35,6 +36,7 @@ export default function RootLayout({
                         <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
                             <FadeTransition>{children}</FadeTransition>
                         </main>
+                        <ToastContainer />
                     </div>
                 </QueryProvider>
             </body>
