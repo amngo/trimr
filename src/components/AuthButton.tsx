@@ -3,35 +3,31 @@
 import { useSession, signOut } from '@/lib/auth-client';
 import { User, LogOut } from 'lucide-react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 export default function AuthButton() {
     const { data: session, isPending } = useSession();
+    const router = useRouter();
 
     if (isPending) {
-        return (
-            <div className="skeleton h-10 w-20"></div>
-        );
+        return <div className="skeleton h-10 w-20"></div>;
     }
 
     if (session) {
         return (
             <div className="dropdown dropdown-end">
-                <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar">
-                    <div className="w-10 rounded-full">
+                <button className="btn btn-ghost btn-circle">
+                    <div className="size-10 flex items-center justify-center">
                         {session.user?.image ? (
                             <img src={session.user.image} alt="User avatar" />
                         ) : (
-                            <div className="avatar placeholder">
-                                <div className="bg-neutral text-neutral-content rounded-full w-10">
-                                    <User className="w-5 h-5" />
-                                </div>
-                            </div>
+                            <User />
                         )}
                     </div>
-                </div>
+                </button>
                 <ul
                     tabIndex={0}
-                    className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow"
+                    className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow"
                 >
                     <li>
                         <div className="justify-between">
@@ -42,7 +38,12 @@ export default function AuthButton() {
                         <Link href="/dashboard">Dashboard</Link>
                     </li>
                     <li>
-                        <button onClick={() => signOut()}>
+                        <button
+                            onClick={async () => {
+                                await signOut();
+                                router.push('/auth');
+                            }}
+                        >
                             <LogOut className="w-4 h-4" />
                             Sign out
                         </button>

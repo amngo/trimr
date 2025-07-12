@@ -1,6 +1,14 @@
 import Link from 'next/link';
+import { redirect } from 'next/navigation';
+import { getCurrentUser } from '@/lib/auth-utils';
 
-export default function LandingPage() {
+export default async function LandingPage() {
+    const user = await getCurrentUser();
+    
+    if (user) {
+        // Redirect authenticated users to dashboard
+        redirect('/dashboard');
+    }
     return (
         <div className="hero min-h-screen bg-base-200">
             <div className="hero-content text-center">
