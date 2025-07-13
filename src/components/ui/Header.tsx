@@ -2,6 +2,8 @@
 import { useModalStore, useSearchStore } from '@/stores';
 import { Plus, SearchIcon, Upload } from 'lucide-react';
 import Button from './Button';
+import AuthButton from './AuthButton';
+import { ThemeToggle } from '../dashboard';
 
 export default function Header() {
     const { openCreateLinkModal, openBulkUploadModal } = useModalStore();
@@ -41,6 +43,8 @@ export default function Header() {
                     <Plus size={16} />
                     Create Link
                 </Button>
+                <ThemeToggle />
+                <AuthButton />
             </div>
         </div>
     );

@@ -1,13 +1,11 @@
 'use client';
 
-import { useSession, signOut } from '@/lib/auth-client';
-import { User, LogOut } from 'lucide-react';
+import { useSession } from '@/lib/auth-client';
+import { LogOut, UserIcon } from 'lucide-react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 
 export default function AuthButton() {
     const { data: session, isPending } = useSession();
-    const router = useRouter();
 
     if (isPending) {
         return <div className="skeleton size-10 rounded-full"></div>;
@@ -16,37 +14,38 @@ export default function AuthButton() {
     if (session) {
         return (
             <div className="dropdown dropdown-end">
-                <button className="btn btn-ghost btn-circle overflow-hidden">
-                    <div className="size-10 flex items-center justify-center">
+                <button className="cursor-pointer grid grid-cols-[auto_auto] grid-rows-2 items-center justify-items-start gap-x-2 border border-base-300 px-4 py-2 rounded-lg bg-base-100">
+                    <div className="row-span-2">
                         {session.user?.image ? (
-                            <img src={session.user.image} alt="User avatar" />
+                            <img
+                                src={session.user.image}
+                                alt="User avatar"
+                                className="size-8 rounded-full"
+                            />
                         ) : (
-                            <User />
+                            <div className="avatar avatar-placeholder bg-neutral rounded-full size-8">
+                                <div>
+                                    <UserIcon className="text-white" />
+                                </div>
+                            </div>
                         )}
                     </div>
+                    <span className="text-xs self-start font-medium max-w-[200px] truncate">
+                        {session.user?.name}
+                    </span>
+                    <span className="text-xs text-base-content/70 font-light max-w-[200px] truncate">
+                        {session.user?.email}
+                    </span>
                 </button>
                 <ul
                     tabIndex={0}
                     className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow"
                 >
                     <li>
-                        <div className="justify-between">
-                            {session.user?.name || session.user?.email}
-                        </div>
-                    </li>
-                    <li>
-                        <Link href="/dashboard">Dashboard</Link>
-                    </li>
-                    <li>
-                        <button
-                            onClick={async () => {
-                                await signOut();
-                                router.push('/auth');
-                            }}
-                        >
+                        <Link href="/logout">
                             <LogOut className="w-4 h-4" />
                             Sign out
-                        </button>
+                        </Link>
                     </li>
                 </ul>
             </div>

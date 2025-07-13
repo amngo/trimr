@@ -9,6 +9,8 @@ import {
     PencilIcon,
     CheckIcon,
     XIcon,
+    ChartBarIcon,
+    PowerIcon,
 } from 'lucide-react';
 import { useState } from 'react';
 import { formatUrl, formatSlug, copyToClipboard } from '@/utils/linkUtils';
@@ -197,24 +199,27 @@ export default function LinkRow({
                             </div>
                             <ul
                                 tabIndex={0}
-                                className="dropdown-content menu bg-base-100 rounded-box z-1 w-42 p-2 shadow-sm flex flex-col space-y-1"
+                                className="dropdown-content menu bg-base-100 rounded-box z-1 w-[180px] p-2 shadow-sm flex flex-col space-y-1"
                             >
                                 <li>
                                     <Link
                                         href={`/stats/${link.slug}`}
-                                        className="btn btn-ghost btn-sm"
+                                        className="btn btn-ghost btn-sm justify-start"
                                         onClick={(e) => e.stopPropagation()}
                                     >
-                                        View Analytics
+                                        <ChartBarIcon size={12} />
+                                        <span className="ml-2">
+                                            View Analytics
+                                        </span>
                                     </Link>
                                 </li>
                                 <li>
                                     <button
                                         onClick={handleStartRename}
-                                        className="btn btn-ghost btn-sm"
+                                        className="btn btn-ghost btn-sm justify-start"
                                     >
                                         <PencilIcon size={12} />
-                                        <span>Rename</span>
+                                        <span className="ml-2">Rename</span>
                                     </button>
                                 </li>
                                 <li>
@@ -224,25 +229,30 @@ export default function LinkRow({
                                             handleToggle();
                                         }}
                                         disabled={isToggling}
-                                        className={cn('btn btn-ghost btn-sm')}
+                                        className={cn(
+                                            'btn btn-ghost btn-sm justify-start',
+                                        )}
                                         title={
                                             link.enabled
                                                 ? 'Disable link'
                                                 : 'Enable link'
                                         }
                                     >
-                                        {link.enabled
-                                            ? 'Disable link'
-                                            : 'Enable link'}
+                                        <PowerIcon size={12} />
+                                        <span className="ml-2">
+                                            {link.enabled
+                                                ? 'Disable link'
+                                                : 'Enable link'}
+                                        </span>
                                     </button>
                                 </li>
                                 <li>
                                     <button
                                         onClick={handleDelete}
-                                        className="text-error btn btn-ghost btn-sm"
+                                        className="text-error btn btn-ghost btn-sm justify-start"
                                     >
                                         <TrashIcon size={12} />
-                                        <span>Delete</span>
+                                        <span className="ml-2">Delete</span>
                                     </button>
                                 </li>
                             </ul>
