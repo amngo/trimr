@@ -4,6 +4,7 @@ import { toast } from '@/stores';
 
 interface CreateLinkData {
     url: string;
+    name?: string;
     customSlug?: string;
     expiration?: string; // Optional expiration date for the link
     startingDate?: string; // Optional starting date for when the link will be active
@@ -28,6 +29,12 @@ interface ToggleLinkResponse {
     error?: string;
 }
 
+interface RenameLinkResponse {
+    success?: boolean;
+    name?: string | null;
+    error?: string;
+}
+
 async function fetchLinks(): Promise<Link[]> {
     const response = await fetch('/api/links');
     if (!response.ok) {
@@ -39,6 +46,7 @@ async function fetchLinks(): Promise<Link[]> {
 async function createLink(data: CreateLinkData): Promise<CreateLinkResponse> {
     const formData = new FormData();
     formData.append('url', data.url);
+    if (data.name) formData.append('name', data.name);
     if (data.customSlug) formData.append('customSlug', data.customSlug);
     if (data.expiration) formData.append('expiration', data.expiration);
     if (data.startingDate) formData.append('startingDate', data.startingDate);
@@ -70,7 +78,7 @@ async function deleteLink(linkId: string): Promise<DeleteLinkResponse> {
 
 async function toggleLink(
     linkId: string,
-    enabled: boolean
+    enabled: boolean,
 ): Promise<ToggleLinkResponse> {
     const response = await fetch(`/api/links/${linkId}`, {
         method: 'PATCH',
@@ -82,6 +90,25 @@ async function toggleLink(
 
     if (!response.ok) {
         throw new Error('Failed to toggle link');
+    }
+
+    return response.json();
+}
+
+async function renameLink(
+    linkId: string,
+    name: string,
+): Promise<RenameLinkResponse> {
+    const response = await fetch(`/api/links/${linkId}`, {
+        method: 'PATCH',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ name }),
+    });
+
+    if (!response.ok) {
+        throw new Error('Failed to rename link');
     }
 
     return response.json();
@@ -124,7 +151,7 @@ export function useDeleteLink() {
 
             queryClient.setQueryData<Link[]>(
                 ['links'],
-                (old) => old?.filter((link) => link.id !== linkId) ?? []
+                (old) => old?.filter((link) => link.id !== linkId) ?? [],
             );
 
             return { previousLinks };
@@ -161,8 +188,8 @@ export function useToggleLink() {
                 ['links'],
                 (old) =>
                     old?.map((link) =>
-                        link.id === linkId ? { ...link, enabled } : link
-                    ) ?? []
+                        link.id === linkId ? { ...link, enabled } : link,
+                    ) ?? [],
             );
 
             return { previousLinks };
@@ -177,6 +204,41 @@ export function useToggleLink() {
             }
             const action = variables.enabled ? 'enable' : 'disable';
             toast.error(`Failed to ${action} link. Please try again.`);
+        },
+    });
+}
+
+export function useRenameLink() {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: ({ linkId, name }: { linkId: string; name: string }) =>
+            renameLink(linkId, name),
+        onMutate: async ({ linkId, name }) => {
+            await queryClient.cancelQueries({ queryKey: ['links'] });
+
+            const previousLinks = queryClient.getQueryData<Link[]>(['links']);
+
+            queryClient.setQueryData<Link[]>(
+                ['links'],
+                (old) =>
+                    old?.map((link) =>
+                        link.id === linkId
+                            ? { ...link, name: name || null }
+                            : link,
+                    ) ?? [],
+            );
+
+            return { previousLinks };
+        },
+        onSuccess: () => {
+            toast.success('Link renamed successfully!');
+        },
+        onError: (err, variables, context) => {
+            if (context?.previousLinks) {
+                queryClient.setQueryData(['links'], context.previousLinks);
+            }
+            toast.error('Failed to rename link. Please try again.');
         },
     });
 }

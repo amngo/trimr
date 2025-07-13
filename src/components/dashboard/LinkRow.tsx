@@ -6,6 +6,9 @@ import {
     TrashIcon,
     UsersIcon,
     EllipsisVerticalIcon,
+    PencilIcon,
+    CheckIcon,
+    XIcon,
 } from 'lucide-react';
 import { useState } from 'react';
 import { formatUrl, formatSlug, copyToClipboard } from '@/utils/linkUtils';
@@ -23,6 +26,7 @@ interface LinkRowProps {
     link: LinkType;
     onDelete?: (linkId: string) => Promise<void>;
     onToggle?: (linkId: string, enabled: boolean) => Promise<void>;
+    onRename?: (linkId: string, name: string) => Promise<void>;
     isDeletionPending?: boolean;
 }
 
@@ -30,10 +34,13 @@ export default function LinkRow({
     link,
     onDelete,
     onToggle,
+    onRename,
     isDeletionPending = false,
 }: LinkRowProps) {
     // const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
     const [isToggling, setIsToggling] = useState(false);
+    const [isEditing, setIsEditing] = useState(false);
+    const [editName, setEditName] = useState(link.name || '');
     // const [showPassword, setShowPassword] = useState(false);
 
     const { isSelectionMode, isLinkSelected, toggleLink } =
@@ -79,13 +86,49 @@ export default function LinkRow({
         toggleLink(link.id);
     };
 
+    const handleStartRename = (e: React.MouseEvent) => {
+        e.stopPropagation();
+        setIsEditing(true);
+        setEditName(link.name || '');
+    };
+
+    const handleSaveRename = async (e: React.MouseEvent) => {
+        e.stopPropagation();
+        if (onRename) {
+            try {
+                await onRename(link.id, editName);
+                setIsEditing(false);
+            } catch (error) {
+                console.error('Error renaming link:', error);
+            }
+        }
+    };
+
+    const handleCancelRename = (e: React.MouseEvent) => {
+        e.stopPropagation();
+        setIsEditing(false);
+        setEditName(link.name || '');
+    };
+
+    const handleNameKeyDown = (e: React.KeyboardEvent) => {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            const mockEvent = { stopPropagation: () => {} } as React.MouseEvent;
+            handleSaveRename(mockEvent);
+        } else if (e.key === 'Escape') {
+            e.preventDefault();
+            const mockEvent = { stopPropagation: () => {} } as React.MouseEvent;
+            handleCancelRename(mockEvent);
+        }
+    };
+
     return (
         <motion.li
             initial={false}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             className={cn(
-                'flex flex-col items-center px-4 pt-2 pb-4 rounded relative border border-base-300 bg-base-100 transition-all duration-300',
+                'group flex flex-col items-center px-4 pt-2 pb-4 rounded relative border border-base-300 bg-base-100 transition-all duration-300',
                 isDeletionPending && 'pointer-events-none',
                 isSelectionMode && 'cursor-pointer hover:bg-base-200',
                 isSelected && 'bg-primary/5 border-primary/30',
@@ -94,7 +137,55 @@ export default function LinkRow({
         >
             <div className="flex flex-col items-center gap-1">
                 <div className="flex items-center justify-between w-full h-8">
-                    <h2 className="text-sm font-medium truncate">My Link</h2>
+                    {isEditing ? (
+                        <div className="flex items-center gap-1 flex-1 mr-2">
+                            <input
+                                type="text"
+                                value={editName}
+                                onChange={(e) => {
+                                    const newValue = e.target.value;
+                                    if (newValue.length <= 28) {
+                                        setEditName(newValue);
+                                    }
+                                }}
+                                onKeyDown={handleNameKeyDown}
+                                className="input input-xs w-full"
+                                placeholder="Enter link name"
+                                maxLength={28}
+                                autoFocus
+                                onClick={(e) => e.stopPropagation()}
+                            />
+                            <button
+                                onClick={handleSaveRename}
+                                className="btn btn-xs btn-square btn-primary"
+                                title="Save"
+                            >
+                                <CheckIcon size={12} />
+                            </button>
+                            <button
+                                onClick={handleCancelRename}
+                                className="btn btn-xs btn-square btn-ghost"
+                                title="Cancel"
+                            >
+                                <XIcon size={12} />
+                            </button>
+                        </div>
+                    ) : (
+                        <div className="flex items-center gap-1 flex-1 mr-2">
+                            <h2 className="text-sm font-medium truncate">
+                                {link.name || 'Untitled Link'}
+                            </h2>
+                            {!isSelectionMode && (
+                                <button
+                                    onClick={handleStartRename}
+                                    className="btn btn-xs btn-square btn-ghost opacity-0 group-hover:opacity-100 transition-opacity"
+                                    title="Rename link"
+                                >
+                                    <PencilIcon size={12} />
+                                </button>
+                            )}
+                        </div>
+                    )}
                     {!isSelectionMode && (
                         <div className="dropdown dropdown-end -mr-2">
                             <div
@@ -116,6 +207,15 @@ export default function LinkRow({
                                     >
                                         View Analytics
                                     </Link>
+                                </li>
+                                <li>
+                                    <button
+                                        onClick={handleStartRename}
+                                        className="btn btn-ghost btn-sm"
+                                    >
+                                        <PencilIcon size={12} />
+                                        <span>Rename</span>
+                                    </button>
                                 </li>
                                 <li>
                                     <button

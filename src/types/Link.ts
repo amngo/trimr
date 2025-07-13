@@ -2,6 +2,7 @@ export interface Link {
     id: string;
     slug: string;
     url: string;
+    name: string | null;
     clickCount: number;
     visitorCount: number;
     createdAt: Date;

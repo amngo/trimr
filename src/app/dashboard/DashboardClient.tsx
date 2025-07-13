@@ -7,7 +7,12 @@ import LinksTable from '@/components/dashboard/LinksTable';
 import LinksSummary from '@/components/dashboard/LinksSummary';
 import BulkActions from '@/components/dashboard/BulkActions';
 import { Link } from '@/types';
-import { useLinks, useDeleteLink, useToggleLink } from '@/hooks/useLinks';
+import {
+    useLinks,
+    useDeleteLink,
+    useToggleLink,
+    useRenameLink,
+} from '@/hooks/useLinks';
 import { useBulkDelete, useBulkToggle } from '@/hooks/useBulkOperations';
 import { useModalStore, useSearchStore } from '@/stores';
 import { logger } from '@/utils';
@@ -37,6 +42,7 @@ export default function DashboardClient({
     const { data: links = initialLinks, isLoading, error } = useLinks();
     const deleteLink = useDeleteLink();
     const toggleLink = useToggleLink();
+    const renameLink = useRenameLink();
     const bulkDelete = useBulkDelete();
     const bulkToggle = useBulkToggle();
 
@@ -73,6 +79,14 @@ export default function DashboardClient({
             await toggleLink.mutateAsync({ linkId, enabled });
         } catch (error) {
             logger.error('Error toggling link', error);
+        }
+    };
+
+    const handleRenameLink = async (linkId: string, name: string) => {
+        try {
+            await renameLink.mutateAsync({ linkId, name });
+        } catch (error) {
+            logger.error('Error renaming link', error);
         }
     };
 
@@ -137,6 +151,7 @@ export default function DashboardClient({
                     onCreateLink={openCreateLinkModal}
                     onDeleteLink={handleDeleteLink}
                     onToggleLink={handleToggleLink}
+                    onRenameLink={handleRenameLink}
                     isLoading={isLoading}
                     deletingLinkId={
                         deleteLink.isPending ? deleteLink.variables : undefined

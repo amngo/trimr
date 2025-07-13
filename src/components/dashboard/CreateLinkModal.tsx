@@ -4,6 +4,7 @@ import { useCreateLink } from '@/hooks/useLinks';
 import { useFormStore } from '@/stores';
 import { BaseModal } from '@/components/ui';
 import URLInput from '../forms/URLInput';
+import NameInput from '../forms/NameInput';
 import ExpirationSelect from '../forms/ExpirationSelect';
 import FormMessages from './FormMessages';
 import FormActions from './FormActions';
@@ -22,11 +23,13 @@ export default function CreateLinkModal({
     const createLink = useCreateLink();
     const {
         url,
+        name,
         expiration,
         startingDate,
         password,
         result,
         setUrl,
+        setName,
         setExpiration,
         setStartingDate,
         setPassword,
@@ -47,6 +50,7 @@ export default function CreateLinkModal({
         try {
             const response = await createLink.mutateAsync({
                 url: formData.get('url') as string,
+                name: (formData.get('name') as string) || undefined,
                 startingDate:
                     (formData.get('startingDate') as string) || undefined,
                 expiration: (formData.get('expiration') as string) || undefined,
@@ -78,14 +82,16 @@ export default function CreateLinkModal({
             title="Create New Link"
         >
             <FormMessages result={result} />
-            <form
-                ref={formRef}
-                action={handleSubmit}
-                className="space-y-2"
-            >
+            <form ref={formRef} action={handleSubmit} className="space-y-2">
                 <URLInput
                     value={url}
                     onChange={setUrl}
+                    disabled={createLink.isPending}
+                />
+
+                <NameInput
+                    value={name}
+                    onChange={setName}
                     disabled={createLink.isPending}
                 />
 

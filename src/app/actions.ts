@@ -10,6 +10,10 @@ const createLinkSchema = z.object({
         .string()
         .min(1, 'URL is required')
         .refine(isValidUrl, 'Please enter a valid URL'),
+    name: z
+        .string()
+        .max(28, 'Link name must be 28 characters or less')
+        .optional(),
     customSlug: z.string().optional(),
     expiration: z.string().optional(),
     startingDate: z.string().optional(),
@@ -72,6 +76,7 @@ export async function createLink(formData: FormData) {
         }
 
         const rawUrl = formData.get('url') as string;
+        const rawName = formData.get('name') as string;
         const rawCustomSlug = formData.get('customSlug') as string;
         const rawExpiration = formData.get('expiration') as string;
         const rawStartingDate = formData.get('startingDate') as string;
@@ -79,6 +84,7 @@ export async function createLink(formData: FormData) {
 
         const result = createLinkSchema.safeParse({
             url: rawUrl,
+            name: rawName || undefined,
             customSlug: rawCustomSlug || undefined,
             expiration: rawExpiration || undefined,
             startingDate: rawStartingDate || undefined,
@@ -92,7 +98,8 @@ export async function createLink(formData: FormData) {
         }
 
         const formattedUrl = formatUrl(result.data.url);
-        const { customSlug, expiration, startingDate, password } = result.data;
+        const { name, customSlug, expiration, startingDate, password } =
+            result.data;
 
         // Check if URL already exists for this user (only if no custom slug provided)
         if (!customSlug) {
@@ -173,12 +180,12 @@ export async function createLink(formData: FormData) {
                     break;
                 case '7d':
                     expiresAt = new Date(
-                        now.getTime() + 7 * 24 * 60 * 60 * 1000
+                        now.getTime() + 7 * 24 * 60 * 60 * 1000,
                     );
                     break;
                 case '30d':
                     expiresAt = new Date(
-                        now.getTime() + 30 * 24 * 60 * 60 * 1000
+                        now.getTime() + 30 * 24 * 60 * 60 * 1000,
                     );
                     break;
             }
@@ -189,6 +196,7 @@ export async function createLink(formData: FormData) {
             data: {
                 slug,
                 url: formattedUrl,
+                name: name || null,
                 userId: user.id,
                 expiresAt,
                 startsAt: new Date(startingDate || Date.now()), // Default to now if no starting date provided

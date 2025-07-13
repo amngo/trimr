@@ -8,6 +8,7 @@ interface LinksTableProps {
     onCreateLink: () => void;
     onDeleteLink?: (linkId: string) => Promise<void>;
     onToggleLink?: (linkId: string, enabled: boolean) => Promise<void>;
+    onRenameLink?: (linkId: string, name: string) => Promise<void>;
     isLoading?: boolean;
     deletingLinkId?: string;
 }
@@ -17,6 +18,7 @@ export default function LinksTable({
     onCreateLink,
     onDeleteLink,
     onToggleLink,
+    onRenameLink,
     isLoading,
     deletingLinkId,
 }: LinksTableProps) {
@@ -43,6 +45,7 @@ export default function LinksTable({
                                 link={link}
                                 onDelete={onDeleteLink}
                                 onToggle={onToggleLink}
+                                onRename={onRenameLink}
                                 isDeletionPending={deletingLinkId === link.id}
                             />
                         ))}
