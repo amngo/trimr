@@ -1,32 +1,23 @@
 import {
     ClipboardIcon,
-    ExternalLinkIcon,
-    MousePointerClickIcon,
-    UsersIcon,
-    TrashIcon,
-    ChartBarIcon,
-    PowerIcon,
     CheckSquare,
     Square,
-    Eye,
-    EyeOff,
+    MousePointerClickIcon,
+    TrashIcon,
+    UsersIcon,
+    EllipsisVerticalIcon,
 } from 'lucide-react';
 import { useState } from 'react';
-import LinkIcon from './LinkIcon';
-import {
-    formatUrl,
-    formatSlug,
-    formatDate,
-    copyToClipboard,
-} from '@/utils/linkUtils';
-import LinkIndicator from './LinkIndicator';
+import { formatUrl, formatSlug, copyToClipboard } from '@/utils/linkUtils';
 import { Link as LinkType } from '@/types';
-import Link from 'next/link';
 import { toast, useBulkSelectionStore } from '@/stores';
 import { cn } from '@/utils';
 import { motion } from 'motion/react';
-import { getBadgeClasses, getLinkBadges } from '@/utils/linkBadges';
 import { BASE_URL } from '@/constants';
+import QRCodeDisplay from './QRCodeDisplay';
+import LinkIndicator from './LinkIndicator';
+import Link from 'next/link';
+import { getBadgeClasses, getLinkBadges } from '@/utils/linkBadges';
 
 interface LinkRowProps {
     link: LinkType;
@@ -41,9 +32,9 @@ export default function LinkRow({
     onToggle,
     isDeletionPending = false,
 }: LinkRowProps) {
-    const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+    // const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
     const [isToggling, setIsToggling] = useState(false);
-    const [showPassword, setShowPassword] = useState(false);
+    // const [showPassword, setShowPassword] = useState(false);
 
     const { isSelectionMode, isLinkSelected, toggleLink } =
         useBulkSelectionStore();
@@ -54,7 +45,7 @@ export default function LinkRow({
         if (onDelete) {
             await onDelete(link.id);
         }
-        setShowDeleteConfirm(false);
+        // setShowDeleteConfirm(false);
     };
 
     const handleToggle = async () => {
@@ -94,78 +85,151 @@ export default function LinkRow({
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             className={cn(
-                'flex items-center px-6 py-4 rounded relative border border-base-300 bg-base-100 transition-all duration-300',
+                'flex flex-col items-center px-4 pt-2 pb-4 rounded relative border border-base-300 bg-base-100 transition-all duration-300',
                 isDeletionPending && 'pointer-events-none',
                 isSelectionMode && 'cursor-pointer hover:bg-base-200',
-                isSelected && 'bg-primary/5 border-primary/30'
+                isSelected && 'bg-primary/5 border-primary/30',
             )}
             onClick={handleRowClick}
         >
-            {/* Selection Checkbox */}
-            {isSelectionMode && (
-                <div
-                    className="mr-4 flex-shrink-0"
-                    onClick={handleCheckboxClick}
-                >
-                    {isSelected ? (
-                        <CheckSquare size={20} className="text-primary" />
-                    ) : (
-                        <Square
-                            size={20}
-                            className="text-base-content/40 hover:text-base-content/60"
-                        />
+            <div className="flex flex-col items-center gap-1">
+                <div className="flex items-center justify-between w-full h-8">
+                    <h2 className="text-sm font-medium truncate">My Link</h2>
+                    {!isSelectionMode && (
+                        <div className="dropdown dropdown-end -mr-2">
+                            <div
+                                tabIndex={0}
+                                role="button"
+                                className="btn btn-square m-1 btn-xs btn-ghost"
+                            >
+                                <EllipsisVerticalIcon size={16} />
+                            </div>
+                            <ul
+                                tabIndex={0}
+                                className="dropdown-content menu bg-base-100 rounded-box z-1 w-42 p-2 shadow-sm flex flex-col space-y-1"
+                            >
+                                <li>
+                                    <Link
+                                        href={`/stats/${link.slug}`}
+                                        className="btn btn-ghost btn-sm"
+                                        onClick={(e) => e.stopPropagation()}
+                                    >
+                                        View Analytics
+                                    </Link>
+                                </li>
+                                <li>
+                                    <button
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            handleToggle();
+                                        }}
+                                        disabled={isToggling}
+                                        className={cn('btn btn-ghost btn-sm')}
+                                        title={
+                                            link.enabled
+                                                ? 'Disable link'
+                                                : 'Enable link'
+                                        }
+                                    >
+                                        {link.enabled
+                                            ? 'Disable link'
+                                            : 'Enable link'}
+                                    </button>
+                                </li>
+                                <li>
+                                    <button
+                                        onClick={handleDelete}
+                                        className="text-error btn btn-ghost btn-sm"
+                                    >
+                                        <TrashIcon size={12} />
+                                        <span>Delete</span>
+                                    </button>
+                                </li>
+                            </ul>
+                        </div>
+                    )}
+
+                    {isSelectionMode && (
+                        <div
+                            className="flex-shrink-0"
+                            onClick={handleCheckboxClick}
+                        >
+                            {isSelected ? (
+                                <CheckSquare
+                                    size={20}
+                                    className="text-primary"
+                                />
+                            ) : (
+                                <Square
+                                    size={20}
+                                    className="text-base-content/40 hover:text-base-content/60"
+                                />
+                            )}
+                        </div>
                     )}
                 </div>
-            )}
 
-            <LinkIndicator link={link} />
+                <QRCodeDisplay qrCodeUrl={formatSlug(link.slug)} />
+                <div className="relative mt-1">
+                    <p className="text-xs truncate font-mono text-primary max-w-[125px]">
+                        trimr.im/{link.slug}
+                    </p>
+                    <button
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            handleCopyLink();
+                        }}
+                        className="btn btn-ghost btn-square btn-xs absolute -right-7 -top-1"
+                        disabled={isSelectionMode}
+                    >
+                        <ClipboardIcon size={16} />
+                    </button>
+                </div>
 
-            <div className="flex items-center space-x-3 flex-1 min-w-0">
-                <LinkIcon url={link.url} />
-                <div className="flex-1 min-w-0">
-                    <div className="flex items-center space-x-2">
-                        <p className="text-sm font-medium truncate">
-                            {formatSlug(link.slug)}
-                        </p>
-                        <button
-                            onClick={(e) => {
-                                e.stopPropagation();
-                                handleCopyLink();
-                            }}
-                            className="text-gray-400 hover:text-gray-600"
-                            disabled={isSelectionMode}
-                        >
-                            <ClipboardIcon size={16} />
-                        </button>
-                        <a
-                            href={link.url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-gray-400 hover:text-gray-600"
-                        >
-                            <ExternalLinkIcon size={16} />
-                        </a>
-                        {/* Link Status Badges */}
+                <div className="tooltip tooltip-bottom">
+                    <span className="tooltip-content text-xs">
+                        {formatUrl(link.url)}
+                    </span>
+                    <p className="text-xs truncate font-light w-[200px] text-center cursor-default">
+                        {formatUrl(link.url)}
+                    </p>
+                </div>
+
+                <div className="self-start flex items-center justify-between w-full mt-1">
+                    <div className="flex items-center gap-8 border border-base-300 rounded px-2 py-1 text-xs">
                         <div className="flex items-center space-x-1">
-                            {getLinkBadges(link).map((badge, index) => (
-                                <span
-                                    key={`${badge.type}-${index}`}
-                                    className={cn(
-                                        'badge badge-xs',
-                                        getBadgeClasses(badge.variant)
-                                    )}
-                                >
-                                    {badge.text}
-                                </span>
-                            ))}
+                            <UsersIcon size={12} />
+                            <span>{link.visitorCount}</span>
+                        </div>
+                        <div className="flex items-center space-x-1">
+                            <MousePointerClickIcon size={12} />
+                            <span>{link.clickCount}</span>
                         </div>
                     </div>
-                    <div className="flex flex-col space-y-1 mt-1">
-                        <p className="text-xs truncate font-light">
-                            {formatUrl(link.url)}
-                        </p>
-                        {/* Password Display */}
-                        {link.password && (
+
+                    {/* Link Status Badges */}
+                    <div className="flex items-center space-x-1">
+                        {getLinkBadges(link).map((badge, index) => (
+                            <span
+                                key={`${badge.type}-${index}`}
+                                className={cn(
+                                    'badge badge-xs',
+                                    getBadgeClasses(badge.variant),
+                                )}
+                            >
+                                {badge.text}
+                            </span>
+                        ))}
+                    </div>
+                </div>
+            </div>
+            <LinkIndicator link={link} />
+        </motion.li>
+    );
+}
+
+{
+    /* {link.password && (
                             <div className="flex items-center space-x-2">
                                 <span className="text-xs text-base-content/60">
                                     Password:
@@ -197,87 +261,5 @@ export default function LinkRow({
                                     </button>
                                 </div>
                             </div>
-                        )}
-                    </div>
-                </div>
-            </div>
-
-            <div className="flex items-center space-x-6 text-sm text-gray-600">
-                <div className="flex items-center space-x-1">
-                    <UsersIcon size={16} />
-                    <span>{link.visitorCount} Visitors</span>
-                </div>
-                <div className="flex items-center space-x-1">
-                    <MousePointerClickIcon size={16} />
-                    <span>{link.clickCount} Clicks</span>
-                </div>
-                <div className="text-gray-500 min-w-0">
-                    {formatDate(link.createdAt)}
-                </div>
-                {!isSelectionMode && (
-                    <div className="relative">
-                        <button
-                            onClick={(e) => {
-                                e.stopPropagation();
-                                handleToggle();
-                            }}
-                            disabled={isToggling}
-                            className={cn(
-                                'btn btn-square btn-soft btn-sm',
-                                isToggling && 'loading'
-                            )}
-                            title={
-                                link.enabled ? 'Disable link' : 'Enable link'
-                            }
-                        >
-                            <PowerIcon size={16} />
-                        </button>
-
-                        <Link
-                            href={`/stats/${link.slug}`}
-                            className="btn btn-square btn-soft btn-sm ml-2 btn-primary"
-                            onClick={(e) => e.stopPropagation()}
-                        >
-                            <ChartBarIcon size={16} />
-                        </Link>
-                        <button
-                            onClick={(e) => {
-                                e.stopPropagation();
-                                setShowDeleteConfirm(!showDeleteConfirm);
-                            }}
-                            className="btn btn-square btn-soft btn-sm ml-2 btn-error"
-                        >
-                            <TrashIcon size={16} />
-                        </button>
-                        {showDeleteConfirm && (
-                            <div className="absolute right-0 top-8 bg-card border rounded z-10 min-w-[150px] bg-base-200 border-base-300">
-                                <div className="p-2">
-                                    <p className="text-sm mb-2">
-                                        Delete this link?
-                                    </p>
-                                    <div className="flex space-x-2">
-                                        <button
-                                            onClick={handleDelete}
-                                            className="flex items-center space-x-1 px-2 py-1 text-xs text-error hover:bg-base-100 rounded"
-                                        >
-                                            <TrashIcon size={12} />
-                                            <span>Delete</span>
-                                        </button>
-                                        <button
-                                            onClick={() =>
-                                                setShowDeleteConfirm(false)
-                                            }
-                                            className="px-2 py-1 text-xs hover:bg-base-100 rounded"
-                                        >
-                                            Cancel
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        )}
-                    </div>
-                )}
-            </div>
-        </motion.li>
-    );
+                        )} */
 }

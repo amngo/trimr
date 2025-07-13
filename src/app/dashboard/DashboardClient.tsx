@@ -1,9 +1,7 @@
 'use client';
-
 import { useMemo } from 'react';
 import CreateLinkModal from '@/components/dashboard/CreateLinkModal';
 import BulkUploadModal from '@/components/dashboard/BulkUploadModal';
-import DashboardHeader from '@/components/dashboard/DashboardHeader';
 import SearchAndFilters from '@/components/dashboard/SearchAndFilters';
 import LinksTable from '@/components/dashboard/LinksTable';
 import LinksSummary from '@/components/dashboard/LinksSummary';
@@ -17,6 +15,8 @@ import {
     filterAndSortLinks,
     getFilteredLinksCount,
 } from '@/utils/filterAndSort';
+import Header from '@/components/ui/Header';
+import { DashboardHeader } from '@/components';
 
 interface DashboardClientProps {
     initialLinks: Link[];
@@ -30,7 +30,6 @@ export default function DashboardClient({
         openCreateLinkModal,
         closeCreateLinkModal,
         isBulkUploadModalOpen,
-        openBulkUploadModal,
         closeBulkUploadModal,
     } = useModalStore();
     const { searchTerm, sortBy, sortOrder, filterStatus, filterTimeRange } =
@@ -48,7 +47,7 @@ export default function DashboardClient({
             sortBy,
             sortOrder,
             filterStatus,
-            filterTimeRange
+            filterTimeRange,
         );
     }, [links, searchTerm, sortBy, sortOrder, filterStatus, filterTimeRange]);
 
@@ -57,7 +56,7 @@ export default function DashboardClient({
             links,
             searchTerm,
             filterStatus,
-            filterTimeRange
+            filterTimeRange,
         );
     }, [links, searchTerm, filterStatus, filterTimeRange]);
 
@@ -113,10 +112,9 @@ export default function DashboardClient({
     return (
         <>
             <div className="flex flex-col h-full">
-                <DashboardHeader
-                    onCreateLink={openCreateLinkModal}
-                    onBulkUpload={openBulkUploadModal}
-                />
+                <Header />
+                <DashboardHeader />
+
                 <LinksSummary
                     total={linkCounts.total}
                     active={linkCounts.active}

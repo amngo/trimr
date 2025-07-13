@@ -14,11 +14,11 @@ export default function LinkIndicator({ link }: { link: Link }) {
     return (
         <div
             className={cn(
-                'absolute w-2 h-full top-0 left-0 transition-colors duration-300',
+                'absolute w-full h-2 bottom-0 left-0 transition-colors duration-300',
                 status === 'active' && 'bg-green-400',
                 status === 'inactive' && 'bg-blue-400',
                 status === 'expired' && 'bg-gray-400',
-                status === 'disabled' && 'bg-red-400'
+                status === 'disabled' && 'bg-red-400',
             )}
         />
     );

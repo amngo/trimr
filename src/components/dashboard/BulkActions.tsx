@@ -84,7 +84,7 @@ export default function BulkActions({
 
     if (!isSelectionMode && !hasSelection()) {
         return (
-            <div className="flex items-center justify-between mt-8">
+            <div className="flex items-center justify-between mt-4">
                 <div className="flex items-center space-x-2">
                     <Button
                         variant="outline"
@@ -204,7 +204,7 @@ export default function BulkActions({
                                                         size="sm"
                                                         onClick={() =>
                                                             setShowDeleteConfirm(
-                                                                false
+                                                                false,
                                                             )
                                                         }
                                                     >

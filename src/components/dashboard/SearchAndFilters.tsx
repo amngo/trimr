@@ -1,4 +1,4 @@
-import { SearchIcon, SortAsc, SortDesc, X } from 'lucide-react';
+import { SortAsc, SortDesc, X } from 'lucide-react';
 import { useSearchStore } from '@/stores';
 import type {
     SortBy,
@@ -13,7 +13,6 @@ export default function SearchAndFilters() {
         sortOrder,
         filterStatus,
         filterTimeRange,
-        setSearchTerm,
         setSortBy,
         toggleSortOrder,
         setFilterStatus,
@@ -50,17 +49,6 @@ export default function SearchAndFilters() {
     return (
         <div className="mt-4 space-y-4">
             <div className="flex flex-wrap gap-4 items-center">
-                {/* Search Bar */}
-                <label className="input input-bordered flex items-center gap-2 grow">
-                    <SearchIcon size={16} />
-                    <input
-                        type="text"
-                        className="grow"
-                        placeholder="Search links by URL or slug..."
-                        value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
-                    />
-                </label>
                 {/* Sort By */}
                 <div className="flex items-center gap-2">
                     <span className="text-sm font-medium">Sort:</span>
@@ -116,7 +104,7 @@ export default function SearchAndFilters() {
                         value={filterTimeRange}
                         onChange={(e) =>
                             setFilterTimeRange(
-                                e.target.value as FilterTimeRange
+                                e.target.value as FilterTimeRange,
                             )
                         }
                     >
@@ -154,7 +142,7 @@ export default function SearchAndFilters() {
                             Status:{' '}
                             {
                                 statusOptions.find(
-                                    (opt) => opt.value === filterStatus
+                                    (opt) => opt.value === filterStatus,
                                 )?.label
                             }
                         </span>
@@ -164,7 +152,7 @@ export default function SearchAndFilters() {
                             Created:{' '}
                             {
                                 timeRangeOptions.find(
-                                    (opt) => opt.value === filterTimeRange
+                                    (opt) => opt.value === filterTimeRange,
                                 )?.label
                             }
                         </span>
