@@ -11,9 +11,15 @@ import {
     XIcon,
     ChartBarIcon,
     PowerIcon,
+    DownloadIcon,
 } from 'lucide-react';
 import { useState } from 'react';
-import { formatUrl, formatSlug, copyToClipboard } from '@/utils/linkUtils';
+import {
+    formatUrl,
+    formatSlug,
+    copyToClipboard,
+    downloadQRCode,
+} from '@/utils/linkUtils';
 import { Link as LinkType } from '@/types';
 import { toast, useBulkSelectionStore } from '@/stores';
 import { cn } from '@/utils';
@@ -75,6 +81,13 @@ export default function LinkRow({
         } else {
             toast.error('Failed to copy link to clipboard');
         }
+    };
+
+    const handleDownloadQRCode = (e: React.MouseEvent) => {
+        e.stopPropagation();
+        const filename = `qr-code-${link.slug}`;
+        downloadQRCode(link.id, filename);
+        toast.success('QR code downloaded!');
     };
 
     const handleRowClick = () => {
@@ -224,6 +237,17 @@ export default function LinkRow({
                                 </li>
                                 <li>
                                     <button
+                                        onClick={handleDownloadQRCode}
+                                        className="btn btn-ghost btn-sm justify-start"
+                                    >
+                                        <DownloadIcon size={12} />
+                                        <span className="ml-2">
+                                            Download QR
+                                        </span>
+                                    </button>
+                                </li>
+                                <li>
+                                    <button
                                         onClick={(e) => {
                                             e.stopPropagation();
                                             handleToggle();
@@ -279,7 +303,7 @@ export default function LinkRow({
                     )}
                 </div>
 
-                <QRCodeDisplay qrCodeUrl={formatSlug(link.slug)} />
+                <QRCodeDisplay id={link.id} qrCodeUrl={formatSlug(link.slug)} />
                 <div className="relative mt-1">
                     <p className="text-xs truncate font-mono text-primary max-w-[125px]">
                         trimr.im/{link.slug}
