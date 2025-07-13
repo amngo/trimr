@@ -1,16 +1,14 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest } from 'next/server';
 import { db } from '@/lib/db';
 import { createLink } from '@/app/actions';
 import { getCurrentUser } from '@/lib/auth-utils';
+import { handleApiError, createApiResponse, HttpError } from '@/lib/api-utils';
 
 export async function GET() {
     try {
         const user = await getCurrentUser();
         if (!user) {
-            return NextResponse.json(
-                { error: 'Authentication required' },
-                { status: 401 }
-            );
+            throw new HttpError('Authentication required', 401, 'UNAUTHORIZED');
         }
 
         const links = await db.link.findMany({
@@ -19,13 +17,9 @@ export async function GET() {
             take: 50,
         });
 
-        return NextResponse.json(links);
+        return createApiResponse(links);
     } catch (error) {
-        console.error('Error fetching links:', error);
-        return NextResponse.json(
-            { error: 'Failed to fetch links' },
-            { status: 500 }
-        );
+        return handleApiError(error, 'GET /api/links');
     }
 }
 
@@ -35,15 +29,11 @@ export async function POST(request: NextRequest) {
         const result = await createLink(formData);
 
         if (result.error) {
-            return NextResponse.json({ error: result.error }, { status: 400 });
+            throw new HttpError(result.error, 400, 'VALIDATION_ERROR');
         }
 
-        return NextResponse.json(result);
+        return createApiResponse(result);
     } catch (error) {
-        console.error('Error creating link:', error);
-        return NextResponse.json(
-            { error: 'Failed to create link' },
-            { status: 500 }
-        );
+        return handleApiError(error, 'POST /api/links');
     }
 }

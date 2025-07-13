@@ -1,11 +1,9 @@
 'use client';
 
 import { useState, useRef, useCallback } from 'react';
-import { Dialog, DialogPanel, DialogTitle } from '@headlessui/react';
-import { AnimatePresence, motion } from 'motion/react';
-import { Upload, FileText, X, AlertCircle, CheckCircle } from 'lucide-react';
+import { Upload, FileText, AlertCircle, CheckCircle } from 'lucide-react';
 import { cn } from '@/utils';
-import { Button } from '@/components/ui';
+import { Button, BaseModal } from '@/components/ui';
 import { CSVUploadModalProps, ParsedCSVData, BulkUploadResult } from '@/types';
 import { parseCSVText, downloadSampleCSV } from '@/utils/csvParser';
 import { useBulkUpload } from '@/hooks/useBulkUpload';
@@ -27,6 +25,21 @@ export default function BulkUploadModal({
             setUploadResult(result);
         },
     });
+
+    const handleFileSelect = useCallback((selectedFile: File) => {
+        setFile(selectedFile);
+        setUploadResult(null);
+
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            const csvText = e.target?.result as string;
+            if (csvText) {
+                const parsed = parseCSVText(csvText);
+                setParsedData(parsed);
+            }
+        };
+        reader.readAsText(selectedFile);
+    }, []);
 
     const handleDrag = useCallback((e: React.DragEvent) => {
         e.preventDefault();
@@ -53,22 +66,7 @@ export default function BulkUploadModal({
         if (csvFile) {
             handleFileSelect(csvFile);
         }
-    }, []);
-
-    const handleFileSelect = useCallback((selectedFile: File) => {
-        setFile(selectedFile);
-        setUploadResult(null);
-
-        const reader = new FileReader();
-        reader.onload = (e) => {
-            const csvText = e.target?.result as string;
-            if (csvText) {
-                const parsed = parseCSVText(csvText);
-                setParsedData(parsed);
-            }
-        };
-        reader.readAsText(selectedFile);
-    }, []);
+    }, [handleFileSelect]);
 
     const handleFileInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const selectedFile = e.target.files?.[0];
@@ -325,67 +323,26 @@ export default function BulkUploadModal({
     };
 
     return (
-        <AnimatePresence>
-            {isOpen && (
-                <Dialog
-                    static
-                    className="relative z-50"
-                    onClose={handleClose}
-                    open={isOpen}
+        <BaseModal
+            isOpen={isOpen}
+            onClose={handleClose}
+            title="Bulk Upload Links"
+        >
+            <div className="space-y-6">
+                {!file && renderUploadArea()}
+                {file && renderFilePreview()}
+                {renderProgress()}
+            </div>
+
+            <div className="flex justify-end space-x-3 mt-6">
+                <Button
+                    variant="ghost"
+                    onClick={handleClose}
+                    disabled={isUploading}
                 >
-                    <motion.div
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        className="fixed inset-0 bg-black/25"
-                    />
-
-                    <div className="fixed inset-0 overflow-y-auto">
-                        <div className="flex min-h-full items-center justify-center p-4 text-center">
-                            <DialogPanel
-                                as={motion.div}
-                                initial={{ opacity: 0, scale: 0.95 }}
-                                animate={{ opacity: 1, scale: 1 }}
-                                exit={{ opacity: 0, scale: 0.95 }}
-                                className="w-full max-w-2xl transform overflow-hidden rounded bg-base-100 p-8 shadow"
-                            >
-                                <div className="flex justify-between items-center mb-6">
-                                    <DialogTitle
-                                        as="h3"
-                                        className="text-2xl font-bold leading-6 text-base-content"
-                                    >
-                                        Bulk Upload Links
-                                    </DialogTitle>
-                                    <Button
-                                        variant="ghost"
-                                        size="sm"
-                                        shape="square"
-                                        onClick={handleClose}
-                                    >
-                                        <X className="h-4 w-4" />
-                                    </Button>
-                                </div>
-
-                                <div className="space-y-6">
-                                    {!file && renderUploadArea()}
-                                    {file && renderFilePreview()}
-                                    {renderProgress()}
-                                </div>
-
-                                <div className="flex justify-end space-x-3 mt-6">
-                                    <Button
-                                        variant="ghost"
-                                        onClick={handleClose}
-                                        disabled={isUploading}
-                                    >
-                                        {uploadResult ? 'Close' : 'Cancel'}
-                                    </Button>
-                                </div>
-                            </DialogPanel>
-                        </div>
-                    </div>
-                </Dialog>
-            )}
-        </AnimatePresence>
+                    {uploadResult ? 'Close' : 'Cancel'}
+                </Button>
+            </div>
+        </BaseModal>
     );
 }

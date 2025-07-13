@@ -3,6 +3,7 @@ import { GET, POST } from '../route';
 import { db } from '@/lib/db';
 import { createLink } from '@/app/actions';
 import { getCurrentUser } from '@/lib/auth-utils';
+import { handleApiError, createApiResponse } from '@/lib/api-utils';
 
 // Mock NextResponse
 jest.mock('next/server', () => ({
@@ -32,12 +33,43 @@ jest.mock('@/lib/auth-utils', () => ({
     getCurrentUser: jest.fn(),
 }));
 
+// Mock the new api-utils
+jest.mock('@/lib/api-utils', () => ({
+    handleApiError: jest.fn(),
+    createApiResponse: jest.fn(),
+    HttpError: jest.fn().mockImplementation((message: string, statusCode?: number, code?: string) => {
+        const error = new Error(message) as Error & { statusCode?: number; code?: string };
+        error.statusCode = statusCode;
+        error.code = code;
+        return error;
+    }),
+}));
+
 // Mock console.error to avoid noise in tests
 const consoleSpy = jest.spyOn(console, 'error').mockImplementation();
 
 describe('/api/links', () => {
     beforeEach(() => {
         jest.clearAllMocks();
+        
+        // Setup default mock implementations
+        (createApiResponse as jest.Mock).mockImplementation((data, status = 200) => ({
+            json: async () => data,
+            status,
+        }));
+        
+        (handleApiError as jest.Mock).mockImplementation((error) => {
+            if (error.statusCode === 401) {
+                return {
+                    json: async () => ({ error: error.message, code: error.code }),
+                    status: 401,
+                };
+            }
+            return {
+                json: async () => ({ error: 'An unexpected error occurred' }),
+                status: 500,
+            };
+        });
     });
 
     afterAll(() => {
@@ -84,7 +116,7 @@ describe('/api/links', () => {
             const data = await response.json();
 
             expect(response.status).toBe(401);
-            expect(data).toEqual({ error: 'Authentication required' });
+            expect(data).toEqual({ error: 'Authentication required', code: 'UNAUTHORIZED' });
             expect(db.link.findMany).not.toHaveBeenCalled();
         });
 
@@ -99,10 +131,10 @@ describe('/api/links', () => {
             const data = await response.json();
 
             expect(response.status).toBe(500);
-            expect(data).toEqual({ error: 'Failed to fetch links' });
-            expect(console.error).toHaveBeenCalledWith(
-                'Error fetching links:',
-                expect.any(Error)
+            expect(data).toEqual({ error: 'An unexpected error occurred' });
+            expect(handleApiError).toHaveBeenCalledWith(
+                expect.any(Error),
+                'GET /api/links'
             );
         });
 
@@ -115,7 +147,7 @@ describe('/api/links', () => {
             const data = await response.json();
 
             expect(response.status).toBe(500);
-            expect(data).toEqual({ error: 'Failed to fetch links' });
+            expect(data).toEqual({ error: 'An unexpected error occurred' });
         });
     });
 
@@ -153,6 +185,12 @@ describe('/api/links', () => {
             };
 
             (createLink as jest.Mock).mockResolvedValue(mockResult);
+            
+            // Update handleApiError mock for this specific test
+            (handleApiError as jest.Mock).mockImplementationOnce((error) => ({
+                json: async () => ({ error: error.message, code: error.code }),
+                status: 400,
+            }));
 
             const formData = new FormData();
             formData.append('url', 'invalid-url');
@@ -166,7 +204,7 @@ describe('/api/links', () => {
             const data = await response.json();
 
             expect(response.status).toBe(400);
-            expect(data).toEqual({ error: 'Invalid URL provided' });
+            expect(data).toEqual({ error: 'Invalid URL provided', code: 'VALIDATION_ERROR' });
         });
 
         it('should handle createLink exceptions', async () => {
@@ -186,10 +224,10 @@ describe('/api/links', () => {
             const data = await response.json();
 
             expect(response.status).toBe(500);
-            expect(data).toEqual({ error: 'Failed to create link' });
-            expect(console.error).toHaveBeenCalledWith(
-                'Error creating link:',
-                expect.any(Error)
+            expect(data).toEqual({ error: 'An unexpected error occurred' });
+            expect(handleApiError).toHaveBeenCalledWith(
+                expect.any(Error),
+                'POST /api/links'
             );
         });
 
@@ -206,7 +244,7 @@ describe('/api/links', () => {
             const data = await response.json();
 
             expect(response.status).toBe(500);
-            expect(data).toEqual({ error: 'Failed to create link' });
+            expect(data).toEqual({ error: 'An unexpected error occurred' });
         });
     });
 });
