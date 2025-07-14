@@ -6,8 +6,8 @@ import { BaseModal } from '@/components/ui';
 import URLInput from '../forms/URLInput';
 import NameInput from '../forms/NameInput';
 import ExpirationSelect from '../forms/ExpirationSelect';
-import FormMessages from './FormMessages';
-import FormActions from './FormActions';
+import FormMessages from '../dashboard/FormMessages';
+import FormActions from '../dashboard/FormActions';
 import StartingDateInput from '../forms/StartingDateInput';
 import PasswordInput from '../forms/PasswordInput';
 

@@ -1,5 +1,5 @@
-export { default as BulkUploadModal } from './BulkUploadModal';
-export { default as CreateLinkModal } from './CreateLinkModal';
+export { default as BulkUploadModal } from '../modals/BulkUploadModal';
+export { default as CreateLinkModal } from '../modals/CreateLinkModal';
 export { default as DashboardHeader } from './DashboardHeader';
 export { default as EmptyState } from './EmptyState';
 export { default as FormActions } from './FormActions';

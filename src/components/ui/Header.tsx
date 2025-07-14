@@ -7,12 +7,7 @@ import { ThemeToggle } from '../dashboard';
 
 export default function Header() {
     const { openCreateLinkModal, openBulkUploadModal } = useModalStore();
-
-    const {
-        searchTerm,
-
-        setSearchTerm,
-    } = useSearchStore();
+    const { searchTerm, setSearchTerm } = useSearchStore();
 
     return (
         <div className="flex items-center justify-between border-b border-base-300 pb-4 gap-4">

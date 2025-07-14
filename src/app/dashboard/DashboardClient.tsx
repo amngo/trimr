@@ -1,7 +1,5 @@
 'use client';
 import { useMemo } from 'react';
-import CreateLinkModal from '@/components/dashboard/CreateLinkModal';
-import BulkUploadModal from '@/components/dashboard/BulkUploadModal';
 import SearchAndFilters from '@/components/dashboard/SearchAndFilters';
 import LinksTable from '@/components/dashboard/LinksTable';
 import LinksSummary from '@/components/dashboard/LinksSummary';
@@ -30,13 +28,7 @@ interface DashboardClientProps {
 export default function DashboardClient({
     initialLinks,
 }: DashboardClientProps) {
-    const {
-        isCreateLinkModalOpen,
-        openCreateLinkModal,
-        closeCreateLinkModal,
-        isBulkUploadModalOpen,
-        closeBulkUploadModal,
-    } = useModalStore();
+    const { openCreateLinkModal } = useModalStore();
     const { searchTerm, sortBy, sortOrder, filterStatus, filterTimeRange } =
         useSearchStore();
     const { data: links = initialLinks, isLoading, error } = useLinks();
@@ -158,16 +150,6 @@ export default function DashboardClient({
                     }
                 />
             </div>
-
-            <CreateLinkModal
-                isOpen={isCreateLinkModalOpen}
-                onClose={closeCreateLinkModal}
-            />
-
-            <BulkUploadModal
-                isOpen={isBulkUploadModalOpen}
-                onClose={closeBulkUploadModal}
-            />
         </>
     );
 }
