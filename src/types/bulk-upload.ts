@@ -1,8 +1,9 @@
 export interface CSVLinkData {
     url: string;
-    customSlug?: string;
-    expiration?: string;
+    name?: string;
     startDate?: string;
+    expiration?: string;
+    password?: string;
 }
 
 export interface BulkUploadResult {

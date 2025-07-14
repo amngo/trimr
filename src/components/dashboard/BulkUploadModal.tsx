@@ -16,7 +16,7 @@ export default function BulkUploadModal({
     const [file, setFile] = useState<File | null>(null);
     const [parsedData, setParsedData] = useState<ParsedCSVData | null>(null);
     const [uploadResult, setUploadResult] = useState<BulkUploadResult | null>(
-        null
+        null,
     );
     const inputRef = useRef<HTMLInputElement>(null);
 
@@ -51,22 +51,25 @@ export default function BulkUploadModal({
         }
     }, []);
 
-    const handleDrop = useCallback((e: React.DragEvent) => {
-        e.preventDefault();
-        e.stopPropagation();
-        setDragActive(false);
+    const handleDrop = useCallback(
+        (e: React.DragEvent) => {
+            e.preventDefault();
+            e.stopPropagation();
+            setDragActive(false);
 
-        const files = Array.from(e.dataTransfer.files);
-        const csvFile = files.find(
-            (file) =>
-                file.type === 'text/csv' ||
-                file.name.toLowerCase().endsWith('.csv')
-        );
+            const files = Array.from(e.dataTransfer.files);
+            const csvFile = files.find(
+                (file) =>
+                    file.type === 'text/csv' ||
+                    file.name.toLowerCase().endsWith('.csv'),
+            );
 
-        if (csvFile) {
-            handleFileSelect(csvFile);
-        }
-    }, [handleFileSelect]);
+            if (csvFile) {
+                handleFileSelect(csvFile);
+            }
+        },
+        [handleFileSelect],
+    );
 
     const handleFileInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const selectedFile = e.target.files?.[0];
@@ -94,7 +97,7 @@ export default function BulkUploadModal({
                 'border-2 border-dashed rounded-lg p-8 text-center transition-colors duration-200',
                 dragActive
                     ? 'border-primary bg-primary/5'
-                    : 'border-base-300 hover:border-primary/50'
+                    : 'border-base-300 hover:border-primary/50',
             )}
             onDragEnter={handleDrag}
             onDragLeave={handleDrag}
@@ -131,7 +134,8 @@ export default function BulkUploadModal({
                     Download sample CSV
                 </button>
                 {' | '}
-                CSV format: url, customSlug (optional), expiration (optional)
+                CSV format: url, name (optional), starting date (optional),
+                expiration (optional), password (optional)
             </div>
         </div>
     );

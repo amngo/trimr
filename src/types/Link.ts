@@ -13,4 +13,9 @@ export interface Link {
     password: string | null;
 }
 
-export type LinkStatus = 'active' | 'inactive' | 'expired' | 'disabled';
+export type LinkStatus =
+    | 'active'
+    | 'inactive'
+    | 'expired'
+    | 'disabled'
+    | 'protected';

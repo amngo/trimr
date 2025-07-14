@@ -5,29 +5,37 @@ import { logger } from './logger';
 // const OPTIONAL_HEADERS = ['customSlug', 'expiration', 'startDate'];
 
 export function parseCSVText(csvText: string): ParsedCSVData {
-    const lines = csvText.trim().split('\n');
+    const trimmedText = csvText.trim();
     const errors: Array<{ row: number; message: string }> = [];
     const data: CSVLinkData[] = [];
 
-    if (lines.length === 0) {
+    if (!trimmedText) {
         return {
             data: [],
-            errors: [{ row: 0, message: 'CSV file is empty' }]
+            errors: [{ row: 0, message: 'CSV file is empty' }],
         };
     }
 
+    const lines = trimmedText.split('\n');
+
     // Parse headers
-    const headers = lines[0].split(',').map(h => h.trim().replace(/['"]/g, ''));
-    
+    const headers = lines[0]
+        .split(',')
+        .map((h) => h.trim().replace(/['"]/g, ''));
+
     // Validate headers
-    const hasUrlHeader = headers.some(h => {
+    const hasUrlHeader = headers.some((h) => {
         const normalized = h.toLowerCase();
-        return normalized === 'url' || normalized === 'link' || normalized === 'website';
+        return (
+            normalized === 'url' ||
+            normalized === 'link' ||
+            normalized === 'website'
+        );
     });
     if (!hasUrlHeader) {
         return {
             data: [],
-            errors: [{ row: 1, message: 'CSV must contain a "url" column' }]
+            errors: [{ row: 1, message: 'CSV must contain a "url" column' }],
         };
     }
 
@@ -50,7 +58,7 @@ export function parseCSVText(csvText: string): ParsedCSVData {
             logger.error('Error parsing CSV row', error);
             errors.push({
                 row: i + 1,
-                message: `Failed to parse row: ${error instanceof Error ? error.message : 'Unknown error'}`
+                message: `Failed to parse row: ${error instanceof Error ? error.message : 'Unknown error'}`,
             });
         }
     }
@@ -60,76 +68,131 @@ export function parseCSVText(csvText: string): ParsedCSVData {
 
 function createHeaderMap(headers: string[]): Record<string, number> {
     const map: Record<string, number> = {};
-    
+
     headers.forEach((header, index) => {
         const normalizedHeader = header.toLowerCase();
-        
+
         // Map common variations
-        if (normalizedHeader === 'url' || normalizedHeader === 'link' || normalizedHeader === 'website') {
+        if (
+            normalizedHeader === 'url' ||
+            normalizedHeader === 'link' ||
+            normalizedHeader === 'website'
+        ) {
             map['url'] = index;
-        } else if (normalizedHeader === 'customslug' || normalizedHeader === 'slug' || normalizedHeader === 'custom_slug') {
-            map['customSlug'] = index;
-        } else if (normalizedHeader === 'expiration' || normalizedHeader === 'expires' || normalizedHeader === 'expiry') {
-            map['expiration'] = index;
-        } else if (normalizedHeader === 'startdate' || normalizedHeader === 'start_date' || normalizedHeader === 'start') {
+        } else if (
+            normalizedHeader === 'name' ||
+            normalizedHeader === 'title' ||
+            normalizedHeader === 'label'
+        ) {
+            map['name'] = index;
+        } else if (
+            normalizedHeader === 'startdate' ||
+            normalizedHeader === 'start_date' ||
+            normalizedHeader === 'start' ||
+            normalizedHeader === 'starting date'
+        ) {
             map['startDate'] = index;
+        } else if (
+            normalizedHeader === 'expiration' ||
+            normalizedHeader === 'expires' ||
+            normalizedHeader === 'expiry' ||
+            normalizedHeader === 'expire_date'
+        ) {
+            map['expiration'] = index;
+        } else if (
+            normalizedHeader === 'password' ||
+            normalizedHeader === 'pass' ||
+            normalizedHeader === 'pwd'
+        ) {
+            map['password'] = index;
         }
     });
 
     return map;
 }
 
-function parseCSVRow(line: string, headerMap: Record<string, number>, rowNumber: number): {
+function parseCSVRow(
+    line: string,
+    headerMap: Record<string, number>,
+    rowNumber: number,
+): {
     data?: CSVLinkData;
     errors: Array<{ row: number; message: string }>;
 } {
     const errors: Array<{ row: number; message: string }> = [];
-    
+
     // Simple CSV parsing (handles basic cases)
     const values = parseCSVLine(line);
-    
+
     // Extract URL (required)
     const urlIndex = headerMap['url'];
     if (urlIndex === undefined || !values[urlIndex]) {
         return {
-            errors: [{ row: rowNumber, message: 'URL is required' }]
+            errors: [{ row: rowNumber, message: 'URL is required' }],
         };
     }
 
     const url = values[urlIndex].trim();
     if (!isValidURL(url)) {
         return {
-            errors: [{ row: rowNumber, message: `Invalid URL: ${url}` }]
+            errors: [{ row: rowNumber, message: `Invalid URL: ${url}` }],
         };
     }
 
     // Extract optional fields
     const data: CSVLinkData = { url };
 
-    if (headerMap['customSlug'] !== undefined && values[headerMap['customSlug']]) {
-        const slug = values[headerMap['customSlug']].trim();
-        if (isValidSlug(slug)) {
-            data.customSlug = slug;
+    if (headerMap['name'] !== undefined && values[headerMap['name']]) {
+        const name = values[headerMap['name']].trim();
+        if (name.length <= 28) {
+            data.name = name;
         } else {
-            errors.push({ row: rowNumber, message: `Invalid slug: ${slug}` });
+            errors.push({
+                row: rowNumber,
+                message: `Name too long (max 28 characters): ${name}`,
+            });
         }
     }
 
-    if (headerMap['expiration'] !== undefined && values[headerMap['expiration']]) {
-        const expiration = values[headerMap['expiration']].trim();
-        if (isValidDate(expiration)) {
-            data.expiration = expiration;
-        } else {
-            errors.push({ row: rowNumber, message: `Invalid expiration date: ${expiration}` });
-        }
-    }
-
-    if (headerMap['startDate'] !== undefined && values[headerMap['startDate']]) {
+    if (
+        headerMap['startDate'] !== undefined &&
+        values[headerMap['startDate']]
+    ) {
         const startDate = values[headerMap['startDate']].trim();
         if (isValidDate(startDate)) {
             data.startDate = startDate;
         } else {
-            errors.push({ row: rowNumber, message: `Invalid start date: ${startDate}` });
+            errors.push({
+                row: rowNumber,
+                message: `Invalid start date: ${startDate}`,
+            });
+        }
+    }
+
+    if (
+        headerMap['expiration'] !== undefined &&
+        values[headerMap['expiration']]
+    ) {
+        const expiration = values[headerMap['expiration']].trim();
+        if (isValidDate(expiration)) {
+            data.expiration = expiration;
+        } else {
+            errors.push({
+                row: rowNumber,
+                message: `Invalid expiration date: ${expiration}`,
+            });
+        }
+    }
+
+    if (headerMap['password'] !== undefined && values[headerMap['password']]) {
+        const password = values[headerMap['password']].trim();
+        if (password.length >= 1) {
+            data.password = password;
+        } else {
+            errors.push({
+                row: rowNumber,
+                message: `Password cannot be empty if provided`,
+            });
         }
     }
 
@@ -140,10 +203,10 @@ function parseCSVLine(line: string): string[] {
     const values: string[] = [];
     let current = '';
     let inQuotes = false;
-    
+
     for (let i = 0; i < line.length; i++) {
         const char = line[i];
-        
+
         if (char === '"') {
             if (inQuotes && line[i + 1] === '"') {
                 // Escaped quote
@@ -161,29 +224,25 @@ function parseCSVLine(line: string): string[] {
             current += char;
         }
     }
-    
+
     // Add the last field
     values.push(current.trim());
-    
+
     return values;
 }
 
 function isValidURL(url: string): boolean {
     try {
         // Add protocol if missing
-        const urlToTest = url.startsWith('http://') || url.startsWith('https://') 
-            ? url 
-            : `https://${url}`;
+        const urlToTest =
+            url.startsWith('http://') || url.startsWith('https://')
+                ? url
+                : `https://${url}`;
         new URL(urlToTest);
         return true;
     } catch {
         return false;
     }
-}
-
-function isValidSlug(slug: string): boolean {
-    // Alphanumeric, hyphens, underscores, 3-50 characters
-    return /^[a-zA-Z0-9_-]{3,50}$/.test(slug);
 }
 
 function isValidDate(dateString: string): boolean {
@@ -193,18 +252,31 @@ function isValidDate(dateString: string): boolean {
 }
 
 export function generateSampleCSV(): string {
-    const headers = ['url', 'customSlug', 'expiration'];
+    const headers = ['url', 'name', 'starting date', 'expiration', 'password'];
     const sampleData = [
-        ['https://example.com', 'example1', '2024-12-31'],
-        ['https://google.com', 'google-link', ''],
-        ['https://github.com', '', '2024-06-30']
+        [
+            'https://example.com',
+            'Example Website',
+            '2024-01-01',
+            '2024-12-31',
+            'secret123',
+        ],
+        ['https://google.com', 'Google Search', '', '2024-06-30', ''],
+        ['https://github.com', 'GitHub Repository', '2024-02-01', '', 'mypass'],
+        ['https://stackoverflow.com', '', '', '', ''],
     ];
 
     const csvLines = [
         headers.join(','),
-        ...sampleData.map(row => row.map(cell => 
-            cell.includes(',') || cell.includes('"') ? `"${cell.replace(/"/g, '""')}"` : cell
-        ).join(','))
+        ...sampleData.map((row) =>
+            row
+                .map((cell) =>
+                    cell.includes(',') || cell.includes('"')
+                        ? `"${cell.replace(/"/g, '""')}"`
+                        : cell,
+                )
+                .join(','),
+        ),
     ];
 
     return csvLines.join('\n');
@@ -214,7 +286,7 @@ export function downloadSampleCSV() {
     const csvContent = generateSampleCSV();
     const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
     const link = document.createElement('a');
-    
+
     if (link.download !== undefined) {
         const url = URL.createObjectURL(blob);
         link.setAttribute('href', url);

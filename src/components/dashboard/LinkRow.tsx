@@ -12,6 +12,8 @@ import {
     ChartBarIcon,
     PowerIcon,
     DownloadIcon,
+    KeyRoundIcon,
+    InfoIcon,
 } from 'lucide-react';
 import { useState } from 'react';
 import {
@@ -19,6 +21,7 @@ import {
     formatSlug,
     copyToClipboard,
     downloadQRCode,
+    formatDate,
 } from '@/utils/linkUtils';
 import { Link as LinkType } from '@/types';
 import { toast, useBulkSelectionStore } from '@/stores';
@@ -28,7 +31,6 @@ import { BASE_URL } from '@/constants';
 import QRCodeDisplay from './QRCodeDisplay';
 import LinkIndicator from './LinkIndicator';
 import Link from 'next/link';
-import { getBadgeClasses, getLinkBadges } from '@/utils/linkBadges';
 
 interface LinkRowProps {
     link: LinkType;
@@ -49,7 +51,6 @@ export default function LinkRow({
     const [isToggling, setIsToggling] = useState(false);
     const [isEditing, setIsEditing] = useState(false);
     const [editName, setEditName] = useState(link.name || '');
-    // const [showPassword, setShowPassword] = useState(false);
 
     const { isSelectionMode, isLinkSelected, toggleLink } =
         useBulkSelectionStore();
@@ -80,6 +81,19 @@ export default function LinkRow({
             toast.success('Link copied to clipboard!');
         } else {
             toast.error('Failed to copy link to clipboard');
+        }
+    };
+
+    const handleCopyPassword = async () => {
+        if (link.password) {
+            const success = await copyToClipboard(link.password);
+            if (success) {
+                toast.success('Password copied to clipboard!');
+            } else {
+                toast.error('Failed to copy password to clipboard');
+            }
+        } else {
+            toast.error('No password set for this link');
         }
     };
 
@@ -128,11 +142,15 @@ export default function LinkRow({
     const handleNameKeyDown = (e: React.KeyboardEvent) => {
         if (e.key === 'Enter') {
             e.preventDefault();
-            const mockEvent = { stopPropagation: () => {} } as React.MouseEvent;
+            const mockEvent = {
+                stopPropagation: () => {},
+            } as React.MouseEvent;
             handleSaveRename(mockEvent);
         } else if (e.key === 'Escape') {
             e.preventDefault();
-            const mockEvent = { stopPropagation: () => {} } as React.MouseEvent;
+            const mockEvent = {
+                stopPropagation: () => {},
+            } as React.MouseEvent;
             handleCancelRename(mockEvent);
         }
     };
@@ -330,7 +348,7 @@ export default function LinkRow({
                 </div>
 
                 <div className="self-start flex items-center justify-between w-full mt-1">
-                    <div className="flex items-center gap-8 border border-base-300 rounded px-2 py-1 text-xs">
+                    <div className="flex items-center gap-12 border border-base-300 rounded px-2 py-1 text-xs">
                         <div className="flex items-center space-x-1">
                             <UsersIcon size={12} />
                             <span>{link.visitorCount}</span>
@@ -341,59 +359,45 @@ export default function LinkRow({
                         </div>
                     </div>
 
-                    {/* Link Status Badges */}
-                    <div className="flex items-center space-x-1">
-                        {getLinkBadges(link).map((badge, index) => (
-                            <span
-                                key={`${badge.type}-${index}`}
-                                className={cn(
-                                    'badge badge-xs',
-                                    getBadgeClasses(badge.variant),
-                                )}
+                    <div className="flex items-center gap-4">
+                        {link.password && (
+                            <button
+                                onClick={handleCopyPassword}
+                                className="tooltip tooltip-left w-[26px] h-[26px] flex items-center justify-center"
                             >
-                                {badge.text}
-                            </span>
-                        ))}
+                                <div className="tooltip-content">
+                                    <div className="font-mono">{`Password: ${link.password}`}</div>
+                                    <div className="text-xs italic">
+                                        Click to copy
+                                    </div>
+                                </div>
+                                <KeyRoundIcon size={16} />
+                            </button>
+                        )}
+                        <div className="tooltip tooltip-left w-[26px] h-[26px] flex items-center justify-center">
+                            <div className="tooltip-content flex flex-col items-start">
+                                {link.createdAt && (
+                                    <div className="text-xs">
+                                        Created at: {formatDate(link.createdAt)}
+                                    </div>
+                                )}
+                                {link.startsAt && (
+                                    <div className="text-xs">
+                                        Starts at: {formatDate(link.startsAt)}
+                                    </div>
+                                )}
+                                {link.expiresAt && (
+                                    <div className="text-xs">
+                                        Expires at: {formatDate(link.expiresAt)}
+                                    </div>
+                                )}
+                            </div>
+                            <InfoIcon size={16} />
+                        </div>
                     </div>
                 </div>
             </div>
             <LinkIndicator link={link} />
         </motion.li>
     );
-}
-
-{
-    /* {link.password && (
-                            <div className="flex items-center space-x-2">
-                                <span className="text-xs text-base-content/60">
-                                    Password:
-                                </span>
-                                <div className="flex items-center space-x-1">
-                                    <span className="text-xs font-mono bg-base-200 px-2 py-1 rounded">
-                                        {showPassword
-                                            ? link.password
-                                            : '••••••••'}
-                                    </span>
-                                    <button
-                                        onClick={(e) => {
-                                            e.stopPropagation();
-                                            setShowPassword(!showPassword);
-                                        }}
-                                        className="text-gray-400 hover:text-gray-600 p-1"
-                                        disabled={isSelectionMode}
-                                        title={
-                                            showPassword
-                                                ? 'Hide password'
-                                                : 'Show password'
-                                        }
-                                    >
-                                        {showPassword ? (
-                                            <EyeOff size={12} />
-                                        ) : (
-                                            <Eye size={12} />
-                                        )}
-                                    </button>
-                                </div>
-                            </div>
-                        )} */
 }
