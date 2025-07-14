@@ -3,6 +3,7 @@ import { Inter } from 'next/font/google';
 import './globals.css';
 import QueryProvider from '@/providers/QueryProvider';
 import { ErrorBoundary, Modals, ToastContainer } from '@/components/ui';
+import { Analytics } from '@vercel/analytics/next';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -28,6 +29,7 @@ export default function RootLayout({
                     </div>
                     <Modals />
                 </QueryProvider>
+                <Analytics />
             </body>
         </html>
     );
