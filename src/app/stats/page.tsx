@@ -1,6 +1,5 @@
 import { Suspense } from 'react';
 import { getCurrentUser } from '@/lib/auth-utils';
-import { redirect } from 'next/navigation';
 import { StatsOverview } from '@/components/stats/StatsOverview';
 import AppLayout from '@/components/layout/AppLayout';
 import StatsHeader from '@/components/stats/StatsHeader';
@@ -9,7 +8,7 @@ export default async function StatsPage() {
     const user = await getCurrentUser();
 
     if (!user) {
-        redirect('/auth');
+        return null;
     }
 
     return (
