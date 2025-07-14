@@ -37,7 +37,7 @@ export default function LinksTable({
             {links.length === 0 ? (
                 <EmptyState onCreateLink={onCreateLink} />
             ) : (
-                <ul className="grid grid-cols-4 gap-4">
+                <ul className="grid grid-cols-4 2xl:grid-cols-5 gap-4">
                     <AnimatePresence initial={false}>
                         {links.map((link) => (
                             <LinkRow

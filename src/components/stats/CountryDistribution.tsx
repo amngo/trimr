@@ -109,29 +109,26 @@ export function CountryDistribution({ countries }: CountryDistributionProps) {
     const maxClicks = Math.max(...countries.map((c) => c.clicks));
 
     return (
-        <div className="card bg-base-200 shadow-sm">
+        <div className="card bg-base-100 border border-base-300">
             <div className="card-body">
                 <h2 className="card-title mb-4">Top Countries</h2>
-                <div className="space-y-3">
+                <ol className="space-y-1">
                     {countries.map((country, index) => (
-                        <div
+                        <li
                             key={country.country}
-                            className="flex items-center justify-between"
+                            className="flex items-center justify-between hover:bg-base-300 px-4 py-2 rounded"
                         >
-                            <div className="flex items-center gap-3 flex-1">
-                                <div className="flex items-center gap-2 min-w-0 flex-1">
-                                    <span className="text-lg">
-                                        {getCountryFlag(country.country)}
-                                    </span>
-                                    <span className="font-medium truncate">
-                                        {country.country}
-                                    </span>
-                                </div>
-                                <div className="flex items-center gap-2">
-                                    <span className="badge badge-neutral badge-sm">
-                                        #{index + 1}
-                                    </span>
-                                </div>
+                            <div className="flex items-center gap-2 min-w-0 flex-1">
+                                <span className="badge badge-neutral badge-sm w-12">
+                                    #{index + 1}
+                                </span>
+
+                                <span className="text-lg">
+                                    {getCountryFlag(country.country)}
+                                </span>
+                                <span className="font-medium truncate">
+                                    {country.country}
+                                </span>
                             </div>
                             <div className="flex items-center gap-3">
                                 <div className="text-right">
@@ -150,9 +147,9 @@ export function CountryDistribution({ countries }: CountryDistributionProps) {
                                     ></progress>
                                 </div>
                             </div>
-                        </div>
+                        </li>
                     ))}
-                </div>
+                </ol>
                 {countries.length === 10 && (
                     <div className="text-center mt-4 text-sm text-base-content/60">
                         Showing top 10 countries

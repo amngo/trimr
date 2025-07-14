@@ -88,13 +88,13 @@ export function ActivityChart({ dailyActivity }: ActivityChartProps) {
                         </p>
                     </div>
                 ) : (
-                    <div className="space-y-4">
+                    <div className="space-y-4 flex flex-col h-full">
                         {/* Chart */}
-                        <div className="relative h-48 flex items-end justify-between gap-1 bg-base-300 rounded-lg p-4">
+                        <div className="relative grow flex items-end justify-between gap-1 bg-base-300 rounded-lg p-4">
                             {dailyActivity.map((day, index) => (
                                 <div
                                     key={day.date}
-                                    className="relative flex-1 flex flex-col items-center group"
+                                    className="relative flex-1 flex flex-col-reverse items-center group h-full"
                                 >
                                     <div
                                         className="w-full bg-primary rounded-t transition-all duration-200 hover:bg-primary-focus cursor-pointer"

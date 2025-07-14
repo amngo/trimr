@@ -21,7 +21,7 @@ export default function RootLayout({
             <body className={inter.className}>
                 <QueryProvider>
                     <div className="min-h-screen bg-base-200">
-                        <main className="max-w-7xl mx-auto">
+                        <main className="mx-auto">
                             <ErrorBoundary>{children}</ErrorBoundary>
                         </main>
                         <ToastContainer />
