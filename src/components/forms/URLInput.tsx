@@ -20,6 +20,7 @@ export default function URLInput({ value, onChange, disabled }: URLInputProps) {
                 required
                 disabled={disabled}
             />
+            <p className="label">Required</p>
         </fieldset>
     );
 }

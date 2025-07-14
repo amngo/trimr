@@ -12,13 +12,13 @@ export default function PasswordInput({
     value,
     onChange,
     disabled = false,
-    placeholder = 'Enter password (optional)',
+    placeholder = 'Enter password',
 }: PasswordInputProps) {
     const [showPassword, setShowPassword] = useState(false);
 
     return (
-        <fieldset className="space-y-2">
-            <legend className="text-sm font-medium flex items-center gap-2">
+        <fieldset className="fieldset">
+            <legend className="fieldset-legend">
                 <Lock size={16} />
                 Password Protection
             </legend>
@@ -49,9 +49,9 @@ export default function PasswordInput({
                     </button>
                 )}
             </div>
-            <p className="text-xs text-base-content/60">
-                Leave empty for no password protection. Visitors will need to
-                enter this password to access the link.
+            <p className="label">
+                Optional - Visitors will need to enter this password to access
+                the link.
             </p>
         </fieldset>
     );

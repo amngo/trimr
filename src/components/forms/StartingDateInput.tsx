@@ -1,7 +1,4 @@
 'use client';
-
-import { InfoIcon } from 'lucide-react';
-
 interface StartingDateInputProps {
     value: string;
     onChange: (value: string) => void;
@@ -15,15 +12,7 @@ export default function StartingDateInput({
 }: StartingDateInputProps) {
     return (
         <fieldset className="fieldset">
-            <legend className="fieldset-legend">
-                Starting Date
-                <div
-                    className="tooltip tooltip-right"
-                    data-tip="Select the starting date for when the link will be active."
-                >
-                    <InfoIcon size={16} />
-                </div>
-            </legend>
+            <legend className="fieldset-legend">Starting Date</legend>
             <input
                 type="datetime-local"
                 id="startingDate"
@@ -33,7 +22,10 @@ export default function StartingDateInput({
                 disabled={disabled}
                 className="input w-full"
             />
-            <p className="label">Optional</p>
+            <p className="label">
+                Optional - Select the starting date for when the link will be
+                accessible.
+            </p>
         </fieldset>
     );
 }

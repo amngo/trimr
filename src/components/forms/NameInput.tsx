@@ -20,9 +20,7 @@ export default function NameInput({
 
     return (
         <fieldset className="fieldset">
-            <legend className="fieldset-legend">
-                Link Name (Optional) - {value.length}/28
-            </legend>
+            <legend className="fieldset-legend">Link Name</legend>
             <input
                 id="name"
                 name="name"
@@ -33,6 +31,7 @@ export default function NameInput({
                 maxLength={28}
                 disabled={disabled}
             />
+            <p className="label">Optional - {value.length}/28 characters</p>
         </fieldset>
     );
 }

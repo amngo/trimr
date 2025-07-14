@@ -1,7 +1,4 @@
 'use client';
-
-import { InfoIcon } from 'lucide-react';
-
 interface ExpirationSelectProps {
     value: string;
     onChange: (value: string) => void;
@@ -15,15 +12,7 @@ export default function ExpirationSelect({
 }: ExpirationSelectProps) {
     return (
         <fieldset className="fieldset">
-            <legend className="fieldset-legend">
-                Expiration
-                <div
-                    className="tooltip tooltip-right"
-                    data-tip="Select how long the link should be valid."
-                >
-                    <InfoIcon size={16} />
-                </div>
-            </legend>
+            <legend className="fieldset-legend">Expiration</legend>
             <select
                 id="expiration"
                 name="expiration"
@@ -38,7 +27,9 @@ export default function ExpirationSelect({
                 <option value="7d">7 Days</option>
                 <option value="30d">30 Days</option>
             </select>
-            <p className="label">Optional</p>
+            <p className="label">
+                Optional - Select how long the link should be valid.
+            </p>
         </fieldset>
     );
 }

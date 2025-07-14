@@ -80,6 +80,7 @@ export default function CreateLinkModal({
             isOpen={isOpen}
             onClose={handleClose}
             title="Create New Link"
+            maxWidth="lg"
         >
             <FormMessages result={result} />
             <form ref={formRef} action={handleSubmit} className="space-y-2">
