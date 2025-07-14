@@ -11,5 +11,4 @@ export { default as LinksSummary } from './LinksSummary';
 export { default as LinksTable } from './LinksTable';
 export { default as QRCodeDisplay } from './QRCodeDisplay';
 export { default as SearchAndFilters } from './SearchAndFilters';
-export { default as Sidebar } from './Sidebar';
 export { default as ThemeToggle } from './ThemeToggle';

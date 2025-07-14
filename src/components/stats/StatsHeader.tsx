@@ -2,14 +2,14 @@ import Link from 'next/link';
 
 export default function StatsHeader() {
     return (
-        <div className="bg-card border-gray-200 pt-4 pb-8">
+        <div className="bg-card border-gray-200 mb-8">
             <div className="breadcrumbs text-sm mb-4">
                 <ul>
                     <li>
                         <Link href="/">Home</Link>
                     </li>
                     <li>
-                        <Link href="/dashboard">Stats</Link>
+                        <Link href="/stats">Analytics</Link>
                     </li>
                 </ul>
             </div>
@@ -18,7 +18,7 @@ export default function StatsHeader() {
                     <h1 className="text-2xl font-semibold text-foreground">
                         Analytics Overview
                     </h1>
-                    <p className="text-sm">
+                    <p className="text-sm text-base-content/70">
                         Comprehensive overview of all your links&apos;
                         performance
                     </p>

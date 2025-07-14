@@ -2,7 +2,7 @@ import Link from 'next/link';
 
 export default function DashboardHeader() {
     return (
-        <div className="bg-card border-gray-200 py-4">
+        <div className="bg-card border-gray-200 mb-8">
             <div className="breadcrumbs text-sm mb-4">
                 <ul>
                     <li>
@@ -18,7 +18,7 @@ export default function DashboardHeader() {
                     <h1 className="text-2xl font-semibold text-foreground">
                         Your Links
                     </h1>
-                    <p className="text-sm">
+                    <p className="text-sm text-base-content/70">
                         Manage your shortened links and track their performance.
                     </p>
                 </div>

@@ -77,7 +77,7 @@ export function StatsOverview({ userId }: StatsOverviewProps) {
 
     if (isLoading) {
         return (
-            <div className="space-y-8">
+            <div className="space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                     {[...Array(8)].map((_, i) => (
                         <div key={i} className="stat bg-base-200 rounded-box">
@@ -90,7 +90,7 @@ export function StatsOverview({ userId }: StatsOverviewProps) {
                         </div>
                     ))}
                 </div>
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
                     <div className="card bg-base-200 shadow-sm">
                         <div className="card-body">
                             <div className="skeleton h-6 w-32 mb-4"></div>
@@ -121,9 +121,9 @@ export function StatsOverview({ userId }: StatsOverviewProps) {
     }
 
     return (
-        <div className="space-y-8">
+        <div className="space-y-4">
             <StatsCards summary={data.summary} />
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
                 <ActivityChart dailyActivity={data.dailyActivity} />
                 <CountryDistribution countries={data.topCountries} />
             </div>

@@ -17,7 +17,7 @@ export default function LinksSummary({
 }: LinksSummaryProps) {
     if (isLoading) {
         return (
-            <div className="stats stats-vertical lg:stats-horizontal mt-4 bg-base-100">
+            <div className="stats stats-vertical lg:stats-horizontal bg-base-100">
                 <div className="stat">
                     <div className="stat-title">Total Links</div>
                     <div className="stat-value">...</div>
@@ -43,7 +43,7 @@ export default function LinksSummary({
     }
 
     return (
-        <div className="stats stats-vertical lg:stats-horizontal mt-4 bg-base-100 border border-base-300">
+        <div className="stats stats-vertical lg:stats-horizontal bg-base-100 border border-base-300">
             <div className="stat">
                 <div className="stat-title">Total Links</div>
                 <div className="stat-value">{total}</div>

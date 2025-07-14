@@ -13,8 +13,8 @@ export default function AuthButton() {
 
     if (session) {
         return (
-            <div className="dropdown dropdown-end">
-                <button className="cursor-pointer grid grid-cols-[auto_auto] grid-rows-2 items-center justify-items-start gap-x-2 border border-base-300 px-4 py-2 rounded-lg bg-base-100">
+            <div className="dropdown dropdown-top">
+                <button className="cursor-pointer grid grid-cols-[auto_1fr] grid-rows-2 items-center justify-items-start px-4 py-4 rounded-lg bg-base-300 w-full gap-x-2">
                     <div className="row-span-2">
                         {session.user?.image ? (
                             <img

@@ -2,7 +2,7 @@ import { Suspense } from 'react';
 import { getCurrentUser } from '@/lib/auth-utils';
 import { redirect } from 'next/navigation';
 import { StatsOverview } from '@/components/stats/StatsOverview';
-import Header from '@/components/ui/Header';
+import AppLayout from '@/components/layout/AppLayout';
 import StatsHeader from '@/components/stats/StatsHeader';
 
 export default async function StatsPage() {
@@ -13,8 +13,7 @@ export default async function StatsPage() {
     }
 
     return (
-        <div className="min-h-screen bg-base-200">
-            <Header />
+        <AppLayout>
             <StatsHeader />
 
             <Suspense
@@ -26,6 +25,6 @@ export default async function StatsPage() {
             >
                 <StatsOverview userId={user.id} />
             </Suspense>
-        </div>
+        </AppLayout>
     );
 }

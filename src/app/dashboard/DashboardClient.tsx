@@ -1,5 +1,6 @@
 'use client';
 import { useMemo } from 'react';
+import AppLayout from '@/components/layout/AppLayout';
 import SearchAndFilters from '@/components/dashboard/SearchAndFilters';
 import LinksTable from '@/components/dashboard/LinksTable';
 import LinksSummary from '@/components/dashboard/LinksSummary';
@@ -18,7 +19,6 @@ import {
     filterAndSortLinks,
     getFilteredLinksCount,
 } from '@/utils/filterAndSort';
-import Header from '@/components/ui/Header';
 import { DashboardHeader } from '@/components';
 
 interface DashboardClientProps {
@@ -116,40 +116,36 @@ export default function DashboardClient({
     }
 
     return (
-        <>
-            <div className="flex flex-col h-full">
-                <Header />
-                <DashboardHeader />
+        <AppLayout>
+            <DashboardHeader />
+            <LinksSummary
+                total={linkCounts.total}
+                active={linkCounts.active}
+                inactive={linkCounts.inactive}
+                expired={linkCounts.expired}
+                disabled={linkCounts.disabled}
+                isLoading={isLoading}
+            />
+            <SearchAndFilters />
 
-                <LinksSummary
-                    total={linkCounts.total}
-                    active={linkCounts.active}
-                    inactive={linkCounts.inactive}
-                    expired={linkCounts.expired}
-                    disabled={linkCounts.disabled}
-                    isLoading={isLoading}
-                />
-                <SearchAndFilters />
+            <BulkActions
+                linkIds={filteredAndSortedLinks.map((link) => link.id)}
+                onBulkDelete={handleBulkDelete}
+                onBulkToggle={handleBulkToggle}
+                isLoading={bulkDelete.isPending || bulkToggle.isPending}
+            />
 
-                <BulkActions
-                    linkIds={filteredAndSortedLinks.map((link) => link.id)}
-                    onBulkDelete={handleBulkDelete}
-                    onBulkToggle={handleBulkToggle}
-                    isLoading={bulkDelete.isPending || bulkToggle.isPending}
-                />
-
-                <LinksTable
-                    links={filteredAndSortedLinks}
-                    onCreateLink={openCreateLinkModal}
-                    onDeleteLink={handleDeleteLink}
-                    onToggleLink={handleToggleLink}
-                    onRenameLink={handleRenameLink}
-                    isLoading={isLoading}
-                    deletingLinkId={
-                        deleteLink.isPending ? deleteLink.variables : undefined
-                    }
-                />
-            </div>
-        </>
+            <LinksTable
+                links={filteredAndSortedLinks}
+                onCreateLink={openCreateLinkModal}
+                onDeleteLink={handleDeleteLink}
+                onToggleLink={handleToggleLink}
+                onRenameLink={handleRenameLink}
+                isLoading={isLoading}
+                deletingLinkId={
+                    deleteLink.isPending ? deleteLink.variables : undefined
+                }
+            />
+        </AppLayout>
     );
 }
