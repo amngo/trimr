@@ -254,16 +254,60 @@ function isValidDate(dateString: string): boolean {
 export function generateSampleCSV(): string {
     const headers = ['url', 'name', 'starting date', 'expiration', 'password'];
     const sampleData = [
+        ['https://www.microsoft.com', 'Promo', '2025-08-18T05:02:47Z', '', ''],
+        ['https://www.nike.com', 'Promo', '', '2025-08-08T00:58:01Z', ''],
+        ['https://www.apple.com', 'Access', '', '2025-09-27T00:58:01Z', ''],
         [
-            'https://example.com',
-            'Example Website',
-            '2024-01-01',
-            '2024-12-31',
-            'secret123',
+            'https://www.stackoverflow.com',
+            'Beta',
+            '2025-08-06T21:51:49Z',
+            '',
+            '',
         ],
-        ['https://google.com', 'Google Search', '', '2024-06-30', ''],
-        ['https://github.com', 'GitHub Repository', '2024-02-01', '', 'mypass'],
-        ['https://stackoverflow.com', '', '', '', ''],
+        [
+            'https://www.adidas.com',
+            'Download',
+            '2025-07-03T09:29:04Z',
+            '2025-08-15T00:58:01Z',
+            '',
+        ],
+        [
+            'https://www.nytimes.com',
+            'Download',
+            '2025-08-12T22:06:37Z',
+            '2025-10-04T00:58:01Z',
+            '',
+        ],
+        [
+            'https://www.reddit.com',
+            'Download',
+            '2025-10-06T16:28:47Z',
+            '2025-08-14T00:58:01Z',
+            '33c2a4',
+        ],
+        ['https://www.wikipedia.org', 'Beta', '', '2025-07-31T00:58:01Z', ''],
+        [
+            'https://www.google.com',
+            'Invite',
+            '2025-09-02T19:30:00Z',
+            '2025-09-02T00:58:01Z',
+            '',
+        ],
+        [
+            'https://github.com',
+            'Invite',
+            '2025-06-26T03:15:39Z',
+            '2025-08-19T00:58:01Z',
+            '',
+        ],
+        [
+            'https://www.mozilla.org',
+            'Access',
+            '2025-08-07T22:10:22Z',
+            '2025-08-21T00:58:01Z',
+            '',
+        ],
+        ['https://www.bbc.com', 'Trial', '', '2025-09-17T00:58:01Z', '2uemsl'],
     ];
 
     const csvLines = [

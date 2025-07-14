@@ -224,7 +224,7 @@ export default function BulkUploadModal({
                 )}
 
                 {/* Upload Button */}
-                {parsedData.data.length > 0 && (
+                {parsedData.data.length > 0 && !uploadResult && (
                     <Button
                         variant="primary"
                         size="lg"

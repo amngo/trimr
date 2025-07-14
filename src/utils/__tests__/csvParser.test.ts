@@ -173,8 +173,8 @@ https://example.com,Test Site,${futureDateStr},${futureDateStr},mypass`;
             const csv = generateSampleCSV();
 
             expect(csv).toContain('url,name,starting date,expiration,password');
-            expect(csv).toContain('https://example.com');
-            expect(csv).toContain('https://google.com');
+            expect(csv).toContain('https://www.microsoft.com');
+            expect(csv).toContain('https://www.google.com');
             expect(csv).toContain('https://github.com');
         });
 
