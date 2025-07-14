@@ -6,8 +6,11 @@ export function generateSlug(): string {
 
 export function isValidUrl(url: string): boolean {
     try {
-        new URL(url);
-        return true;
+        const parsedUrl = new URL(url);
+        // Only allow http and https protocols for security
+        return (
+            parsedUrl.protocol === 'http:' || parsedUrl.protocol === 'https:'
+        );
     } catch {
         return false;
     }
@@ -37,8 +40,7 @@ export function normalizeUrl(url: string): string {
     try {
         const parsedUrl = new URL(url);
         return parsedUrl.href.replace(/\/$/, ''); // Remove trailing slash
-    } catch (error) {
-        console.error('Invalid URL:', url, error);
+    } catch {
         return url; // Return original if invalid
     }
 }

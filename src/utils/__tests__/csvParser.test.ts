@@ -45,6 +45,8 @@ google.com`;
 
             expect(result.errors).toHaveLength(0);
             expect(result.data).toHaveLength(2);
+            expect(result.data[0].url).toBe('https://example.com');
+            expect(result.data[1].url).toBe('https://google.com');
         });
 
         it('should return error for empty CSV', () => {

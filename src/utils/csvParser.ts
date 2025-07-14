@@ -132,12 +132,15 @@ function parseCSVRow(
         };
     }
 
-    const url = values[urlIndex].trim();
-    if (!isValidURL(url)) {
+    const rawUrl = values[urlIndex].trim();
+    if (!isValidURL(rawUrl)) {
         return {
-            errors: [{ row: rowNumber, message: `Invalid URL: ${url}` }],
+            errors: [{ row: rowNumber, message: `Invalid URL: ${rawUrl}` }],
         };
     }
+
+    // Format URL to ensure it has protocol
+    const url = formatURL(rawUrl);
 
     // Extract optional fields
     const data: CSVLinkData = { url };
@@ -229,6 +232,13 @@ function parseCSVLine(line: string): string[] {
     values.push(current.trim());
 
     return values;
+}
+
+function formatURL(url: string): string {
+    if (!url.startsWith('http://') && !url.startsWith('https://')) {
+        return `https://${url}`;
+    }
+    return url;
 }
 
 function isValidURL(url: string): boolean {

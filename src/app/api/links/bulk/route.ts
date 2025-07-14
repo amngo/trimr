@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getCurrentUser } from '@/lib/auth-utils';
 import { db } from '@/lib/db';
 import { nanoid } from 'nanoid';
-import { normalizeUrl, isValidUrl } from '@/lib/utils';
+import { normalizeUrl, isValidUrl, formatUrl } from '@/lib/utils';
 import { logger } from '@/utils';
 import { BulkUploadResult, CSVLinkData } from '@/types';
 
@@ -64,7 +64,8 @@ export async function POST(request: NextRequest) {
                     continue;
                 }
 
-                const normalizedUrl = normalizeUrl(linkData.url);
+                const formattedUrl = formatUrl(linkData.url);
+                const normalizedUrl = normalizeUrl(formattedUrl);
 
                 // Generate slug
                 let slug = nanoid(8);

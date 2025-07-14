@@ -9,7 +9,10 @@ const createLinkSchema = z.object({
     url: z
         .string()
         .min(1, 'URL is required')
-        .refine(isValidUrl, 'Please enter a valid URL'),
+        .refine(
+            (url) => isValidUrl(formatUrl(url)),
+            'Please enter a valid URL',
+        ),
     name: z
         .string()
         .max(28, 'Link name must be 28 characters or less')
