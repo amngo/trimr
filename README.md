@@ -16,11 +16,14 @@ A production-ready URL shortener built with Next.js 15, featuring analytics, aut
 - ⏰ **Link Expiration**: Set expiration dates and active periods
 - 📂 **Bulk Operations**: Upload multiple URLs via CSV
 - 🎯 **Link Management**: Full CRUD operations with search and filtering
-- 🧪 **Comprehensive Testing**: 105 tests with full coverage
+- 📖 **API Documentation**: Interactive Swagger UI with comprehensive OpenAPI 3.0 specs
+- 📊 **Enhanced Analytics**: Vercel Analytics integration for advanced tracking
+- 📝 **Structured Logging**: Custom logger with error handling and context tracking
+- 🧪 **Comprehensive Testing**: 289 tests with full coverage
 
 ## Tech Stack
 
-- **Framework**: Next.js 15.1.2 with App Router
+- **Framework**: Next.js 15.4.1 with App Router
 - **Frontend**: React 19 with TypeScript
 - **Database**: SQLite with Prisma ORM 6.1.0
 - **Authentication**: Better Auth 1.2.12
@@ -31,10 +34,12 @@ A production-ready URL shortener built with Next.js 15, featuring analytics, aut
 - **UI Components**: Headless UI 2.2.4
 - **ID Generation**: nanoid 5.0.9
 - **Validation**: Zod 3.25.76
-- **QR Codes**: qrcode 1.5.4
+- **QR Codes**: React QR Code 2.0.18
 - **Testing**: Jest 30.0.4 + Testing Library
 - **Code Quality**: ESLint + Prettier + Husky
-- **Analytics**: Custom IP geolocation
+- **Analytics**: Custom IP geolocation + Vercel Analytics
+- **API Documentation**: Swagger UI with OpenAPI 3.0
+- **Logging**: Custom logger with error handling
 
 ## Getting Started
 
@@ -78,6 +83,8 @@ npm run dev
 
 The application will be available at `http://localhost:3000`.
 
+6. Explore the API documentation at `http://localhost:3000/api-docs`
+
 ## Project Structure
 
 ```
@@ -89,6 +96,7 @@ src/
 │   ├── api/                 # API routes
 │   │   ├── auth/            # Authentication endpoints
 │   │   └── links/           # Link management APIs
+│   ├── api-docs/            # API documentation page
 │   ├── auth/                # Authentication pages
 │   ├── dashboard/           # User dashboard
 │   ├── landing/             # Landing page
@@ -108,6 +116,7 @@ src/
 │   ├── api-utils.ts         # API error handling
 │   ├── auth.ts              # Authentication setup
 │   ├── db.ts                # Prisma client
+│   ├── swagger.ts           # API documentation configuration
 │   └── utils.ts             # Utility functions
 ├── providers/               # React context providers
 ├── stores/                  # Zustand state stores
@@ -164,6 +173,7 @@ src/
 - `GET /[slug]` - Redirect to original URL and track analytics
 - `GET /[slug]/password` - Password protection page
 - `GET /stats/[slug]` - View analytics for a specific link
+- `GET /api-docs` - Interactive Swagger API documentation
 
 ### Authentication
 
@@ -186,6 +196,17 @@ src/
 - **User Agent Tracking**: Browser and device information
 - **Daily Activity**: Click trends over the last 7 days
 - **Top Countries**: Most active countries for each link
+- **Vercel Analytics**: Enhanced tracking with real-time visitor insights
+
+## API Documentation
+
+This project includes comprehensive API documentation using Swagger UI:
+
+- **Interactive Documentation**: Visit `/api-docs` to explore all API endpoints
+- **OpenAPI 3.0 Specification**: Full API specification with request/response schemas
+- **Authentication Examples**: Complete examples for protected endpoints
+- **Try It Out**: Test API endpoints directly from the documentation interface
+- **Schema Validation**: Detailed request and response validation schemas
 
 ## Environment Variables
 
@@ -270,7 +291,8 @@ Use the format: `type(scope): description`
 - **ESLint**: Code linting with Next.js rules
 - **Prettier**: Code formatting with 4-space tabs
 - **TypeScript**: Strict type checking
-- **Testing**: 105 tests with comprehensive coverage
+- **Testing**: 289 tests with comprehensive coverage
+- **API Documentation**: Swagger UI with OpenAPI 3.0 specification
 
 ## Contributing
 
