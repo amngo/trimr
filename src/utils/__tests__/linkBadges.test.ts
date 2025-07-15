@@ -126,7 +126,7 @@ describe('linkBadges', () => {
 
         it('should handle time formatting correctly for minutes', () => {
             const inThirtyMinutes = new Date();
-            inThirtyMinutes.setMinutes(inThirtyMinutes.getMinutes() + 30);
+            inThirtyMinutes.setTime(inThirtyMinutes.getTime() + 30 * 60 * 1000); // Add exactly 30 minutes in milliseconds
 
             const link = createMockLink({ startsAt: inThirtyMinutes });
             const badges = getLinkBadges(link);

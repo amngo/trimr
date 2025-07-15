@@ -9,6 +9,7 @@ import ExpirationSelect from './forms/ExpirationSelect';
 import FormMessages from './FormMessages';
 import FormActions from './FormActions';
 import StartingDateInput from './forms/StartingDateInput';
+import { logger } from '@/utils/logger';
 import PasswordInput from './forms/PasswordInput';
 
 interface CreateLinkModalProps {
@@ -63,7 +64,7 @@ export default function CreateLinkModal({
                 setResult({ slug: response.slug, url: response.url });
             }
         } catch (error) {
-            console.error('Error creating link:', error);
+            logger.error('Error creating link', error);
             setResult({ error: 'An unexpected error occurred' });
         } finally {
             handleClose();

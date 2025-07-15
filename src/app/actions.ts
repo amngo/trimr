@@ -4,6 +4,7 @@ import { db } from '@/lib/db';
 import { generateSlug, isValidUrl, formatUrl } from '@/lib/utils';
 import { revalidatePath } from 'next/cache';
 import { getCurrentUser } from '@/lib/auth-utils';
+import { logger } from '@/utils/logger';
 
 const createLinkSchema = z.object({
     url: z
@@ -61,7 +62,7 @@ export async function deleteLink(linkId: string) {
 
         return { success: true };
     } catch (error) {
-        console.error('Error deleting link:', error);
+        logger.error('Error deleting link', error);
         return {
             error: 'Failed to delete link. Please try again.',
         };
@@ -215,7 +216,7 @@ export async function createLink(formData: FormData) {
             url: formattedUrl,
         };
     } catch (error) {
-        console.error('Error creating link:', error);
+        logger.error('Error creating link', error);
         return {
             error: 'An unexpected error occurred. Please try again.',
         };

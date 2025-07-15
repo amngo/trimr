@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { signOut, useSession } from '@/lib/auth-client';
 import { useRouter } from 'next/navigation';
 import { CheckCircle, LogOut } from 'lucide-react';
+import { logger } from '@/utils/logger';
 import Link from 'next/link';
 
 export default function LogoutPage() {
@@ -20,7 +21,7 @@ export default function LogoutPage() {
                     await signOut();
                     setIsSignedOut(true);
                 } catch (error) {
-                    console.error('Logout failed:', error);
+                    logger.error('Logout failed', error);
                 } finally {
                     setIsSigningOut(false);
                 }

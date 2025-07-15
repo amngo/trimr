@@ -27,6 +27,7 @@ import { Link as LinkType } from '@/types';
 import { toast, useBulkSelectionStore } from '@/stores';
 import { cn } from '@/utils';
 import { motion } from 'motion/react';
+import { logger } from '@/utils/logger';
 import { BASE_URL } from '@/constants';
 import QRCodeDisplay from './QRCodeDisplay';
 import LinkIndicator from './LinkIndicator';
@@ -128,7 +129,7 @@ export default function LinkRow({
                 await onRename(link.id, editName);
                 setIsEditing(false);
             } catch (error) {
-                console.error('Error renaming link:', error);
+                logger.error('Error renaming link', error);
             }
         }
     };

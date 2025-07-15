@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/lib/db';
+import { logger } from '@/utils/logger';
 
 export async function POST(request: NextRequest) {
     try {
@@ -8,7 +9,7 @@ export async function POST(request: NextRequest) {
         if (!password) {
             return NextResponse.json(
                 { error: 'Password is required' },
-                { status: 400 }
+                { status: 400 },
             );
         }
 
@@ -21,21 +22,21 @@ export async function POST(request: NextRequest) {
         if (!link) {
             return NextResponse.json(
                 { error: 'Link not found' },
-                { status: 404 }
+                { status: 404 },
             );
         }
 
         if (!link.enabled) {
             return NextResponse.json(
                 { error: 'Link is disabled' },
-                { status: 403 }
+                { status: 403 },
             );
         }
 
         if (!link.password) {
             return NextResponse.json(
                 { error: 'This link is not password protected' },
-                { status: 400 }
+                { status: 400 },
             );
         }
 
@@ -43,16 +44,16 @@ export async function POST(request: NextRequest) {
         if (password !== link.password) {
             return NextResponse.json(
                 { error: 'Incorrect password' },
-                { status: 401 }
+                { status: 401 },
             );
         }
 
         return NextResponse.json({ success: true });
     } catch (error) {
-        console.error('Error verifying password:', error);
+        logger.error('Error verifying password', error);
         return NextResponse.json(
             { error: 'Internal server error' },
-            { status: 500 }
+            { status: 500 },
         );
     }
 }

@@ -4,6 +4,7 @@ import { db } from '@/lib/db';
 import { getCountryFromIp } from '@/lib/utils';
 import { AlertTriangle } from 'lucide-react';
 import { BASE_URL } from '@/constants';
+import { logger } from '@/utils/logger';
 
 interface PageProps {
     params: Promise<{
@@ -225,7 +226,7 @@ export default async function RedirectPage({ params }: PageProps) {
             }),
         ]);
     } catch (error) {
-        console.error('Error tracking click:', error);
+        logger.error('Error tracking click', error);
         // Don't block redirect if analytics fail
     }
 

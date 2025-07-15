@@ -3,6 +3,7 @@ import { deleteLink } from '@/app/actions';
 import { db } from '@/lib/db';
 import { getCurrentUser } from '@/lib/auth-utils';
 import { z } from 'zod';
+import { logger } from '@/utils/logger';
 
 export async function DELETE(
     request: NextRequest,
@@ -18,7 +19,7 @@ export async function DELETE(
 
         return NextResponse.json(result);
     } catch (error) {
-        console.error('Error deleting link:', error);
+        logger.error('Error deleting link', error);
         return NextResponse.json(
             { error: 'Failed to delete link' },
             { status: 500 },
@@ -99,7 +100,7 @@ export async function PATCH(
             name: updatedLink.name,
         });
     } catch (error) {
-        console.error('Error updating link:', error);
+        logger.error('Error updating link', error);
         return NextResponse.json(
             { error: 'Failed to update link' },
             { status: 500 },

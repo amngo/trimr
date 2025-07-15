@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { getCurrentUser } from '@/lib/auth-utils';
 import { db } from '@/lib/db';
+import { logger } from '@/utils/logger';
 
 export async function GET() {
     try {
@@ -179,7 +180,7 @@ export async function GET() {
 
         return NextResponse.json(overview);
     } catch (error) {
-        console.error('Analytics overview error:', error);
+        logger.error('Analytics overview error', error);
         return NextResponse.json(
             { error: 'Failed to fetch analytics overview' },
             { status: 500 },

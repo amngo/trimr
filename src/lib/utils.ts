@@ -1,4 +1,5 @@
 import { nanoid } from 'nanoid';
+import { logger } from '@/utils/logger';
 
 export function generateSlug(): string {
     return nanoid(8);
@@ -31,7 +32,7 @@ export async function getCountryFromIp(ip: string): Promise<string | null> {
             return country.trim();
         }
     } catch (error) {
-        console.error('Error fetching country:', error);
+        logger.error('Error fetching country', error);
     }
     return null;
 }
