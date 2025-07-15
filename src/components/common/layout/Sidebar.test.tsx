@@ -1,6 +1,6 @@
 import { render, screen, fireEvent, waitFor } from '@/test-utils/test-utils';
 import { usePathname } from 'next/navigation';
-import Sidebar from '../Sidebar';
+import Sidebar from './Sidebar';
 import { useSidebarStore } from '@/stores';
 import { mockLocalStorage } from '@/test-utils/test-helpers';
 

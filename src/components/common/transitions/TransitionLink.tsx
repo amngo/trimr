@@ -23,13 +23,13 @@ export default function TransitionLink({
 
     const handleClick = (e: React.MouseEvent) => {
         e.preventDefault();
-        
+
         if (onClick) {
             onClick();
         }
 
         setIsTransitioning(true);
-        
+
         // Small delay to allow for fade out animation
         setTimeout(() => {
             router.push(href);
@@ -44,7 +44,7 @@ export default function TransitionLink({
             className={cn(
                 'transition-opacity duration-150',
                 isTransitioning ? 'opacity-50' : 'opacity-100',
-                className
+                className,
             )}
         >
             {children}

@@ -8,7 +8,6 @@ interface RouteTransitionProps {
     children: React.ReactNode;
 }
 
-
 const loadingVariants = {
     initial: { opacity: 0 },
     animate: { opacity: 1 },

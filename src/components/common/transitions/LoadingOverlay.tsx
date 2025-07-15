@@ -26,7 +26,9 @@ export default function LoadingOverlay({ isVisible }: LoadingOverlayProps) {
                     >
                         <div className="flex items-center space-x-3">
                             <div className="loading loading-spinner loading-md text-primary"></div>
-                            <span className="text-base-content">Loading...</span>
+                            <span className="text-base-content">
+                                Loading...
+                            </span>
                         </div>
                     </motion.div>
                 </motion.div>

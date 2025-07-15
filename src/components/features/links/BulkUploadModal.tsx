@@ -3,7 +3,7 @@
 import { useState, useRef, useCallback } from 'react';
 import { Upload, FileText, AlertCircle, CheckCircle } from 'lucide-react';
 import { cn } from '@/utils';
-import { Button, BaseModal } from '@/components/ui';
+import { Button, BaseModal } from '../../common';
 import { CSVUploadModalProps, ParsedCSVData, BulkUploadResult } from '@/types';
 import { parseCSVText, downloadSampleCSV } from '@/utils/csvParser';
 import { useBulkUpload } from '@/hooks/useBulkUpload';

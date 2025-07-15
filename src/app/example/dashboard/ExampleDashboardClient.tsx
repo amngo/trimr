@@ -1,10 +1,12 @@
 'use client';
 import { useMemo, useState } from 'react';
-import AppLayout from '@/components/layout/AppLayout';
-import SearchAndFilters from '@/components/dashboard/SearchAndFilters';
-import LinksTable from '@/components/dashboard/LinksTable';
-import LinksSummary from '@/components/dashboard/LinksSummary';
-import BulkActions from '@/components/dashboard/BulkActions';
+import { AppLayout } from '@/components/common';
+import {
+    SearchAndFilters,
+    LinksTable,
+    LinksSummary,
+    BulkActions,
+} from '@/components/features/links';
 import { Link } from '@/types';
 import { useSearchStore } from '@/stores';
 import { logger } from '@/utils';
@@ -12,7 +14,7 @@ import {
     filterAndSortLinks,
     getFilteredLinksCount,
 } from '@/utils/filterAndSort';
-import { DashboardHeader } from '@/components';
+import { DashboardHeader } from '@/components/features/links';
 
 interface ExampleDashboardClientProps {
     initialLinks: Link[];

@@ -11,7 +11,7 @@ import {
     AlertTriangle,
 } from 'lucide-react';
 import { AnimatePresence, motion } from 'motion/react';
-import { Button } from '@/components/ui';
+import { Button } from '../../common';
 import { useBulkSelectionStore } from '@/stores';
 
 interface BulkActionsProps {

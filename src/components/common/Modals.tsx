@@ -1,6 +1,6 @@
 'use client';
 
-import { CreateLinkModal, BulkUploadModal } from '@/components/modals';
+import { CreateLinkModal, BulkUploadModal } from '../features/links';
 import { useModalStore } from '@/stores';
 
 export default function Modals() {

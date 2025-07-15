@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { BarChart3, Link as LinkIcon, X, Home, Activity } from 'lucide-react';
 import { useSidebarStore } from '@/stores';
-import AuthButton from './AuthButton';
+import { AuthButton } from '../../features/auth';
 
 interface SidebarProps {
     className?: string;

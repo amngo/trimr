@@ -1,8 +1,7 @@
 import { Suspense } from 'react';
 import { getCurrentUser } from '@/lib/auth-utils';
-import { StatsOverview } from '@/components/stats/StatsOverview';
-import AppLayout from '@/components/layout/AppLayout';
-import StatsHeader from '@/components/stats/StatsHeader';
+import { StatsOverview, StatsHeader } from '@/components/features/analytics';
+import { AppLayout } from '@/components/common';
 
 export default async function StatsPage() {
     const user = await getCurrentUser();

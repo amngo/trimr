@@ -1,7 +1,7 @@
 import { Suspense } from 'react';
 import { ExampleStatsOverview } from './ExampleStatsOverview';
-import AppLayout from '@/components/layout/AppLayout';
-import StatsHeader from '@/components/stats/StatsHeader';
+import { AppLayout } from '@/components/common';
+import { StatsHeader } from '@/components/features/analytics';
 
 export default function ExampleStatsPage() {
     return (

@@ -1,11 +1,13 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { StatsCards } from '@/components/stats/StatsCards';
-import { TopLinksTable } from '@/components/stats/TopLinksTable';
-import { CountryDistribution } from '@/components/stats/CountryDistribution';
-import { ActivityChart } from '@/components/stats/ActivityChart';
-import { RecentActivity } from '@/components/stats/RecentActivity';
+import {
+    StatsCards,
+    TopLinksTable,
+    CountryDistribution,
+    ActivityChart,
+    RecentActivity,
+} from '@/components/features/analytics';
 
 interface ExampleOverviewData {
     summary: {

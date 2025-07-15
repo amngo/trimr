@@ -53,24 +53,26 @@ export default class ErrorBoundary extends Component<
                             Something went wrong
                         </h2>
                         <p className="text-base-content/70 mb-6">
-                            We encountered an unexpected error. Please try refreshing the page.
+                            We encountered an unexpected error. Please try
+                            refreshing the page.
                         </p>
-                        {process.env.NODE_ENV === 'development' && this.state.error && (
-                            <details className="mb-6 text-left">
-                                <summary className="cursor-pointer text-sm font-medium">
-                                    Error Details
-                                </summary>
-                                <pre className="mt-2 p-4 bg-base-200 rounded text-xs overflow-auto">
-                                    {this.state.error.message}
-                                    {this.state.error.stack && (
-                                        <>
-                                            {'\n\n'}
-                                            {this.state.error.stack}
-                                        </>
-                                    )}
-                                </pre>
-                            </details>
-                        )}
+                        {process.env.NODE_ENV === 'development' &&
+                            this.state.error && (
+                                <details className="mb-6 text-left">
+                                    <summary className="cursor-pointer text-sm font-medium">
+                                        Error Details
+                                    </summary>
+                                    <pre className="mt-2 p-4 bg-base-200 rounded text-xs overflow-auto">
+                                        {this.state.error.message}
+                                        {this.state.error.stack && (
+                                            <>
+                                                {'\n\n'}
+                                                {this.state.error.stack}
+                                            </>
+                                        )}
+                                    </pre>
+                                </details>
+                            )}
                         <div className="flex justify-center gap-3">
                             <Button onClick={() => window.location.reload()}>
                                 <RefreshCw className="w-4 h-4 mr-2" />

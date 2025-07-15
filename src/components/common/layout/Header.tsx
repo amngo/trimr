@@ -7,8 +7,8 @@ import {
     PanelRightOpenIcon,
     PanelRightCloseIcon,
 } from 'lucide-react';
-import Button from './Button';
-import { ThemeToggle } from '../dashboard';
+import Button from '../Button';
+import { ThemeToggle } from '../../features/links';
 
 export default function Header() {
     const { openCreateLinkModal, openBulkUploadModal } = useModalStore();

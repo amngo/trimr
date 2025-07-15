@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react';
-import ErrorBoundary from '../ui/ErrorBoundary';
+import ErrorBoundary from '../common/ErrorBoundary';
 
 // Mock console.error to avoid noise in tests
 const consoleSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
@@ -25,7 +25,7 @@ describe('ErrorBoundary', () => {
         render(
             <ErrorBoundary>
                 <ThrowError shouldThrow={false} />
-            </ErrorBoundary>
+            </ErrorBoundary>,
         );
 
         expect(screen.getByText('No error')).toBeInTheDocument();
@@ -35,38 +35,42 @@ describe('ErrorBoundary', () => {
         render(
             <ErrorBoundary>
                 <ThrowError shouldThrow={true} />
-            </ErrorBoundary>
+            </ErrorBoundary>,
         );
 
         expect(screen.getByText('Something went wrong')).toBeInTheDocument();
-        expect(screen.getByText(/We encountered an unexpected error/)).toBeInTheDocument();
+        expect(
+            screen.getByText(/We encountered an unexpected error/),
+        ).toBeInTheDocument();
     });
 
     it('should render custom fallback when provided', () => {
         const customFallback = <div>Custom Error UI</div>;
-        
+
         render(
             <ErrorBoundary fallback={customFallback}>
                 <ThrowError shouldThrow={true} />
-            </ErrorBoundary>
+            </ErrorBoundary>,
         );
 
         expect(screen.getByText('Custom Error UI')).toBeInTheDocument();
-        expect(screen.queryByText('Something went wrong')).not.toBeInTheDocument();
+        expect(
+            screen.queryByText('Something went wrong'),
+        ).not.toBeInTheDocument();
     });
 
     it('should call onError when error occurs', () => {
         const mockOnError = jest.fn();
-        
+
         render(
             <ErrorBoundary onError={mockOnError}>
                 <ThrowError shouldThrow={true} />
-            </ErrorBoundary>
+            </ErrorBoundary>,
         );
 
         expect(mockOnError).toHaveBeenCalledWith(
             expect.any(Error),
-            expect.any(Object)
+            expect.any(Object),
         );
     });
 
@@ -74,7 +78,7 @@ describe('ErrorBoundary', () => {
         render(
             <ErrorBoundary>
                 <ThrowError shouldThrow={true} />
-            </ErrorBoundary>
+            </ErrorBoundary>,
         );
 
         expect(screen.getByText('Try Again')).toBeInTheDocument();
@@ -91,7 +95,7 @@ describe('ErrorBoundary', () => {
         render(
             <ErrorBoundary>
                 <ThrowError shouldThrow={true} />
-            </ErrorBoundary>
+            </ErrorBoundary>,
         );
 
         expect(screen.getByText('Error Details')).toBeInTheDocument();

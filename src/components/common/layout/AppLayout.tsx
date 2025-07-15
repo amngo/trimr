@@ -1,7 +1,7 @@
 'use client';
 import { ReactNode } from 'react';
-import Sidebar from '@/components/ui/Sidebar';
-import Header from '@/components/ui/Header';
+import Sidebar from './Sidebar';
+import Header from './Header';
 import { FadeTransition } from '../transitions';
 
 interface AppLayoutProps {

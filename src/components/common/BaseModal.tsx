@@ -4,7 +4,7 @@ import { ReactNode } from 'react';
 import { Dialog, DialogPanel, DialogTitle } from '@headlessui/react';
 import { AnimatePresence, motion } from 'motion/react';
 import { X } from 'lucide-react';
-import { Button } from '@/components/ui';
+import Button from './Button';
 
 interface BaseModalProps {
     isOpen: boolean;

@@ -116,7 +116,7 @@ describe('linkBadges', () => {
 
         it('should handle time formatting correctly for hours', () => {
             const inTwoHours = new Date();
-            inTwoHours.setHours(inTwoHours.getHours() + 2);
+            inTwoHours.setTime(inTwoHours.getTime() + 2 * 60 * 60 * 1000); // Add exactly 2 hours in milliseconds
 
             const link = createMockLink({ expiresAt: inTwoHours });
             const badges = getLinkBadges(link);
