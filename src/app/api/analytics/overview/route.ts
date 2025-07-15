@@ -3,6 +3,36 @@ import { getCurrentUser } from '@/lib/auth-utils';
 import { db } from '@/lib/db';
 import { logger } from '@/utils/logger';
 
+/**
+ * @swagger
+ * /api/analytics/overview:
+ *   get:
+ *     summary: Get analytics overview
+ *     description: Retrieve comprehensive analytics data for the authenticated user's links
+ *     tags:
+ *       - Analytics
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Successfully retrieved analytics overview
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/AnalyticsOverview'
+ *       401:
+ *         description: Authentication required
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ */
 export async function GET() {
     try {
         const user = await getCurrentUser();

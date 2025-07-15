@@ -1,5 +1,12 @@
 import React, { ReactElement } from 'react';
-import { render, RenderOptions, RenderResult } from '@testing-library/react';
+import {
+    render,
+    RenderOptions,
+    RenderResult,
+    screen,
+    fireEvent,
+    waitFor,
+} from '@testing-library/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 // Mock providers for isolated testing
@@ -59,3 +66,4 @@ function customRender(
 export * from '@testing-library/react';
 export { customRender as render };
 export { createTestQueryClient };
+export { screen, fireEvent, waitFor };
